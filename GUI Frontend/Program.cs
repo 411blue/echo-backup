@@ -16,6 +16,7 @@ namespace GUI_Frontend
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
+            //test comment. james 2012-10-03
         }
     }
 }
