@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>1fa3d337-e6e8-4816-b4f8-d5c37c20626d</ProjectGuid>
+    <ProjectGuid>{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GUI_Frontend</RootNamespace>
-    <AssemblyName>GUI_Frontend</AssemblyName>
+    <AssemblyName>GUI Frontend</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>

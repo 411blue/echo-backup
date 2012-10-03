@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Harness", "Test Harness\Test Harness.csproj", "{D1427BC8-307E-4C37-AB68-BDA412E2C952}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI Frontend", "GUI Frontend\GUI Frontend.csproj", "{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -13,6 +17,14 @@ Global
 		{D1427BC8-307E-4C37-AB68-BDA412E2C952}.Debug|x86.Build.0 = Debug|x86
 		{D1427BC8-307E-4C37-AB68-BDA412E2C952}.Release|x86.ActiveCfg = Release|x86
 		{D1427BC8-307E-4C37-AB68-BDA412E2C952}.Release|x86.Build.0 = Release|x86
+		{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}.Debug|x86.ActiveCfg = Debug|x86
+		{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}.Debug|x86.Build.0 = Debug|x86
+		{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}.Release|x86.ActiveCfg = Release|x86
+		{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}.Release|x86.Build.0 = Release|x86
+		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Debug|x86.ActiveCfg = Debug|x86
+		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Debug|x86.Build.0 = Debug|x86
+		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Release|x86.ActiveCfg = Release|x86
+		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
