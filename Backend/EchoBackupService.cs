@@ -9,9 +9,9 @@ using System.Text;
 
 namespace Backend
 {
-    public partial class Service1 : ServiceBase
+    public partial class EchoBackup : ServiceBase
     {
-        public Service1()
+        public EchoBackup()
         {
             InitializeComponent();
         }
