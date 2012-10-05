@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.nodesListBox = new System.Windows.Forms.ListBox();
             this.nodesBox = new System.Windows.Forms.GroupBox();
+            this.clearButton = new System.Windows.Forms.Button();
             this.rescanButton = new System.Windows.Forms.Button();
             this.refreshStatusButton = new System.Windows.Forms.Button();
             this.restartNodeButton = new System.Windows.Forms.Button();
@@ -49,44 +50,40 @@
             this.statusRunningLabel = new System.Windows.Forms.Label();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.nodeConfigBox = new System.Windows.Forms.GroupBox();
-            this.backupSizeConfigLabel = new System.Windows.Forms.Label();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
-            this.diskCapacityConfigLabel = new System.Windows.Forms.Label();
-            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
+            this.nodeConfigBox = new System.Windows.Forms.GroupBox();
+            this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
+            this.freeSpaceConfigLabel = new System.Windows.Forms.Label();
+            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.fileCountConfigLabel = new System.Windows.Forms.Label();
+            this.diskCapacityConfigLabel = new System.Windows.Forms.Label();
+            this.backupSizeConfigLabel = new System.Windows.Forms.Label();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.testHarnessConfigBox = new System.Windows.Forms.GroupBox();
+            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
+            this.rescanIntervalConfigLabel = new System.Windows.Forms.Label();
             this.statusRefreshIntervalConfigLabel = new System.Windows.Forms.Label();
             this.diskUsageButton = new System.Windows.Forms.Button();
             this.pushUpdateButton = new System.Windows.Forms.Button();
-            this.rescanIntervalConfigLabel = new System.Windows.Forms.Label();
-            this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
-            this.clearButton = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.freeSpaceConfigLabel = new System.Windows.Forms.Label();
-            this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
-            this.fileCountConfigLabel = new System.Windows.Forms.Label();
-            this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
             this.nodesBox.SuspendLayout();
             this.nodesStatusBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.nodeConfigBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
-            this.testHarnessConfigBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
+            this.testHarnessConfigBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.SuspendLayout();
             // 
             // nodesListBox
@@ -110,6 +107,15 @@
             this.nodesBox.TabStop = false;
             this.nodesBox.Text = "Nodes";
             this.nodesBox.Enter += new System.EventHandler(this.nodesBox_Enter);
+            // 
+            // clearButton
+            // 
+            this.clearButton.Location = new System.Drawing.Point(85, 121);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(75, 23);
+            this.clearButton.TabIndex = 1;
+            this.clearButton.Text = "Clear";
+            this.clearButton.UseVisualStyleBackColor = true;
             // 
             // rescanButton
             // 
@@ -290,6 +296,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(122, 19);
             this.toolStripStatusLabel.Text = "toolStripStatusLabel1";
             // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Margin = new System.Windows.Forms.Padding(4, 3, 1, 3);
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 18);
+            // 
             // nodeConfigBox
             // 
             this.nodeConfigBox.Controls.Add(this.numericUpDown6);
@@ -308,22 +320,54 @@
             this.nodeConfigBox.Text = "Node Configuration";
             this.nodeConfigBox.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
-            // backupSizeConfigLabel
+            // numericUpDown6
             // 
-            this.backupSizeConfigLabel.AutoSize = true;
-            this.backupSizeConfigLabel.Location = new System.Drawing.Point(7, 22);
-            this.backupSizeConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.backupSizeConfigLabel.Name = "backupSizeConfigLabel";
-            this.backupSizeConfigLabel.Size = new System.Drawing.Size(95, 13);
-            this.backupSizeConfigLabel.TabIndex = 0;
-            this.backupSizeConfigLabel.Text = "Backup Size (MB):";
+            this.numericUpDown6.Location = new System.Drawing.Point(269, 43);
+            this.numericUpDown6.Name = "numericUpDown6";
+            this.numericUpDown6.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDown6.TabIndex = 1;
+            // 
+            // numericUpDown2
+            // 
+            this.numericUpDown2.Location = new System.Drawing.Point(110, 43);
+            this.numericUpDown2.Name = "numericUpDown2";
+            this.numericUpDown2.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDown2.TabIndex = 1;
+            // 
+            // freeSpaceConfigLabel
+            // 
+            this.freeSpaceConfigLabel.AutoSize = true;
+            this.freeSpaceConfigLabel.Location = new System.Drawing.Point(176, 45);
+            this.freeSpaceConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.freeSpaceConfigLabel.Name = "freeSpaceConfigLabel";
+            this.freeSpaceConfigLabel.Size = new System.Drawing.Size(90, 13);
+            this.freeSpaceConfigLabel.TabIndex = 0;
+            this.freeSpaceConfigLabel.Text = "Free Space (MB):";
+            // 
+            // numericUpDown7
+            // 
+            this.numericUpDown7.Location = new System.Drawing.Point(269, 20);
+            this.numericUpDown7.Name = "numericUpDown7";
+            this.numericUpDown7.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDown7.TabIndex = 1;
             // 
             // numericUpDown1
             // 
-            this.numericUpDown1.Location = new System.Drawing.Point(105, 20);
+            this.numericUpDown1.Location = new System.Drawing.Point(110, 20);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown1.TabIndex = 1;
+            // 
+            // fileCountConfigLabel
+            // 
+            this.fileCountConfigLabel.AutoSize = true;
+            this.fileCountConfigLabel.Location = new System.Drawing.Point(209, 22);
+            this.fileCountConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.fileCountConfigLabel.Name = "fileCountConfigLabel";
+            this.fileCountConfigLabel.Size = new System.Drawing.Size(57, 13);
+            this.fileCountConfigLabel.TabIndex = 0;
+            this.fileCountConfigLabel.Text = "File Count:";
+            this.fileCountConfigLabel.Click += new System.EventHandler(this.label1_Click_1);
             // 
             // diskCapacityConfigLabel
             // 
@@ -335,30 +379,25 @@
             this.diskCapacityConfigLabel.TabIndex = 0;
             this.diskCapacityConfigLabel.Text = "Disk Capacity (MB):";
             // 
-            // numericUpDown2
+            // backupSizeConfigLabel
             // 
-            this.numericUpDown2.Location = new System.Drawing.Point(110, 43);
-            this.numericUpDown2.Name = "numericUpDown2";
-            this.numericUpDown2.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown2.TabIndex = 1;
+            this.backupSizeConfigLabel.AutoSize = true;
+            this.backupSizeConfigLabel.Location = new System.Drawing.Point(12, 22);
+            this.backupSizeConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.backupSizeConfigLabel.Name = "backupSizeConfigLabel";
+            this.backupSizeConfigLabel.Size = new System.Drawing.Size(95, 13);
+            this.backupSizeConfigLabel.TabIndex = 0;
+            this.backupSizeConfigLabel.Text = "Backup Size (MB):";
             // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Margin = new System.Windows.Forms.Padding(4, 3, 1, 3);
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 18);
-            // 
             // testHarnessConfigBox
             // 
-            this.testHarnessConfigBox.Controls.Add(this.numericUpDown5);
             this.testHarnessConfigBox.Controls.Add(this.numericUpDown3);
             this.testHarnessConfigBox.Controls.Add(this.numericUpDown4);
-            this.testHarnessConfigBox.Controls.Add(this.label2);
             this.testHarnessConfigBox.Controls.Add(this.rescanIntervalConfigLabel);
             this.testHarnessConfigBox.Controls.Add(this.statusRefreshIntervalConfigLabel);
             this.testHarnessConfigBox.Location = new System.Drawing.Point(427, 168);
@@ -369,12 +408,29 @@
             this.testHarnessConfigBox.Text = "Test Harness Configuration";
             this.testHarnessConfigBox.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
+            // numericUpDown3
+            // 
+            this.numericUpDown3.Location = new System.Drawing.Point(154, 42);
+            this.numericUpDown3.Name = "numericUpDown3";
+            this.numericUpDown3.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDown3.TabIndex = 1;
+            // 
             // numericUpDown4
             // 
             this.numericUpDown4.Location = new System.Drawing.Point(154, 19);
             this.numericUpDown4.Name = "numericUpDown4";
             this.numericUpDown4.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown4.TabIndex = 1;
+            // 
+            // rescanIntervalConfigLabel
+            // 
+            this.rescanIntervalConfigLabel.AutoSize = true;
+            this.rescanIntervalConfigLabel.Location = new System.Drawing.Point(40, 45);
+            this.rescanIntervalConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.rescanIntervalConfigLabel.Name = "rescanIntervalConfigLabel";
+            this.rescanIntervalConfigLabel.Size = new System.Drawing.Size(111, 13);
+            this.rescanIntervalConfigLabel.TabIndex = 0;
+            this.rescanIntervalConfigLabel.Text = "Rescan Interval (sec):";
             // 
             // statusRefreshIntervalConfigLabel
             // 
@@ -403,49 +459,6 @@
             this.pushUpdateButton.TabIndex = 4;
             this.pushUpdateButton.Text = "Push Update";
             this.pushUpdateButton.UseVisualStyleBackColor = true;
-            // 
-            // rescanIntervalConfigLabel
-            // 
-            this.rescanIntervalConfigLabel.AutoSize = true;
-            this.rescanIntervalConfigLabel.Location = new System.Drawing.Point(7, 45);
-            this.rescanIntervalConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.rescanIntervalConfigLabel.Name = "rescanIntervalConfigLabel";
-            this.rescanIntervalConfigLabel.Size = new System.Drawing.Size(111, 13);
-            this.rescanIntervalConfigLabel.TabIndex = 0;
-            this.rescanIntervalConfigLabel.Text = "Rescan Interval (sec):";
-            // 
-            // numericUpDown3
-            // 
-            this.numericUpDown3.Location = new System.Drawing.Point(154, 42);
-            this.numericUpDown3.Name = "numericUpDown3";
-            this.numericUpDown3.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown3.TabIndex = 1;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(7, 67);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(144, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Status Refresh Interval (sec):";
-            // 
-            // numericUpDown5
-            // 
-            this.numericUpDown5.Location = new System.Drawing.Point(154, 64);
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown5.TabIndex = 1;
-            // 
-            // clearButton
-            // 
-            this.clearButton.Location = new System.Drawing.Point(85, 121);
-            this.clearButton.Name = "clearButton";
-            this.clearButton.Size = new System.Drawing.Size(75, 23);
-            this.clearButton.TabIndex = 1;
-            this.clearButton.Text = "Clear";
-            this.clearButton.UseVisualStyleBackColor = true;
             // 
             // button1
             // 
@@ -492,41 +505,6 @@
             this.button5.Text = "Configure Schedule...";
             this.button5.UseVisualStyleBackColor = true;
             // 
-            // freeSpaceConfigLabel
-            // 
-            this.freeSpaceConfigLabel.AutoSize = true;
-            this.freeSpaceConfigLabel.Location = new System.Drawing.Point(176, 45);
-            this.freeSpaceConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.freeSpaceConfigLabel.Name = "freeSpaceConfigLabel";
-            this.freeSpaceConfigLabel.Size = new System.Drawing.Size(90, 13);
-            this.freeSpaceConfigLabel.TabIndex = 0;
-            this.freeSpaceConfigLabel.Text = "Free Space (MB):";
-            // 
-            // numericUpDown6
-            // 
-            this.numericUpDown6.Location = new System.Drawing.Point(269, 43);
-            this.numericUpDown6.Name = "numericUpDown6";
-            this.numericUpDown6.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown6.TabIndex = 1;
-            // 
-            // fileCountConfigLabel
-            // 
-            this.fileCountConfigLabel.AutoSize = true;
-            this.fileCountConfigLabel.Location = new System.Drawing.Point(176, 22);
-            this.fileCountConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.fileCountConfigLabel.Name = "fileCountConfigLabel";
-            this.fileCountConfigLabel.Size = new System.Drawing.Size(57, 13);
-            this.fileCountConfigLabel.TabIndex = 0;
-            this.fileCountConfigLabel.Text = "File Count:";
-            this.fileCountConfigLabel.Click += new System.EventHandler(this.label1_Click_1);
-            // 
-            // numericUpDown7
-            // 
-            this.numericUpDown7.Location = new System.Drawing.Point(269, 20);
-            this.numericUpDown7.Name = "numericUpDown7";
-            this.numericUpDown7.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown7.TabIndex = 1;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -562,15 +540,14 @@
             this.statusStrip1.PerformLayout();
             this.nodeConfigBox.ResumeLayout(false);
             this.nodeConfigBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.testHarnessConfigBox.ResumeLayout(false);
             this.testHarnessConfigBox.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -611,9 +588,7 @@
         private System.Windows.Forms.Button diskUsageButton;
         private System.Windows.Forms.Button pushUpdateButton;
         private System.Windows.Forms.Button clearButton;
-        private System.Windows.Forms.NumericUpDown numericUpDown5;
         private System.Windows.Forms.NumericUpDown numericUpDown3;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label rescanIntervalConfigLabel;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
