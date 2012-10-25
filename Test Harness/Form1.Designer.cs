@@ -1,4 +1,10 @@
-﻿namespace Test_Harness
+﻿/*
+ * ===== Add a line for yourself below =====
+ * Author: James Tate II    Date: 2012-10-24
+ * 
+ */
+
+namespace Test_Harness
 {
     partial class Form1
     {
@@ -28,7 +34,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.nodesListBox = new System.Windows.Forms.ListBox();
             this.nodesBox = new System.Windows.Forms.GroupBox();
             this.clearButton = new System.Windows.Forms.Button();
@@ -41,7 +46,7 @@
             this.incrBackupNowButton = new System.Windows.Forms.Button();
             this.backupReportButton = new System.Windows.Forms.Button();
             this.viewLogsButton = new System.Windows.Forms.Button();
-            this.nodesStatusBox = new System.Windows.Forms.GroupBox();
+            this.nodeStatusBox = new System.Windows.Forms.GroupBox();
             this.statusTestDirLabel = new System.Windows.Forms.Label();
             this.statusGUIDLabel = new System.Windows.Forms.Label();
             this.statusIPAddressLabel = new System.Windows.Forms.Label();
@@ -60,7 +65,6 @@
             this.fileCountConfigLabel = new System.Windows.Forms.Label();
             this.diskCapacityConfigLabel = new System.Windows.Forms.Label();
             this.backupSizeConfigLabel = new System.Windows.Forms.Label();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.testHarnessConfigBox = new System.Windows.Forms.GroupBox();
             this.numericUpDown3 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown4 = new System.Windows.Forms.NumericUpDown();
@@ -68,13 +72,25 @@
             this.statusRefreshIntervalConfigLabel = new System.Windows.Forms.Label();
             this.diskUsageButton = new System.Windows.Forms.Button();
             this.pushUpdateButton = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
+            this.statusCodeVersionLabel = new System.Windows.Forms.Label();
+            this.nodeControlBox = new System.Windows.Forms.GroupBox();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.currentDateTimeConfigLabel = new System.Windows.Forms.Label();
+            this.backupFrequencyConfigLabel = new System.Windows.Forms.Label();
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.FullBackupFrequencyConfigLabel = new System.Windows.Forms.Label();
+            this.FullBackupFrequencyConfigLabel2 = new System.Windows.Forms.Label();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.StatusRunningTextBox = new System.Windows.Forms.TextBox();
+            this.StatusIndexVersionTextBox = new System.Windows.Forms.TextBox();
+            this.StatusCurrentTaskTextBox = new System.Windows.Forms.TextBox();
+            this.StatusIPAddressTextBox = new System.Windows.Forms.TextBox();
+            this.StatusGUIDTextBox = new System.Windows.Forms.TextBox();
+            this.StatusTestDirectoryTextBox = new System.Windows.Forms.TextBox();
+            this.StatusCodeVersionTextBox = new System.Windows.Forms.TextBox();
             this.nodesBox.SuspendLayout();
-            this.nodesStatusBox.SuspendLayout();
+            this.nodeStatusBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.nodeConfigBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
@@ -84,14 +100,23 @@
             this.testHarnessConfigBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
+            this.nodeControlBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             this.SuspendLayout();
             // 
             // nodesListBox
             // 
             this.nodesListBox.FormattingEnabled = true;
+            this.nodesListBox.Items.AddRange(new object[] {
+            "Alan-PC",
+            "AppleJack",
+            "Laptop",
+            "rm-rf",
+            "OldComputer",
+            "Patrick-PC"});
             this.nodesListBox.Location = new System.Drawing.Point(6, 19);
             this.nodesListBox.Name = "nodesListBox";
-            this.nodesListBox.Size = new System.Drawing.Size(154, 95);
+            this.nodesListBox.Size = new System.Drawing.Size(154, 108);
             this.nodesListBox.TabIndex = 0;
             this.nodesListBox.SelectedIndexChanged += new System.EventHandler(this.nodesListBox_SelectedIndexChanged);
             // 
@@ -102,7 +127,7 @@
             this.nodesBox.Controls.Add(this.nodesListBox);
             this.nodesBox.Location = new System.Drawing.Point(12, 12);
             this.nodesBox.Name = "nodesBox";
-            this.nodesBox.Size = new System.Drawing.Size(166, 150);
+            this.nodesBox.Size = new System.Drawing.Size(166, 166);
             this.nodesBox.TabIndex = 2;
             this.nodesBox.TabStop = false;
             this.nodesBox.Text = "Nodes";
@@ -110,7 +135,7 @@
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(85, 121);
+            this.clearButton.Location = new System.Drawing.Point(84, 135);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(75, 23);
             this.clearButton.TabIndex = 1;
@@ -119,7 +144,7 @@
             // 
             // rescanButton
             // 
-            this.rescanButton.Location = new System.Drawing.Point(7, 121);
+            this.rescanButton.Location = new System.Drawing.Point(6, 135);
             this.rescanButton.Name = "rescanButton";
             this.rescanButton.Size = new System.Drawing.Size(75, 23);
             this.rescanButton.TabIndex = 1;
@@ -128,7 +153,7 @@
             // 
             // refreshStatusButton
             // 
-            this.refreshStatusButton.Location = new System.Drawing.Point(427, 21);
+            this.refreshStatusButton.Location = new System.Drawing.Point(6, 19);
             this.refreshStatusButton.Name = "refreshStatusButton";
             this.refreshStatusButton.Size = new System.Drawing.Size(106, 23);
             this.refreshStatusButton.TabIndex = 4;
@@ -137,7 +162,7 @@
             // 
             // restartNodeButton
             // 
-            this.restartNodeButton.Location = new System.Drawing.Point(539, 21);
+            this.restartNodeButton.Location = new System.Drawing.Point(118, 19);
             this.restartNodeButton.Name = "restartNodeButton";
             this.restartNodeButton.Size = new System.Drawing.Size(106, 23);
             this.restartNodeButton.TabIndex = 4;
@@ -146,7 +171,7 @@
             // 
             // startNodeButton
             // 
-            this.startNodeButton.Location = new System.Drawing.Point(427, 50);
+            this.startNodeButton.Location = new System.Drawing.Point(6, 48);
             this.startNodeButton.Name = "startNodeButton";
             this.startNodeButton.Size = new System.Drawing.Size(106, 23);
             this.startNodeButton.TabIndex = 4;
@@ -155,7 +180,7 @@
             // 
             // stopNodeButton
             // 
-            this.stopNodeButton.Location = new System.Drawing.Point(539, 50);
+            this.stopNodeButton.Location = new System.Drawing.Point(118, 48);
             this.stopNodeButton.Name = "stopNodeButton";
             this.stopNodeButton.Size = new System.Drawing.Size(106, 23);
             this.stopNodeButton.TabIndex = 4;
@@ -164,7 +189,7 @@
             // 
             // fulBackupNowButton
             // 
-            this.fulBackupNowButton.Location = new System.Drawing.Point(427, 79);
+            this.fulBackupNowButton.Location = new System.Drawing.Point(6, 77);
             this.fulBackupNowButton.Name = "fulBackupNowButton";
             this.fulBackupNowButton.Size = new System.Drawing.Size(106, 23);
             this.fulBackupNowButton.TabIndex = 4;
@@ -173,7 +198,7 @@
             // 
             // incrBackupNowButton
             // 
-            this.incrBackupNowButton.Location = new System.Drawing.Point(539, 79);
+            this.incrBackupNowButton.Location = new System.Drawing.Point(118, 77);
             this.incrBackupNowButton.Name = "incrBackupNowButton";
             this.incrBackupNowButton.Size = new System.Drawing.Size(106, 23);
             this.incrBackupNowButton.TabIndex = 4;
@@ -182,7 +207,7 @@
             // 
             // backupReportButton
             // 
-            this.backupReportButton.Location = new System.Drawing.Point(427, 108);
+            this.backupReportButton.Location = new System.Drawing.Point(6, 106);
             this.backupReportButton.Name = "backupReportButton";
             this.backupReportButton.Size = new System.Drawing.Size(106, 23);
             this.backupReportButton.TabIndex = 4;
@@ -191,27 +216,35 @@
             // 
             // viewLogsButton
             // 
-            this.viewLogsButton.Location = new System.Drawing.Point(539, 108);
+            this.viewLogsButton.Location = new System.Drawing.Point(118, 106);
             this.viewLogsButton.Name = "viewLogsButton";
             this.viewLogsButton.Size = new System.Drawing.Size(106, 23);
             this.viewLogsButton.TabIndex = 4;
             this.viewLogsButton.Text = "View Logs...";
             this.viewLogsButton.UseVisualStyleBackColor = true;
             // 
-            // nodesStatusBox
+            // nodeStatusBox
             // 
-            this.nodesStatusBox.Controls.Add(this.statusTestDirLabel);
-            this.nodesStatusBox.Controls.Add(this.statusGUIDLabel);
-            this.nodesStatusBox.Controls.Add(this.statusIPAddressLabel);
-            this.nodesStatusBox.Controls.Add(this.statusCurrentTaskLabel);
-            this.nodesStatusBox.Controls.Add(this.statusIndexVersionLabel);
-            this.nodesStatusBox.Controls.Add(this.statusRunningLabel);
-            this.nodesStatusBox.Location = new System.Drawing.Point(191, 12);
-            this.nodesStatusBox.Name = "nodesStatusBox";
-            this.nodesStatusBox.Size = new System.Drawing.Size(229, 150);
-            this.nodesStatusBox.TabIndex = 5;
-            this.nodesStatusBox.TabStop = false;
-            this.nodesStatusBox.Text = "Node Status";
+            this.nodeStatusBox.Controls.Add(this.StatusCodeVersionTextBox);
+            this.nodeStatusBox.Controls.Add(this.StatusTestDirectoryTextBox);
+            this.nodeStatusBox.Controls.Add(this.StatusIPAddressTextBox);
+            this.nodeStatusBox.Controls.Add(this.StatusGUIDTextBox);
+            this.nodeStatusBox.Controls.Add(this.StatusCurrentTaskTextBox);
+            this.nodeStatusBox.Controls.Add(this.StatusIndexVersionTextBox);
+            this.nodeStatusBox.Controls.Add(this.StatusRunningTextBox);
+            this.nodeStatusBox.Controls.Add(this.statusCodeVersionLabel);
+            this.nodeStatusBox.Controls.Add(this.statusTestDirLabel);
+            this.nodeStatusBox.Controls.Add(this.statusGUIDLabel);
+            this.nodeStatusBox.Controls.Add(this.statusIPAddressLabel);
+            this.nodeStatusBox.Controls.Add(this.statusCurrentTaskLabel);
+            this.nodeStatusBox.Controls.Add(this.statusIndexVersionLabel);
+            this.nodeStatusBox.Controls.Add(this.statusRunningLabel);
+            this.nodeStatusBox.Location = new System.Drawing.Point(191, 12);
+            this.nodeStatusBox.Name = "nodeStatusBox";
+            this.nodeStatusBox.Size = new System.Drawing.Size(229, 166);
+            this.nodeStatusBox.TabIndex = 5;
+            this.nodeStatusBox.TabStop = false;
+            this.nodeStatusBox.Text = "Node Status";
             // 
             // statusTestDirLabel
             // 
@@ -282,10 +315,10 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel,
             this.toolStripProgressBar1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 328);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 349);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.statusStrip1.Size = new System.Drawing.Size(785, 24);
+            this.statusStrip1.Size = new System.Drawing.Size(668, 24);
             this.statusStrip1.TabIndex = 6;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -304,15 +337,23 @@
             // 
             // nodeConfigBox
             // 
+            this.nodeConfigBox.Controls.Add(this.comboBox2);
+            this.nodeConfigBox.Controls.Add(this.comboBox1);
+            this.nodeConfigBox.Controls.Add(this.dateTimePicker1);
             this.nodeConfigBox.Controls.Add(this.numericUpDown6);
             this.nodeConfigBox.Controls.Add(this.numericUpDown2);
             this.nodeConfigBox.Controls.Add(this.freeSpaceConfigLabel);
             this.nodeConfigBox.Controls.Add(this.numericUpDown7);
+            this.nodeConfigBox.Controls.Add(this.numericUpDown5);
             this.nodeConfigBox.Controls.Add(this.numericUpDown1);
             this.nodeConfigBox.Controls.Add(this.fileCountConfigLabel);
+            this.nodeConfigBox.Controls.Add(this.FullBackupFrequencyConfigLabel2);
+            this.nodeConfigBox.Controls.Add(this.FullBackupFrequencyConfigLabel);
+            this.nodeConfigBox.Controls.Add(this.backupFrequencyConfigLabel);
+            this.nodeConfigBox.Controls.Add(this.currentDateTimeConfigLabel);
             this.nodeConfigBox.Controls.Add(this.diskCapacityConfigLabel);
             this.nodeConfigBox.Controls.Add(this.backupSizeConfigLabel);
-            this.nodeConfigBox.Location = new System.Drawing.Point(12, 168);
+            this.nodeConfigBox.Location = new System.Drawing.Point(12, 184);
             this.nodeConfigBox.Name = "nodeConfigBox";
             this.nodeConfigBox.Size = new System.Drawing.Size(408, 150);
             this.nodeConfigBox.TabIndex = 5;
@@ -382,17 +423,12 @@
             // backupSizeConfigLabel
             // 
             this.backupSizeConfigLabel.AutoSize = true;
-            this.backupSizeConfigLabel.Location = new System.Drawing.Point(12, 22);
+            this.backupSizeConfigLabel.Location = new System.Drawing.Point(12, 21);
             this.backupSizeConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
             this.backupSizeConfigLabel.Name = "backupSizeConfigLabel";
             this.backupSizeConfigLabel.Size = new System.Drawing.Size(95, 13);
             this.backupSizeConfigLabel.TabIndex = 0;
             this.backupSizeConfigLabel.Text = "Backup Size (MB):";
-            // 
-            // contextMenuStrip1
-            // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
             // 
             // testHarnessConfigBox
             // 
@@ -400,9 +436,9 @@
             this.testHarnessConfigBox.Controls.Add(this.numericUpDown4);
             this.testHarnessConfigBox.Controls.Add(this.rescanIntervalConfigLabel);
             this.testHarnessConfigBox.Controls.Add(this.statusRefreshIntervalConfigLabel);
-            this.testHarnessConfigBox.Location = new System.Drawing.Point(427, 168);
+            this.testHarnessConfigBox.Location = new System.Drawing.Point(427, 184);
             this.testHarnessConfigBox.Name = "testHarnessConfigBox";
-            this.testHarnessConfigBox.Size = new System.Drawing.Size(218, 150);
+            this.testHarnessConfigBox.Size = new System.Drawing.Size(230, 150);
             this.testHarnessConfigBox.TabIndex = 5;
             this.testHarnessConfigBox.TabStop = false;
             this.testHarnessConfigBox.Text = "Test Harness Configuration";
@@ -444,7 +480,7 @@
             // 
             // diskUsageButton
             // 
-            this.diskUsageButton.Location = new System.Drawing.Point(427, 137);
+            this.diskUsageButton.Location = new System.Drawing.Point(6, 135);
             this.diskUsageButton.Name = "diskUsageButton";
             this.diskUsageButton.Size = new System.Drawing.Size(106, 23);
             this.diskUsageButton.TabIndex = 4;
@@ -453,89 +489,250 @@
             // 
             // pushUpdateButton
             // 
-            this.pushUpdateButton.Location = new System.Drawing.Point(539, 137);
+            this.pushUpdateButton.Location = new System.Drawing.Point(118, 135);
             this.pushUpdateButton.Name = "pushUpdateButton";
             this.pushUpdateButton.Size = new System.Drawing.Size(106, 23);
             this.pushUpdateButton.TabIndex = 4;
             this.pushUpdateButton.Text = "Push Update";
             this.pushUpdateButton.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // statusCodeVersionLabel
             // 
-            this.button1.Location = new System.Drawing.Point(651, 21);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(129, 23);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "--unused--";
-            this.button1.UseVisualStyleBackColor = true;
+            this.statusCodeVersionLabel.AutoSize = true;
+            this.statusCodeVersionLabel.Location = new System.Drawing.Point(7, 133);
+            this.statusCodeVersionLabel.Margin = new System.Windows.Forms.Padding(4, 2, 4, 4);
+            this.statusCodeVersionLabel.Name = "statusCodeVersionLabel";
+            this.statusCodeVersionLabel.Size = new System.Drawing.Size(73, 13);
+            this.statusCodeVersionLabel.TabIndex = 0;
+            this.statusCodeVersionLabel.Text = "Code Version:";
+            this.statusCodeVersionLabel.Click += new System.EventHandler(this.label3_Click);
             // 
-            // button2
+            // nodeControlBox
             // 
-            this.button2.Location = new System.Drawing.Point(651, 50);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(129, 23);
-            this.button2.TabIndex = 4;
-            this.button2.Text = "~~not used~~";
-            this.button2.UseVisualStyleBackColor = true;
+            this.nodeControlBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.nodeControlBox.Controls.Add(this.incrBackupNowButton);
+            this.nodeControlBox.Controls.Add(this.refreshStatusButton);
+            this.nodeControlBox.Controls.Add(this.restartNodeButton);
+            this.nodeControlBox.Controls.Add(this.startNodeButton);
+            this.nodeControlBox.Controls.Add(this.stopNodeButton);
+            this.nodeControlBox.Controls.Add(this.fulBackupNowButton);
+            this.nodeControlBox.Controls.Add(this.diskUsageButton);
+            this.nodeControlBox.Controls.Add(this.viewLogsButton);
+            this.nodeControlBox.Controls.Add(this.backupReportButton);
+            this.nodeControlBox.Controls.Add(this.pushUpdateButton);
+            this.nodeControlBox.Location = new System.Drawing.Point(427, 12);
+            this.nodeControlBox.Name = "nodeControlBox";
+            this.nodeControlBox.Size = new System.Drawing.Size(230, 166);
+            this.nodeControlBox.TabIndex = 7;
+            this.nodeControlBox.TabStop = false;
+            this.nodeControlBox.Text = "Node Control";
+            this.nodeControlBox.Enter += new System.EventHandler(this.groupBox1_Enter_1);
             // 
-            // button3
+            // dateTimePicker1
             // 
-            this.button3.Location = new System.Drawing.Point(651, 79);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(129, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "__not in use__";
-            this.button3.UseVisualStyleBackColor = true;
+            this.dateTimePicker1.CustomFormat = "dddd, MMM dd, yyyy -  hh:mm:sstt";
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(127, 69);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.ShowUpDown = true;
+            this.dateTimePicker1.Size = new System.Drawing.Size(243, 20);
+            this.dateTimePicker1.TabIndex = 3;
             // 
-            // button4
+            // currentDateTimeConfigLabel
             // 
-            this.button4.Location = new System.Drawing.Point(651, 137);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(129, 23);
-            this.button4.TabIndex = 4;
-            this.button4.Text = "##todo: use##";
-            this.button4.UseVisualStyleBackColor = true;
+            this.currentDateTimeConfigLabel.AutoSize = true;
+            this.currentDateTimeConfigLabel.Location = new System.Drawing.Point(7, 72);
+            this.currentDateTimeConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.currentDateTimeConfigLabel.Name = "currentDateTimeConfigLabel";
+            this.currentDateTimeConfigLabel.Size = new System.Drawing.Size(117, 13);
+            this.currentDateTimeConfigLabel.TabIndex = 0;
+            this.currentDateTimeConfigLabel.Text = "Current Date and Time:";
+            this.currentDateTimeConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
             // 
-            // button5
+            // backupFrequencyConfigLabel
             // 
-            this.button5.Location = new System.Drawing.Point(651, 108);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(129, 23);
-            this.button5.TabIndex = 4;
-            this.button5.Text = "Configure Schedule...";
-            this.button5.UseVisualStyleBackColor = true;
+            this.backupFrequencyConfigLabel.AutoSize = true;
+            this.backupFrequencyConfigLabel.Location = new System.Drawing.Point(7, 95);
+            this.backupFrequencyConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.backupFrequencyConfigLabel.Name = "backupFrequencyConfigLabel";
+            this.backupFrequencyConfigLabel.Size = new System.Drawing.Size(130, 13);
+            this.backupFrequencyConfigLabel.TabIndex = 0;
+            this.backupFrequencyConfigLabel.Text = "Backup Frequency: Every";
+            this.backupFrequencyConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
+            // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.Location = new System.Drawing.Point(140, 93);
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDown5.TabIndex = 1;
+            this.numericUpDown5.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown5.ValueChanged += new System.EventHandler(this.numericUpDown5_ValueChanged);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "MicroSeconds",
+            "Milliseconds",
+            "Seconds",
+            "Minutes",
+            "Hours",
+            "Days",
+            "Weeks",
+            "Months",
+            "Years",
+            "Decades",
+            "Centuries",
+            "Millenia",
+            "Megannum"});
+            this.comboBox1.Location = new System.Drawing.Point(196, 92);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(131, 21);
+            this.comboBox1.TabIndex = 4;
+            this.comboBox1.Text = "Days";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // FullBackupFrequencyConfigLabel
+            // 
+            this.FullBackupFrequencyConfigLabel.AutoSize = true;
+            this.FullBackupFrequencyConfigLabel.Location = new System.Drawing.Point(7, 121);
+            this.FullBackupFrequencyConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.FullBackupFrequencyConfigLabel.Name = "FullBackupFrequencyConfigLabel";
+            this.FullBackupFrequencyConfigLabel.Size = new System.Drawing.Size(149, 13);
+            this.FullBackupFrequencyConfigLabel.TabIndex = 0;
+            this.FullBackupFrequencyConfigLabel.Text = "Full Backup Frequency: Every";
+            this.FullBackupFrequencyConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
+            // 
+            // FullBackupFrequencyConfigLabel2
+            // 
+            this.FullBackupFrequencyConfigLabel2.AutoSize = true;
+            this.FullBackupFrequencyConfigLabel2.Location = new System.Drawing.Point(217, 121);
+            this.FullBackupFrequencyConfigLabel2.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.FullBackupFrequencyConfigLabel2.Name = "FullBackupFrequencyConfigLabel2";
+            this.FullBackupFrequencyConfigLabel2.Size = new System.Drawing.Size(142, 13);
+            this.FullBackupFrequencyConfigLabel2.TabIndex = 0;
+            this.FullBackupFrequencyConfigLabel2.Text = "backup will be a full backup.";
+            this.FullBackupFrequencyConfigLabel2.Click += new System.EventHandler(this.label1_Click_2);
+            // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "1st",
+            "2nd",
+            "3rd",
+            "4th",
+            "5th",
+            "6th",
+            "7th",
+            "8th",
+            "9th",
+            "10th",
+            "11th",
+            "12th",
+            "13th",
+            "14th",
+            "15th",
+            "16th",
+            "17th",
+            "18th",
+            "19th",
+            "20th",
+            "21st",
+            "22nd",
+            "23rd",
+            "24th",
+            "25th",
+            "26th",
+            "27th",
+            "28th",
+            "29th",
+            "30th"});
+            this.comboBox2.Location = new System.Drawing.Point(159, 118);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(51, 21);
+            this.comboBox2.TabIndex = 4;
+            this.comboBox2.Text = "7th";
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // StatusRunningTextBox
+            // 
+            this.StatusRunningTextBox.Location = new System.Drawing.Point(90, 16);
+            this.StatusRunningTextBox.Name = "StatusRunningTextBox";
+            this.StatusRunningTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusRunningTextBox.TabIndex = 1;
+            this.StatusRunningTextBox.Text = "Yes";
+            // 
+            // StatusIndexVersionTextBox
+            // 
+            this.StatusIndexVersionTextBox.Location = new System.Drawing.Point(90, 35);
+            this.StatusIndexVersionTextBox.Name = "StatusIndexVersionTextBox";
+            this.StatusIndexVersionTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusIndexVersionTextBox.TabIndex = 1;
+            this.StatusIndexVersionTextBox.Text = "12345";
+            // 
+            // StatusCurrentTaskTextBox
+            // 
+            this.StatusCurrentTaskTextBox.Location = new System.Drawing.Point(90, 54);
+            this.StatusCurrentTaskTextBox.Name = "StatusCurrentTaskTextBox";
+            this.StatusCurrentTaskTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusCurrentTaskTextBox.TabIndex = 1;
+            this.StatusCurrentTaskTextBox.Text = "Idle";
+            // 
+            // StatusIPAddressTextBox
+            // 
+            this.StatusIPAddressTextBox.Location = new System.Drawing.Point(90, 73);
+            this.StatusIPAddressTextBox.Name = "StatusIPAddressTextBox";
+            this.StatusIPAddressTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusIPAddressTextBox.TabIndex = 1;
+            this.StatusIPAddressTextBox.Text = "10.0.0.1";
+            // 
+            // StatusGUIDTextBox
+            // 
+            this.StatusGUIDTextBox.Location = new System.Drawing.Point(90, 92);
+            this.StatusGUIDTextBox.Name = "StatusGUIDTextBox";
+            this.StatusGUIDTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusGUIDTextBox.TabIndex = 1;
+            this.StatusGUIDTextBox.Text = "unique1";
+            // 
+            // StatusTestDirectoryTextBox
+            // 
+            this.StatusTestDirectoryTextBox.Location = new System.Drawing.Point(90, 111);
+            this.StatusTestDirectoryTextBox.Name = "StatusTestDirectoryTextBox";
+            this.StatusTestDirectoryTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusTestDirectoryTextBox.TabIndex = 1;
+            this.StatusTestDirectoryTextBox.Text = "C:\\Program  Files\\Echo Backup\\";
+            // 
+            // StatusCodeVersionTextBox
+            // 
+            this.StatusCodeVersionTextBox.Location = new System.Drawing.Point(90, 130);
+            this.StatusCodeVersionTextBox.Name = "StatusCodeVersionTextBox";
+            this.StatusCodeVersionTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusCodeVersionTextBox.TabIndex = 1;
+            this.StatusCodeVersionTextBox.Text = "1.2.3";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.ClientSize = new System.Drawing.Size(785, 352);
+            this.ClientSize = new System.Drawing.Size(668, 373);
             this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.nodeControlBox);
+            this.Controls.Add(this.nodeStatusBox);
             this.Controls.Add(this.nodeConfigBox);
             this.Controls.Add(this.testHarnessConfigBox);
-            this.Controls.Add(this.nodesStatusBox);
-            this.Controls.Add(this.viewLogsButton);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.pushUpdateButton);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.backupReportButton);
-            this.Controls.Add(this.diskUsageButton);
-            this.Controls.Add(this.incrBackupNowButton);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.fulBackupNowButton);
-            this.Controls.Add(this.stopNodeButton);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.startNodeButton);
-            this.Controls.Add(this.restartNodeButton);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.refreshStatusButton);
             this.Controls.Add(this.nodesBox);
             this.Name = "Form1";
-            this.Text = "Test Harness";
+            this.Text = "Echo Backup Test Harness";
             this.nodesBox.ResumeLayout(false);
-            this.nodesStatusBox.ResumeLayout(false);
-            this.nodesStatusBox.PerformLayout();
+            this.nodeStatusBox.ResumeLayout(false);
+            this.nodeStatusBox.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.nodeConfigBox.ResumeLayout(false);
@@ -548,6 +745,8 @@
             this.testHarnessConfigBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
+            this.nodeControlBox.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -566,7 +765,7 @@
         private System.Windows.Forms.Button incrBackupNowButton;
         private System.Windows.Forms.Button backupReportButton;
         private System.Windows.Forms.Button viewLogsButton;
-        private System.Windows.Forms.GroupBox nodesStatusBox;
+        private System.Windows.Forms.GroupBox nodeStatusBox;
         private System.Windows.Forms.Label statusIPAddressLabel;
         private System.Windows.Forms.Label statusCurrentTaskLabel;
         private System.Windows.Forms.Label statusIndexVersionLabel;
@@ -581,7 +780,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.Label diskCapacityConfigLabel;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.GroupBox testHarnessConfigBox;
         private System.Windows.Forms.NumericUpDown numericUpDown4;
         private System.Windows.Forms.Label statusRefreshIntervalConfigLabel;
@@ -590,15 +788,27 @@
         private System.Windows.Forms.Button clearButton;
         private System.Windows.Forms.NumericUpDown numericUpDown3;
         private System.Windows.Forms.Label rescanIntervalConfigLabel;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
         private System.Windows.Forms.NumericUpDown numericUpDown6;
         private System.Windows.Forms.Label freeSpaceConfigLabel;
         private System.Windows.Forms.NumericUpDown numericUpDown7;
         private System.Windows.Forms.Label fileCountConfigLabel;
+        private System.Windows.Forms.Label statusCodeVersionLabel;
+        private System.Windows.Forms.GroupBox nodeControlBox;
+        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.Label currentDateTimeConfigLabel;
+        private System.Windows.Forms.Label backupFrequencyConfigLabel;
+        private System.Windows.Forms.NumericUpDown numericUpDown5;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label FullBackupFrequencyConfigLabel;
+        private System.Windows.Forms.Label FullBackupFrequencyConfigLabel2;
+        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.TextBox StatusCodeVersionTextBox;
+        private System.Windows.Forms.TextBox StatusTestDirectoryTextBox;
+        private System.Windows.Forms.TextBox StatusIPAddressTextBox;
+        private System.Windows.Forms.TextBox StatusGUIDTextBox;
+        private System.Windows.Forms.TextBox StatusCurrentTaskTextBox;
+        private System.Windows.Forms.TextBox StatusIndexVersionTextBox;
+        private System.Windows.Forms.TextBox StatusRunningTextBox;
 
     }
 }
