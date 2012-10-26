@@ -1,6 +1,6 @@
 ﻿namespace Backend
 {
-    partial class EchoBackup
+    partial class EchoBackupService
     {
         /// <summary> 
         /// Required designer variable.
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.serviceController1 = new System.ServiceProcess.ServiceController();
             // 
             // EchoBackup
             // 
@@ -36,5 +37,7 @@
         }
 
         #endregion
+
+        private System.ServiceProcess.ServiceController serviceController1;
     }
 }
