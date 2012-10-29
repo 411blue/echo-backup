@@ -4,20 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 using System.Diagnostics;
+using System.Data;
 
 namespace Backend.Database
 {
     public class SQLiteExamples
     {
-        //the name of a table
-        private string tablename = "dvds";
-
-        //columns in our 'dvd' table
-        private string idColName = "id";
-        private string nameColName = "title";
-        private string genreColName = "genre";
-
-
         /// <summary>
         /// Creates a SQLite database. Assumes that the database does
         /// not exist already.
@@ -69,21 +61,50 @@ namespace Backend.Database
         /// <param name="conn">A SQLiteConnection object.</param>
         public void CreateDVDTable(SQLiteConnection conn)
         {
-            //This sql query creates a dvds table with an auto incrementing id field as the primary key.
-            string sql = "CREATE TABLE dvds (id INTEGER PRIMARY KEY ASC, title TEXT, genre TEXT)";
+            //This sql query creates a dvds table with an auto incrementing id field as the primary key and some other columns.
+            string sql = "CREATE TABLE dvds (id INTEGER PRIMARY KEY ASC, title TEXT, genre TEXT, date_added DATETIME)";
 
             //SQLiteCommand objects are where we exectute sql statements.
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
             try
             {
+                conn.Open();
                 cmd.ExecuteNonQuery();
+                conn.Close();
             }
             catch (SQLiteException ex)
             {
                 //if anything is wrong with the sql statement or the database,
                 //a SQLiteException will show information about it.
                 Debug.Print(ex.Message);
+
+                //always make sure the database connectio is closed.
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
             }
+        }
+
+        public void InsertDVDRecord(string dvdTitle, string dvdGenre, SQLiteConnection conn)
+        {
+            string sql = "INSERT INTO dvds (title, genre, date_added) VALUES (@pTitle, @pGenre, @pDateAdded)";
+            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+
+            //We know the title and the genre, so let's get the date for the date_added field.
+            //SQLite likes dates and times in a certain format (ISO-something or other).
+            //This is given as the parameter to ToString()
+            string currentTimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+            cmd.Parameters.Add(new SQLiteParameter("@pTitle", dvdTitle));
+            cmd.Parameters.Add(new SQLiteParameter("@pGenre", dvdGenre));
+            cmd.Parameters.Add(new SQLiteParameter("@pDateAdded", currentTimeString));
+
+            //open the connection, exectute the query, and close the connection.
+            //should probably be a try/catch block here
+            conn.Open();
+            cmd.ExecuteNonQuery();
+            conn.Close();
         }
 
         /// <summary>
@@ -125,10 +146,14 @@ namespace Backend.Database
             //now let's add the parameter to the SQLiteCommand's parameter collection:
             cmd.Parameters.Add(pDVDName);
 
-            //now we execute the sql statement.
+            //now we execute the sql statement
             //we are assuming that there is only one record to return,
             //so we use ExecuteScalar().
-            return cmd.ExecuteScalar().ToString();
+            conn.Open();
+            string genre = cmd.ExecuteScalar().ToString();
+            conn.Close();
+
+            return genre;
         }
 
         /// <summary>
@@ -143,6 +168,10 @@ namespace Backend.Database
 
             string sql = "SELECT title FROM dvds";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+
+
+            //open the connection
+            conn.Open();
 
             //we are 'using' a data reader here. Once
             //it leaves the 'using' scope, memory for the 
@@ -165,6 +194,9 @@ namespace Backend.Database
                 dvdTitles.Add(dvdTitle);
             }
 
+            //close the connection
+            conn.Close();
+
             return dvdTitles;
         }
 
@@ -180,7 +212,9 @@ namespace Backend.Database
 
             //'sqlite_master' exists in all sqlite databases and holds metadata about the database.
             cmd.CommandText = "SELECT name FROM sqlite_master WHERE type='table' AND name='" + tableName + "'";
+            conn.Open();
             SQLiteDataReader rdr = cmd.ExecuteReader();
+            conn.Close();
             if (rdr.HasRows)
                 return true;
             return false;
