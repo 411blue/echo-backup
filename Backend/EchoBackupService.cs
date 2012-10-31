@@ -10,6 +10,7 @@ using System.Text;
 
 namespace Backend {
     public partial class EchoBackupService : ServiceBase {
+        private Version version = new Version("0.1.0.0");
         private Logger logger;
 
         public EchoBackupService() {
@@ -20,6 +21,7 @@ namespace Backend {
         protected override void OnStart(string[] args) {
             logger = new Logger();
             logger.Log("Started Service");
+            MainLoop();
         }
 
         protected override void OnStop() {
