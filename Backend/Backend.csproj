@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\IndexDatabase.cs" />
     <Compile Include="Database\SQLiteExamples.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="EchoBackupService.cs">
