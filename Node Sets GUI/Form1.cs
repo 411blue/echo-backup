@@ -6,13 +6,12 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Backend;
 
 namespace GUI_Frontend
 {
-    public partial class Form1 : Form
+    public partial class frmNodeSets : Form
     {
-        public Form1()
+        public frmNodeSets()
         {
             InitializeComponent();
         }

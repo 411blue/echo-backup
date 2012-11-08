@@ -5,7 +5,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test Harness", "Test Harnes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backend", "Backend\Backend.csproj", "{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI Frontend", "GUI Frontend\GUI Frontend.csproj", "{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{83825CE6-2E9D-45C1-802F-837D3F0C52BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Node Sets GUI", "Node Sets GUI\Node Sets GUI.csproj", "{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,11 +34,9 @@ Global
 		{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}.Release|x86.ActiveCfg = Release|x86
 		{D3A9E7AD-ECC1-4698-9AB2-71BFA87EA99F}.Release|x86.Build.0 = Release|x86
 		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Debug|x64.ActiveCfg = Debug|x86
-		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Debug|x64.Build.0 = Debug|x86
 		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Debug|x86.ActiveCfg = Debug|x86
 		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Debug|x86.Build.0 = Debug|x86
 		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Release|x64.ActiveCfg = Release|x86
-		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Release|x64.Build.0 = Release|x86
 		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Release|x86.ActiveCfg = Release|x86
 		{7EF3CA2A-A74B-4BC8-B8B8-AB494FE2545C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
