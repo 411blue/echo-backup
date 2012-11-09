@@ -86,6 +86,7 @@ namespace Backend
             server.Close();
         }
 
+
         //Generate UniqeID
         public Guid GetUniqueId()
         {
@@ -217,13 +218,13 @@ namespace Backend
         //Set the max backup support of the local node
         public void setMaxBackupSpace(double d1)
         {
-            d1 = backupLimit;
+            backupLimit = d1;
         }
 
         //Set the backup directory
         public void SetBackupDirectory(string s1)
         {
-            s1 =  backupDirectory;
+            backupDirectory = s1;
         }
 
         private Guid uniqueId;
