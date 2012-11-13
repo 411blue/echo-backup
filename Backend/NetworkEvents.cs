@@ -1,4 +1,5 @@
 ﻿using System.Net.NetworkInformation;
+using System.Net.Sockets;
 using System.Net;
 using System;
 
@@ -48,9 +49,36 @@ namespace Backend
     }
 
     /// <summary>
-    /// Represents a request to store a backup file on another node
+    /// Abstract class with base code for TCP network events. Contains a TcpClient object.
     /// </summary>
-    class PushRequest : NetworkEvent
+    abstract class TcpNetworkEvent : NetworkEvent
+    {
+        private TcpClient myTcpClient;
+        public TcpClient TcpClient
+        {
+            get { return myTcpClient; }
+            set { myTcpClient = value; }
+        }
+        
+
+        TcpNetworkEvent(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
+        {
+            mySourceIPAddress = ipAddress;
+            mySourceMacAddress = macAddress;
+            mySourceGuid = guid;
+            mySequenceNumber = sequenceNumber;
+        }
+
+        TcpNetworkEvent(TcpClient tcpClient)
+        {
+            myTcpClient = tcpClient;
+        }
+    }
+
+    /// <summary>
+    /// Represents a push request to store a backup file.
+    /// </summary>
+    class PushRequest : TcpNetworkEvent
     {
         // The id of the backup this file is a part of
         private long myBackupNumber;
@@ -74,17 +102,6 @@ namespace Backend
         {
             get { return myFileSize; }
             set { myFileSize = value; }
-        }
-
-        PushRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber, long backupNumber, long chunkNumber, long fileSize)
-        {
-            mySourceIPAddress = ipAddress;
-            mySourceMacAddress = macAddress;
-            mySourceGuid = guid;
-            mySequenceNumber = sequenceNumber;
-            myBackupNumber = backupNumber;
-            myChunkNumber = chunkNumber;
-            myFileSize = fileSize;
         }
     }
 }
