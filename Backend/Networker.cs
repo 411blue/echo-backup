@@ -225,6 +225,29 @@ namespace Backend
             backupDirectory = s1;
         }
 
+        //Get Hello message
+        public string GetHello()
+        {
+            string hello = string.Concat("Hello" + "/" + Convert.ToString(GetUniqueId()));
+            return hello;
+        }
+
+        //Get update message
+        public string GetUpdate()
+        {
+            string update = string.Concat("Update" + "/" + Convert.ToString(GetUniqueId()) + "/" + GetHostName() + "/" + GetInternetAddress() + "/"
+            + GetMAC()) + "/" + GetTotalSize() + "/" + GetUsedSpace() + "/" + GetFreeSpace()
+            + "/" + GetMaxBackupSpace();
+            return update;
+        }
+
+        //Get Bye message
+        public string GetBye()
+        {
+            string bye = string.Concat("Hello" + "/" + GetUniqueId());
+            return bye;
+        }
+
         private Guid uniqueId;
         private string hostName;
         private string internetAddress;
