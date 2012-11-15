@@ -85,7 +85,6 @@ namespace Backend
             server.Close();
         }
 
-
         //Generate UniqeID
         public Guid GetUniqueId()
         {
