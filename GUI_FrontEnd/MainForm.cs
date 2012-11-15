@@ -6,14 +6,41 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Backend;
+using GUI_FrontEnd.Properties;
+using System.IO; //allows access to Backend classes!
 
 namespace GUI_FrontEnd
 {
+    /// <summary>
+    /// This is the main form for Echo Backup. It acts as the stage for
+    /// all of the other GUIs and stores data that they need to share between them,
+    /// such as references to databases, settings, current state, etc.
+    /// </summary>
     public partial class MainForm : Form
     {
+        private Logger logger;
+        private Networker networker;
+        
         public MainForm()
         {
             InitializeComponent();
+
+            if (Directory.Exists(Settings.Default.LogFilePath))
+            {
+                logger = new Logger(Settings.Default.LogFilePath);
+            }
+            else
+            {
+                logger = new Logger();
+            }
+
+            //at this point the MainForm should get references to
+            //other nodes and such. Perhaps this could be Properties in the
+            //Networker class.
+            networker = new Networker();
+            
+            
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -112,6 +139,17 @@ namespace GUI_FrontEnd
                 GUI_FrontEnd.SchedulerGUI gui = new GUI_FrontEnd.SchedulerGUI(this);
                 gui.MdiParent = this;
                 gui.Show();
+            }
+        }
+
+        private void setLogFilePathToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                Settings.Default.LogFilePath = fbd.SelectedPath;
+                Settings.Default.Save();
+                lblStatus.Text = "Log file path changed to " + fbd.SelectedPath;
             }
         }
     }

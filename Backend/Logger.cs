@@ -5,11 +5,18 @@ using System.Linq;
 using System.Text;
 
 namespace Backend {
-    class Logger {
+    public class Logger {
         private StreamWriter writer;
-        private String filename = "C:\\log.log";
+        private String filename = "log.log";
+        private String defaultFileName = Environment.CurrentDirectory + "\\" + "log.log";
+        
+        public Logger(string path) {
+            writer = new StreamWriter(path + "\\" + filename, true);
+            this.Log(" Opened log file.");
+        }
 
-        public Logger() {
+        public Logger()
+        {
             writer = new StreamWriter(filename, true);
             this.Log(" Opened log file.");
         }

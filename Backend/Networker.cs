@@ -26,7 +26,7 @@ namespace Backend
     }
     */
 
-    class Networker
+    public class Networker
     {
         /*
         const int MULTICAST_PORT = 7777;

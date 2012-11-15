@@ -39,6 +39,8 @@
             this.schedulerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStripMainForm = new System.Windows.Forms.StatusStrip();
             this.lblStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setLogFilePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStripMainForm.SuspendLayout();
             this.statusStripMainForm.SuspendLayout();
             this.SuspendLayout();
@@ -47,7 +49,8 @@
             // 
             this.menuStripMainForm.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
-            this.viewToolStripMenuItem});
+            this.viewToolStripMenuItem,
+            this.optionsToolStripMenuItem});
             this.menuStripMainForm.Location = new System.Drawing.Point(0, 0);
             this.menuStripMainForm.Name = "menuStripMainForm";
             this.menuStripMainForm.Size = new System.Drawing.Size(784, 24);
@@ -130,6 +133,21 @@
             this.lblStatus.Size = new System.Drawing.Size(118, 17);
             this.lblStatus.Text = "toolStripStatusLabel1";
             // 
+            // optionsToolStripMenuItem
+            // 
+            this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setLogFilePathToolStripMenuItem});
+            this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
+            // 
+            // setLogFilePathToolStripMenuItem
+            // 
+            this.setLogFilePathToolStripMenuItem.Name = "setLogFilePathToolStripMenuItem";
+            this.setLogFilePathToolStripMenuItem.Size = new System.Drawing.Size(161, 22);
+            this.setLogFilePathToolStripMenuItem.Text = "Set Log File Path";
+            this.setLogFilePathToolStripMenuItem.Click += new System.EventHandler(this.setLogFilePathToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -164,6 +182,8 @@
         private System.Windows.Forms.ToolStripMenuItem schedulerToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStripMainForm;
         private System.Windows.Forms.ToolStripStatusLabel lblStatus;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setLogFilePathToolStripMenuItem;
     }
 }
 
