@@ -25,9 +25,9 @@ namespace GUI_FrontEnd
         {
             //make sure it's not already showing
             bool showing = false;
-            foreach (Control ctl in this.Controls)
+            foreach (Form form in this.MdiChildren)
             {
-                if (ctl is BackupStatusGUI)
+                if (form is BackupStatusGUI)
                 {
                     showing = true;
                 }
