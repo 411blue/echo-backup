@@ -12,13 +12,13 @@ namespace Backend {
         
         public Logger(string path) {
             writer = new StreamWriter(path + "\\" + filename, true);
-            this.Log(" Opened log file.");
+            this.Log("Opened log file.");
         }
 
         public Logger()
         {
             writer = new StreamWriter(filename, true);
-            this.Log(" Opened log file.");
+            this.Log("Opened log file.");
         }
 
         public void Log(String s) {

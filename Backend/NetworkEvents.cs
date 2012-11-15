@@ -60,7 +60,6 @@ namespace Backend
             set { myTcpClient = value; }
         }
         
-
         public TcpNetworkEvent(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
         {
             mySourceIPAddress = ipAddress;
