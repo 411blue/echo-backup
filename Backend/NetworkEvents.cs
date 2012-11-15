@@ -11,7 +11,7 @@ namespace Backend
     /// An abstract representation of a network event. Used to provide a base for the definition of push, pull and query requests.
     /// </summary>
     [Serializable()]
-    abstract class NetworkEvent
+    public abstract class NetworkEvent
     {
         protected IPAddress mySourceIPAddress;
         public IPAddress SourceIPAddress
@@ -51,7 +51,7 @@ namespace Backend
     /// <summary>
     /// Abstract class with base code for TCP network events. Contains a TcpClient object.
     /// </summary>
-    abstract class TcpNetworkEvent : NetworkEvent
+    public abstract class TcpNetworkEvent : NetworkEvent
     {
         private TcpClient myTcpClient;
         public TcpClient TcpClient
@@ -61,7 +61,7 @@ namespace Backend
         }
         
 
-        TcpNetworkEvent(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
+        public TcpNetworkEvent(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
         {
             mySourceIPAddress = ipAddress;
             mySourceMacAddress = macAddress;
@@ -69,7 +69,7 @@ namespace Backend
             mySequenceNumber = sequenceNumber;
         }
 
-        TcpNetworkEvent(TcpClient tcpClient)
+        public TcpNetworkEvent(TcpClient tcpClient)
         {
             myTcpClient = tcpClient;
         }
@@ -78,8 +78,20 @@ namespace Backend
     /// <summary>
     /// Represents a push request to store a backup file.
     /// </summary>
-    class PushRequest : TcpNetworkEvent
+    public class PushRequest : TcpNetworkEvent
     {
+        
+        //these constructors is needed to compile!..Shane
+        public PushRequest(TcpClient tcpClient)
+            : base(tcpClient)
+        {
+        }
+
+        public PushRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
+            : base(ipAddress, macAddress, guid, sequenceNumber)
+        {
+        }
+
         // The id of the backup this file is a part of
         private long myBackupNumber;
         public long BackupNumber

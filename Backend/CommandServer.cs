@@ -19,7 +19,7 @@ namespace Backend
         //flag to continue listening
         private bool keepGoing = true;
         private Queue<TcpNetworkEvent> eventQueue;
-        private Queue<Thread>
+        private Queue<Thread> serverThreads; //this had no name and no semi-colon so it wouldn't compile. I just named it serverThreads as it seemed appropriate...Shane
         private Thread serverThread;
         private TcpListener tcpListener;
 
@@ -65,7 +65,7 @@ namespace Backend
                     //blocks until the client sends a message
                     //read only 2 bytes -- the ushort that specifies the length of the message in bytes
                     bytesRead = clientStream.Read(bytes, 0, 2);
-                    totalBytesRead += bytesRead;
+                    totalBytesRead += (uint)bytesRead;
                 }
                 catch
                 {
@@ -80,7 +80,7 @@ namespace Backend
                 if (totalBytesRead < bytesNeeded) {
                     continue;
                 }
-
+            }
         }
     }
 }

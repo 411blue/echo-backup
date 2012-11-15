@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data Recovery GUI", "Data R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Backup Status GUI", "Backup Status GUI\Backup Status GUI.csproj", "{C793B0B3-501C-4DC8-A975-D10E410125C6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GUI_FrontEnd", "GUI_FrontEnd\GUI_FrontEnd.csproj", "{3F430BF2-C9B1-4746-82F6-46698CD57840}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -63,6 +65,12 @@ Global
 		{C793B0B3-501C-4DC8-A975-D10E410125C6}.Release|x64.ActiveCfg = Release|x86
 		{C793B0B3-501C-4DC8-A975-D10E410125C6}.Release|x86.ActiveCfg = Release|x86
 		{C793B0B3-501C-4DC8-A975-D10E410125C6}.Release|x86.Build.0 = Release|x86
+		{3F430BF2-C9B1-4746-82F6-46698CD57840}.Debug|x64.ActiveCfg = Debug|x86
+		{3F430BF2-C9B1-4746-82F6-46698CD57840}.Debug|x86.ActiveCfg = Debug|x86
+		{3F430BF2-C9B1-4746-82F6-46698CD57840}.Debug|x86.Build.0 = Debug|x86
+		{3F430BF2-C9B1-4746-82F6-46698CD57840}.Release|x64.ActiveCfg = Release|x86
+		{3F430BF2-C9B1-4746-82F6-46698CD57840}.Release|x86.ActiveCfg = Release|x86
+		{3F430BF2-C9B1-4746-82F6-46698CD57840}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
