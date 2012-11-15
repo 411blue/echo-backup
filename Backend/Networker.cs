@@ -147,7 +147,7 @@ namespace Backend
         }
 
         //Get free disk space of drive C on the local node
-        public double GetFreeSpace()
+        public long GetFreeSpace()
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
 
@@ -155,14 +155,14 @@ namespace Backend
             {
                 if (drive.Name == "C:\\")
                 {
-                    freeSpace = Convert.ToDouble(drive.AvailableFreeSpace / 1073741824);
+                    freeSpace = drive.AvailableFreeSpace;
                 }
             }
             return freeSpace;
         }
 
         //Get total disk space of drive C on the local node
-        public double GetTotalSize()
+        public long GetTotalSize()
         {
             DriveInfo[] allDrives = DriveInfo.GetDrives();
 
@@ -170,7 +170,7 @@ namespace Backend
             {
                 if (drive.Name == "C:\\")
                 {
-                    totalSize = Convert.ToDouble(drive.TotalSize / 1073741824);
+                    totalSize = drive.TotalSize;
                     break;
                 }
             }
@@ -178,9 +178,9 @@ namespace Backend
         }
 
         //Get used disk space of drive C on the local node
-        public double GetUsedSpace()
+        public long GetUsedSpace()
         {
-            return usedSpace = Convert.ToDouble(GetTotalSize() - GetFreeSpace());
+            return usedSpace = GetTotalSize() - GetFreeSpace();
         }
 
         //Get the max backup support of the local node
@@ -190,7 +190,7 @@ namespace Backend
         }
 
         //Get the size of directory and all subdirectories
-        public double GetDirectorySize(string path)
+        public long GetDirectorySize(string path)
         {
             DirectoryInfo di = new DirectoryInfo(path);
             FileInfo[] fi = di.GetFiles();
@@ -205,7 +205,7 @@ namespace Backend
             {
                 GetDirectorySize(Convert.ToString(dri.FullName));
             }
-            return Convert.ToDouble(directorySize);
+            return directorySize;
         }
 
         //Get the backup directory
@@ -230,11 +230,11 @@ namespace Backend
         private string hostName;
         private string internetAddress;
         private string mac;
-        private double freeSpace;
-        private double totalSize;
-        private double usedSpace;
+        private long freeSpace;
+        private long totalSize;
+        private long usedSpace;
         private double backupLimit;
-        private double directorySize;
+        private long directorySize;
         private string backupDirectory;
         IPAddress multicastIp;
     }
