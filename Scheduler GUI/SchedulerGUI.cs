@@ -7,18 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace Backup_Status
+namespace Scheduler_GUI
 {
-    public partial class Form1 : Form
+    public partial class SchedulerGUI : Form
     {
-        public Form1()
+        public SchedulerGUI()
         {
             InitializeComponent();
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
         }
     }
 }

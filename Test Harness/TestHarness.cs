@@ -15,9 +15,9 @@ using System.Windows.Forms;
 
 namespace Test_Harness
 {
-    public partial class Form1 : Form
+    public partial class TestHarness : Form
     {
-        public Form1()
+        public TestHarness()
         {
             InitializeComponent();
         }

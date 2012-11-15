@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace Data_Recovery_GUI
 {
-    public partial class Form1 : Form
+    public partial class DataRecoveryGUI : Form
     {
-        public Form1()
+        public DataRecoveryGUI()
         {
             InitializeComponent();
         }

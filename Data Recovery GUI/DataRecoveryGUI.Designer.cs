@@ -1,6 +1,6 @@
 ﻿namespace Data_Recovery_GUI
 {
-    partial class Form1
+    partial class DataRecoveryGUI
     {
         /// <summary>
         /// Required designer variable.

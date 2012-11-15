@@ -6,7 +6,7 @@
 
 namespace Test_Harness
 {
-    partial class Form1
+    partial class TestHarness
     {
         /// <summary>
         /// Required designer variable.

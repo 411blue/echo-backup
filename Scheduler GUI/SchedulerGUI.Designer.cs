@@ -1,6 +1,6 @@
 ﻿namespace Scheduler_GUI
 {
-    partial class Form1
+    partial class SchedulerGUI
     {
         /// <summary>
         /// Required designer variable.

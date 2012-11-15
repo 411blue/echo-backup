@@ -1,6 +1,6 @@
 ﻿namespace Backup_Status
 {
-    partial class Form1
+    partial class BackupStatusGUI
     {
         /// <summary>
         /// Required designer variable.
