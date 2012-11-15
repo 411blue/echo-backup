@@ -98,18 +98,21 @@
             this.dataRecoveryToolStripMenuItem.Name = "dataRecoveryToolStripMenuItem";
             this.dataRecoveryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.dataRecoveryToolStripMenuItem.Text = "Data Recovery";
+            this.dataRecoveryToolStripMenuItem.Click += new System.EventHandler(this.dataRecoveryToolStripMenuItem_Click);
             // 
             // nodeSetsToolStripMenuItem
             // 
             this.nodeSetsToolStripMenuItem.Name = "nodeSetsToolStripMenuItem";
             this.nodeSetsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.nodeSetsToolStripMenuItem.Text = "Node Sets";
+            this.nodeSetsToolStripMenuItem.Click += new System.EventHandler(this.nodeSetsToolStripMenuItem_Click);
             // 
             // schedulerToolStripMenuItem
             // 
             this.schedulerToolStripMenuItem.Name = "schedulerToolStripMenuItem";
             this.schedulerToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.schedulerToolStripMenuItem.Text = "Scheduler";
+            this.schedulerToolStripMenuItem.Click += new System.EventHandler(this.schedulerToolStripMenuItem_Click);
             // 
             // statusStripMainForm
             // 

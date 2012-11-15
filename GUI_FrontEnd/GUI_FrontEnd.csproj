@@ -52,19 +52,43 @@
     <Compile Include="BackupStatusGUI.Designer.cs">
       <DependentUpon>BackupStatusGUI.cs</DependentUpon>
     </Compile>
+    <Compile Include="DataRecoveryGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataRecoveryGUI.Designer.cs">
+      <DependentUpon>DataRecoveryGUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="NodeSetsGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NodeSetsGUI.Designer.cs">
+      <DependentUpon>NodeSetsGUI.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SchedulerGUI.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SchedulerGUI.Designer.cs">
+      <DependentUpon>SchedulerGUI.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="BackupStatusGUI.resx">
       <DependentUpon>BackupStatusGUI.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="DataRecoveryGUI.resx">
+      <DependentUpon>DataRecoveryGUI.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NodeSetsGUI.resx">
+      <DependentUpon>NodeSetsGUI.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -75,6 +99,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="SchedulerGUI.resx">
+      <DependentUpon>SchedulerGUI.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
