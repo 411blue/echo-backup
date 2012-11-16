@@ -24,7 +24,7 @@ namespace GUI_FrontEnd
             {
                 for (int i = 0; i < dataGridViewNodeSets.Rows.Count - 1; ++i)
                 {
-                    hostList.Items.Add(dataGridViewNodeSets.Rows[i].Cells[0].Value);
+                    DiskList.Items.Add(dataGridViewNodeSets.Rows[i].Cells[0].Value);
                 }
             }
         }
@@ -33,10 +33,10 @@ namespace GUI_FrontEnd
         {
             for (int i = 0; i < dataGridViewNodeSets.Rows.Count - 1; ++i)
             {
-                if (h == Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[0].Value))
+                if (h == Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[1].Value))
                 {
-                    draw(long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[1].Value)), long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[2].Value)),
-                        long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[3].Value)), long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[4].Value)));
+                    draw(long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[6].Value)), long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[7].Value)),
+                        long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[8].Value)), long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[9].Value)));
                     break;
                 }
             }
@@ -77,7 +77,7 @@ namespace GUI_FrontEnd
 
         private void hostList_TextChanged(object sender, EventArgs e)
         {
-            lookUpBytes(hostList.Text);
+            lookUpBytes(DiskList.Text);
         }
 
         #endregion
@@ -86,8 +86,6 @@ namespace GUI_FrontEnd
         {
             //initialize the disk report tab
             InitializeDiskReportTab();
-        }
-
-        
+        }        
     }
 }

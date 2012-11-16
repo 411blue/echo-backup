@@ -35,19 +35,13 @@
             this.tabNodeSets = new System.Windows.Forms.TabPage();
             this.pnlNodeSetsFill = new System.Windows.Forms.Panel();
             this.dataGridViewNodeSets = new System.Windows.Forms.DataGridView();
-            this.colMacAddress = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDeviceName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colReliabilityMetric = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colUtilizationPercentage = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colAvailableSpace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.btnLoadNodeSet = new System.Windows.Forms.Button();
             this.btnSaveNodeSet = new System.Windows.Forms.Button();
             this.chkUtilizationOverride = new System.Windows.Forms.CheckBox();
             this.lblRedundancy = new System.Windows.Forms.Label();
             this.numUpDwnRedundancy = new System.Windows.Forms.NumericUpDown();
-            this.pnlNodeSetsTop = new System.Windows.Forms.Panel();
+            this.NodeGrid = new System.Windows.Forms.Panel();
             this.btnRefreshList = new System.Windows.Forms.Button();
             this.lblListTitle = new System.Windows.Forms.Label();
             this.tabDiskReport = new System.Windows.Forms.TabPage();
@@ -61,7 +55,7 @@
             this.bytes1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.hostList = new System.Windows.Forms.ComboBox();
+            this.DiskList = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -111,6 +105,17 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitEchoBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.maxBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.freeSpace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nonBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -119,7 +124,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNodeSets)).BeginInit();
             this.pnlNodeSetsBottom.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDwnRedundancy)).BeginInit();
-            this.pnlNodeSetsTop.SuspendLayout();
+            this.NodeGrid.SuspendLayout();
             this.tabDiskReport.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
@@ -182,7 +187,7 @@
             this.tabNodeSets.BackColor = System.Drawing.SystemColors.Control;
             this.tabNodeSets.Controls.Add(this.pnlNodeSetsFill);
             this.tabNodeSets.Controls.Add(this.pnlNodeSetsBottom);
-            this.tabNodeSets.Controls.Add(this.pnlNodeSetsTop);
+            this.tabNodeSets.Controls.Add(this.NodeGrid);
             this.tabNodeSets.Location = new System.Drawing.Point(4, 22);
             this.tabNodeSets.Name = "tabNodeSets";
             this.tabNodeSets.Padding = new System.Windows.Forms.Padding(3);
@@ -205,47 +210,22 @@
             this.dataGridViewNodeSets.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewNodeSets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewNodeSets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colMacAddress,
-            this.colDeviceName,
-            this.colReliabilityMetric,
-            this.colUtilizationPercentage,
-            this.colAvailableSpace,
-            this.colDescription});
+            this.guid,
+            this.name,
+            this.ip,
+            this.mac,
+            this.reliablity,
+            this.maxBackup,
+            this.totalCapacity,
+            this.freeSpace,
+            this.nonBackup,
+            this.backupData,
+            this.status});
             this.dataGridViewNodeSets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewNodeSets.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewNodeSets.Name = "dataGridViewNodeSets";
             this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 347);
             this.dataGridViewNodeSets.TabIndex = 1;
-            // 
-            // colMacAddress
-            // 
-            this.colMacAddress.HeaderText = "Mac Address";
-            this.colMacAddress.Name = "colMacAddress";
-            // 
-            // colDeviceName
-            // 
-            this.colDeviceName.HeaderText = "Device Name";
-            this.colDeviceName.Name = "colDeviceName";
-            // 
-            // colReliabilityMetric
-            // 
-            this.colReliabilityMetric.HeaderText = "Reliability Metric";
-            this.colReliabilityMetric.Name = "colReliabilityMetric";
-            // 
-            // colUtilizationPercentage
-            // 
-            this.colUtilizationPercentage.HeaderText = "Utilization Percentage";
-            this.colUtilizationPercentage.Name = "colUtilizationPercentage";
-            // 
-            // colAvailableSpace
-            // 
-            this.colAvailableSpace.HeaderText = "Available Space";
-            this.colAvailableSpace.Name = "colAvailableSpace";
-            // 
-            // colDescription
-            // 
-            this.colDescription.HeaderText = "Description";
-            this.colDescription.Name = "colDescription";
             // 
             // pnlNodeSetsBottom
             // 
@@ -305,16 +285,16 @@
             this.numUpDwnRedundancy.Size = new System.Drawing.Size(61, 20);
             this.numUpDwnRedundancy.TabIndex = 8;
             // 
-            // pnlNodeSetsTop
+            // NodeGrid
             // 
-            this.pnlNodeSetsTop.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlNodeSetsTop.Controls.Add(this.btnRefreshList);
-            this.pnlNodeSetsTop.Controls.Add(this.lblListTitle);
-            this.pnlNodeSetsTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlNodeSetsTop.Location = new System.Drawing.Point(3, 3);
-            this.pnlNodeSetsTop.Name = "pnlNodeSetsTop";
-            this.pnlNodeSetsTop.Size = new System.Drawing.Size(770, 62);
-            this.pnlNodeSetsTop.TabIndex = 0;
+            this.NodeGrid.BackColor = System.Drawing.SystemColors.Control;
+            this.NodeGrid.Controls.Add(this.btnRefreshList);
+            this.NodeGrid.Controls.Add(this.lblListTitle);
+            this.NodeGrid.Dock = System.Windows.Forms.DockStyle.Top;
+            this.NodeGrid.Location = new System.Drawing.Point(3, 3);
+            this.NodeGrid.Name = "NodeGrid";
+            this.NodeGrid.Size = new System.Drawing.Size(770, 62);
+            this.NodeGrid.TabIndex = 0;
             // 
             // btnRefreshList
             // 
@@ -348,7 +328,7 @@
             this.tabDiskReport.Controls.Add(this.bytes1);
             this.tabDiskReport.Controls.Add(this.label7);
             this.tabDiskReport.Controls.Add(this.label1);
-            this.tabDiskReport.Controls.Add(this.hostList);
+            this.tabDiskReport.Controls.Add(this.DiskList);
             this.tabDiskReport.Controls.Add(this.label6);
             this.tabDiskReport.Controls.Add(this.label5);
             this.tabDiskReport.Controls.Add(this.label4);
@@ -454,16 +434,16 @@
             this.label1.TabIndex = 83;
             this.label1.Text = "Bytes";
             // 
-            // hostList
+            // DiskList
             // 
-            this.hostList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.hostList.FormattingEnabled = true;
-            this.hostList.Location = new System.Drawing.Point(8, 27);
-            this.hostList.Name = "hostList";
-            this.hostList.Size = new System.Drawing.Size(121, 21);
-            this.hostList.TabIndex = 82;
-            this.hostList.TabStop = false;
-            this.hostList.TextChanged += new System.EventHandler(this.hostList_TextChanged);
+            this.DiskList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DiskList.FormattingEnabled = true;
+            this.DiskList.Location = new System.Drawing.Point(8, 27);
+            this.DiskList.Name = "DiskList";
+            this.DiskList.Size = new System.Drawing.Size(121, 21);
+            this.DiskList.TabIndex = 82;
+            this.DiskList.TabStop = false;
+            this.DiskList.TextChanged += new System.EventHandler(this.hostList_TextChanged);
             // 
             // label6
             // 
@@ -913,6 +893,68 @@
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // guid
+            // 
+            this.guid.HeaderText = "GUID";
+            this.guid.Name = "guid";
+            this.guid.Visible = false;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            // 
+            // ip
+            // 
+            this.ip.HeaderText = "Logical Address";
+            this.ip.Name = "ip";
+            // 
+            // mac
+            // 
+            this.mac.HeaderText = "Pyshical Address";
+            this.mac.Name = "mac";
+            // 
+            // reliablity
+            // 
+            this.reliablity.HeaderText = "Reliablity Metric";
+            this.reliablity.Name = "reliablity";
+            this.reliablity.Visible = false;
+            // 
+            // maxBackup
+            // 
+            this.maxBackup.HeaderText = "Max Backup Capacity";
+            this.maxBackup.Name = "maxBackup";
+            this.maxBackup.Visible = false;
+            // 
+            // totalCapacity
+            // 
+            this.totalCapacity.HeaderText = "Total Capacity";
+            this.totalCapacity.Name = "totalCapacity";
+            this.totalCapacity.Visible = false;
+            // 
+            // freeSpace
+            // 
+            this.freeSpace.HeaderText = "Avaliable Space";
+            this.freeSpace.Name = "freeSpace";
+            this.freeSpace.Visible = false;
+            // 
+            // nonBackup
+            // 
+            this.nonBackup.HeaderText = "Non-Backup Data";
+            this.nonBackup.Name = "nonBackup";
+            this.nonBackup.Visible = false;
+            // 
+            // backupData
+            // 
+            this.backupData.HeaderText = "Backup Data";
+            this.backupData.Name = "backupData";
+            this.backupData.Visible = false;
+            // 
+            // status
+            // 
+            this.status.HeaderText = "Block Status";
+            this.status.Name = "status";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -935,8 +977,8 @@
             this.pnlNodeSetsBottom.ResumeLayout(false);
             this.pnlNodeSetsBottom.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDwnRedundancy)).EndInit();
-            this.pnlNodeSetsTop.ResumeLayout(false);
-            this.pnlNodeSetsTop.PerformLayout();
+            this.NodeGrid.ResumeLayout(false);
+            this.NodeGrid.PerformLayout();
             this.tabDiskReport.ResumeLayout(false);
             this.tabDiskReport.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
@@ -972,16 +1014,10 @@
         private System.Windows.Forms.TabPage tabDiskReport;
         private System.Windows.Forms.Panel pnlNodeSetsFill;
         private System.Windows.Forms.Panel pnlNodeSetsBottom;
-        private System.Windows.Forms.Panel pnlNodeSetsTop;
+        private System.Windows.Forms.Panel NodeGrid;
         private System.Windows.Forms.Button btnRefreshList;
         private System.Windows.Forms.Label lblListTitle;
         private System.Windows.Forms.DataGridView dataGridViewNodeSets;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colMacAddress;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDeviceName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colReliabilityMetric;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colUtilizationPercentage;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colAvailableSpace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDescription;
         private System.Windows.Forms.Button btnLoadNodeSet;
         private System.Windows.Forms.Button btnSaveNodeSet;
         private System.Windows.Forms.CheckBox chkUtilizationOverride;
@@ -997,7 +1033,7 @@
         private System.Windows.Forms.Label bytes1;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox hostList;
+        private System.Windows.Forms.ComboBox DiskList;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
@@ -1047,5 +1083,16 @@
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitEchoBackupToolStripMenuItem;
         private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn guid;
+        private System.Windows.Forms.DataGridViewTextBoxColumn name;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn mac;
+        private System.Windows.Forms.DataGridViewTextBoxColumn reliablity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn maxBackup;
+        private System.Windows.Forms.DataGridViewTextBoxColumn totalCapacity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn freeSpace;
+        private System.Windows.Forms.DataGridViewTextBoxColumn nonBackup;
+        private System.Windows.Forms.DataGridViewTextBoxColumn backupData;
+        private System.Windows.Forms.DataGridViewTextBoxColumn status;
     }
 }
