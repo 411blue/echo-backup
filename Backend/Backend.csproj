@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Database\NodeDatabase.cs" />
     <Compile Include="NetworkEvents.cs" />
     <Compile Include="CommandServer.cs" />
     <Compile Include="Database\IndexDatabase.cs" />
