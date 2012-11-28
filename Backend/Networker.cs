@@ -9,37 +9,9 @@ using System.Threading;
 using System.IO;
 
 namespace Backend 
-{   /*
-    public struct Hello 
-    {
-        public IPAddress ip;
-        public PhysicalAddress mac;
-        public Guid guid;
-        public Version version;
-
-        public Hello(IPAddress ip, PhysicalAddress mac, Guid guid, Version version) {
-            this.ip = ip;
-            this.mac = mac;
-            this.guid = guid;
-            this.version = version;
-        }
-    }
-    */
-
+{   
     public class Networker
     {
-        /*
-        const int MULTICAST_PORT = 7777;
-        static readonly byte[] MULTICAST_CHANNEL_BYTES = { 239, 77, 77, 77 };
-        static readonly IPAddress MULTICAST_CHANNEL = new IPAddress(MULTICAST_CHANNEL_BYTES);
-
-        UdpClient udpClient;
-        IPEndPoint multicastListener;
-        Thread multicastThread;
-        Thread unicastThread;
-        Queue<Hello> hellos;
-        */
-
         public Networker()
         {
             uniqueId = Guid.Empty;
@@ -52,37 +24,6 @@ namespace Backend
             backupLimit = 0;
             backupDirectory = "";
             directorySize = 0;
-            multicastIp = IPAddress.Parse("224.1.0.1");
-        }
-
-        public void server()
-        {
-            UdpClient sock = new UdpClient(9050);
-            Console.WriteLine("Ready to receive…");
-            sock.JoinMulticastGroup(multicastIp, 50);
-            IPEndPoint iep = new IPEndPoint(IPAddress.Any, 0);
-            byte[] data = sock.Receive(ref iep);
-            string stringData = Encoding.ASCII.GetString(data, 0, data.Length);
-            Console.WriteLine("received: {0}", stringData);
-            sock.Close();
-        }
-
-        public void client()
-        {
-            IPAddress multicastIp = IPAddress.Parse("224.1.0.1");
-            Socket server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            IPEndPoint iep = new IPEndPoint(IPAddress.Any, 9051);
-            IPEndPoint iep2 = new IPEndPoint(multicastIp, 9050);
-            server.Bind(iep);
-
-            string attributes = string.Concat(GetUniqueId() + "/" + GetHostName() + "/" + GetInternetAddress() + "/"
-                + GetMAC()) + "/" + GetTotalSize() + "/" + GetUsedSpace() + "/" + GetFreeSpace()
-                + "/" + GetMaxBackupSpace() + "/" + GetDirectorySize(GetBackupDirectory());
-            byte[] data = Encoding.ASCII.GetBytes(attributes);
-            server.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(multicastIp));
-            server.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 50);
-            server.SendTo(data, iep2);
-            server.Close();
         }
 
         //Generate UniqeID
@@ -183,7 +124,7 @@ namespace Backend
         }
 
         //Get the max backup support of the local node
-        public double GetMaxBackupSpace()
+        public int GetMaxBackupSpace()
         {
             return backupLimit;
         }
@@ -214,9 +155,9 @@ namespace Backend
         }
 
         //Set the max backup support of the local node
-        public void setMaxBackupSpace(double d1)
+        public void setMaxBackupSpace(int i1)
         {
-            backupLimit = d1;
+            backupLimit = i1;
         }
 
         //Set the backup directory
@@ -255,9 +196,8 @@ namespace Backend
         private long freeSpace;
         private long totalSize;
         private long usedSpace;
-        private double backupLimit;
+        private int backupLimit;
         private long directorySize;
         private string backupDirectory;
-        IPAddress multicastIp;
     }
 }

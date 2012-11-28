@@ -10,22 +10,23 @@ namespace Backend.Database
 {
     class NodeDatabase
     {
-        public struct Node
+        private struct Node
         {
-            public string uniqueIdentifier;
-            public string name;
-            public string ip;
-            public string mac;
+            string uniqueIdentifier;
+            string name;
+            string ip;
+            string mac;
             public int maxBackupCapacity;
-            public long backupData;
-            public long nonBackupData;
-            public long freeSpace;
-            public long totalCapacity;
-            public int reliabilityMetric;
-            public int hops;
-            public int smart;
-            public double backupPassPrecentage;
-            public string status;
+            long backupData;
+            long nonBackupData;
+            long freeSpace;
+            long totalCapacity;
+            int reliabilityMetric;
+            int hops;
+            int smart;
+            int backupFailed;
+            int backupPassed;
+            string status;
         }
     }
 }
