@@ -35,6 +35,17 @@
             this.tabNodeSets = new System.Windows.Forms.TabPage();
             this.pnlNodeSetsFill = new System.Windows.Forms.Panel();
             this.dataGridViewNodeSets = new System.Windows.Forms.DataGridView();
+            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.maxBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.freeSpace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nonBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.btnLoadNodeSet = new System.Windows.Forms.Button();
             this.btnSaveNodeSet = new System.Windows.Forms.Button();
@@ -105,17 +116,8 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitEchoBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.maxBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.freeSpace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nonBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.label9 = new System.Windows.Forms.Label();
+            this.maxBackupSupport = new System.Windows.Forms.NumericUpDown();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -140,6 +142,7 @@
             this.pnlDataRecoveryTop.SuspendLayout();
             this.tabScheduler.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxBackupSupport)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -181,6 +184,7 @@
             this.tabControl.SelectedIndex = 0;
             this.tabControl.Size = new System.Drawing.Size(784, 513);
             this.tabControl.TabIndex = 0;
+            this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
             // tabNodeSets
             // 
@@ -227,9 +231,73 @@
             this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 347);
             this.dataGridViewNodeSets.TabIndex = 1;
             // 
+            // guid
+            // 
+            this.guid.HeaderText = "GUID";
+            this.guid.Name = "guid";
+            this.guid.Visible = false;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            // 
+            // ip
+            // 
+            this.ip.HeaderText = "Logical Address";
+            this.ip.Name = "ip";
+            // 
+            // mac
+            // 
+            this.mac.HeaderText = "Pyshical Address";
+            this.mac.Name = "mac";
+            // 
+            // reliablity
+            // 
+            this.reliablity.HeaderText = "Reliablity Metric";
+            this.reliablity.Name = "reliablity";
+            this.reliablity.Visible = false;
+            // 
+            // maxBackup
+            // 
+            this.maxBackup.HeaderText = "Max Backup Capacity";
+            this.maxBackup.Name = "maxBackup";
+            this.maxBackup.Visible = false;
+            // 
+            // totalCapacity
+            // 
+            this.totalCapacity.HeaderText = "Total Capacity";
+            this.totalCapacity.Name = "totalCapacity";
+            this.totalCapacity.Visible = false;
+            // 
+            // freeSpace
+            // 
+            this.freeSpace.HeaderText = "Avaliable Space";
+            this.freeSpace.Name = "freeSpace";
+            this.freeSpace.Visible = false;
+            // 
+            // nonBackup
+            // 
+            this.nonBackup.HeaderText = "Non-Backup Data";
+            this.nonBackup.Name = "nonBackup";
+            this.nonBackup.Visible = false;
+            // 
+            // backupData
+            // 
+            this.backupData.HeaderText = "Backup Data";
+            this.backupData.Name = "backupData";
+            this.backupData.Visible = false;
+            // 
+            // status
+            // 
+            this.status.HeaderText = "Block Status";
+            this.status.Name = "status";
+            // 
             // pnlNodeSetsBottom
             // 
             this.pnlNodeSetsBottom.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlNodeSetsBottom.Controls.Add(this.maxBackupSupport);
+            this.pnlNodeSetsBottom.Controls.Add(this.label9);
             this.pnlNodeSetsBottom.Controls.Add(this.btnLoadNodeSet);
             this.pnlNodeSetsBottom.Controls.Add(this.btnSaveNodeSet);
             this.pnlNodeSetsBottom.Controls.Add(this.chkUtilizationOverride);
@@ -282,7 +350,7 @@
             // 
             this.numUpDwnRedundancy.Location = new System.Drawing.Point(182, 10);
             this.numUpDwnRedundancy.Name = "numUpDwnRedundancy";
-            this.numUpDwnRedundancy.Size = new System.Drawing.Size(61, 20);
+            this.numUpDwnRedundancy.Size = new System.Drawing.Size(60, 20);
             this.numUpDwnRedundancy.TabIndex = 8;
             // 
             // NodeGrid
@@ -893,67 +961,22 @@
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // guid
+            // label9
             // 
-            this.guid.HeaderText = "GUID";
-            this.guid.Name = "guid";
-            this.guid.Visible = false;
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(259, 12);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(136, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "Max Backup Support (GBs)";
             // 
-            // name
+            // maxBackupSupport
             // 
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            // 
-            // ip
-            // 
-            this.ip.HeaderText = "Logical Address";
-            this.ip.Name = "ip";
-            // 
-            // mac
-            // 
-            this.mac.HeaderText = "Pyshical Address";
-            this.mac.Name = "mac";
-            // 
-            // reliablity
-            // 
-            this.reliablity.HeaderText = "Reliablity Metric";
-            this.reliablity.Name = "reliablity";
-            this.reliablity.Visible = false;
-            // 
-            // maxBackup
-            // 
-            this.maxBackup.HeaderText = "Max Backup Capacity";
-            this.maxBackup.Name = "maxBackup";
-            this.maxBackup.Visible = false;
-            // 
-            // totalCapacity
-            // 
-            this.totalCapacity.HeaderText = "Total Capacity";
-            this.totalCapacity.Name = "totalCapacity";
-            this.totalCapacity.Visible = false;
-            // 
-            // freeSpace
-            // 
-            this.freeSpace.HeaderText = "Avaliable Space";
-            this.freeSpace.Name = "freeSpace";
-            this.freeSpace.Visible = false;
-            // 
-            // nonBackup
-            // 
-            this.nonBackup.HeaderText = "Non-Backup Data";
-            this.nonBackup.Name = "nonBackup";
-            this.nonBackup.Visible = false;
-            // 
-            // backupData
-            // 
-            this.backupData.HeaderText = "Backup Data";
-            this.backupData.Name = "backupData";
-            this.backupData.Visible = false;
-            // 
-            // status
-            // 
-            this.status.HeaderText = "Block Status";
-            this.status.Name = "status";
+            this.maxBackupSupport.Location = new System.Drawing.Point(401, 12);
+            this.maxBackupSupport.Name = "maxBackupSupport";
+            this.maxBackupSupport.Size = new System.Drawing.Size(60, 20);
+            this.maxBackupSupport.TabIndex = 14;
+            this.maxBackupSupport.ValueChanged += new System.EventHandler(this.maxBackupSupport_ValueChanged);
             // 
             // MainForm
             // 
@@ -966,6 +989,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
             this.Text = "Echo Backup";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
             this.Load += new System.EventHandler(this.MainForm2_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -999,6 +1023,7 @@
             this.tabScheduler.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxBackupSupport)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1094,5 +1119,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nonBackup;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupData;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
+        private System.Windows.Forms.NumericUpDown maxBackupSupport;
+        private System.Windows.Forms.Label label9;
     }
 }

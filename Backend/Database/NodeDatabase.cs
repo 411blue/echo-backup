@@ -16,7 +16,7 @@ namespace Backend.Database
             string name;
             string ip;
             string mac;
-            public int maxBackupCapacity;
+            int maxBackupCapacity;
             long backupData;
             long nonBackupData;
             long freeSpace;

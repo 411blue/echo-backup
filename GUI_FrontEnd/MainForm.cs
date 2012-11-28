@@ -14,6 +14,7 @@ namespace GUI_FrontEnd
         public MainForm()
         {
             InitializeComponent();
+            maxBackupSupport.Value = Properties.Settings.Default.maxBackupSupport;
             
         }
 
@@ -82,10 +83,25 @@ namespace GUI_FrontEnd
 
         #endregion
 
-        private void MainForm2_Load(object sender, EventArgs e)
+        private void maxBackupSupport_ValueChanged(object sender, EventArgs e)
         {
-            //initialize the disk report tab
-            InitializeDiskReportTab();
-        }        
+            Properties.Settings.Default.maxBackupSupport = maxBackupSupport.Value;
+        }    
+
+        private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (tabControl.SelectedIndex == 1)
+            {
+                //initialize the disk report tab
+                InitializeDiskReportTab();
+            }
+        }
+
+        private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Properties.Settings.Default.Save();
+        }
+
+    
     }
 }
