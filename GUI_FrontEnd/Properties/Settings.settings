@@ -5,11 +5,8 @@
     <Setting Name="LogFilePath" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
-    <Setting Name="myGUID" Type="System.Guid" Scope="User">
+    <Setting Name="maxBackupCapacity" Type="System.Decimal" Scope="User">
       <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="maxBackupSupport" Type="System.Decimal" Scope="User">
-      <Value Profile="(Default)">0</Value>
     </Setting>
   </Settings>
 </SettingsFile>

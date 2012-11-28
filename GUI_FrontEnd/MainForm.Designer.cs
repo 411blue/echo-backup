@@ -47,6 +47,8 @@
             this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
+            this.maxBackupCapacity = new System.Windows.Forms.NumericUpDown();
+            this.label9 = new System.Windows.Forms.Label();
             this.btnLoadNodeSet = new System.Windows.Forms.Button();
             this.btnSaveNodeSet = new System.Windows.Forms.Button();
             this.chkUtilizationOverride = new System.Windows.Forms.CheckBox();
@@ -116,8 +118,6 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitEchoBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.label9 = new System.Windows.Forms.Label();
-            this.maxBackupSupport = new System.Windows.Forms.NumericUpDown();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -125,6 +125,7 @@
             this.pnlNodeSetsFill.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNodeSets)).BeginInit();
             this.pnlNodeSetsBottom.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxBackupCapacity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDwnRedundancy)).BeginInit();
             this.NodeGrid.SuspendLayout();
             this.tabDiskReport.SuspendLayout();
@@ -142,7 +143,6 @@
             this.pnlDataRecoveryTop.SuspendLayout();
             this.tabScheduler.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxBackupSupport)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -296,7 +296,7 @@
             // pnlNodeSetsBottom
             // 
             this.pnlNodeSetsBottom.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlNodeSetsBottom.Controls.Add(this.maxBackupSupport);
+            this.pnlNodeSetsBottom.Controls.Add(this.maxBackupCapacity);
             this.pnlNodeSetsBottom.Controls.Add(this.label9);
             this.pnlNodeSetsBottom.Controls.Add(this.btnLoadNodeSet);
             this.pnlNodeSetsBottom.Controls.Add(this.btnSaveNodeSet);
@@ -308,6 +308,23 @@
             this.pnlNodeSetsBottom.Name = "pnlNodeSetsBottom";
             this.pnlNodeSetsBottom.Size = new System.Drawing.Size(770, 72);
             this.pnlNodeSetsBottom.TabIndex = 1;
+            // 
+            // maxBackupCapacity
+            // 
+            this.maxBackupCapacity.Location = new System.Drawing.Point(401, 12);
+            this.maxBackupCapacity.Name = "maxBackupCapacity";
+            this.maxBackupCapacity.Size = new System.Drawing.Size(60, 20);
+            this.maxBackupCapacity.TabIndex = 14;
+            this.maxBackupCapacity.ValueChanged += new System.EventHandler(this.maxBackupSupport_ValueChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(259, 12);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(140, 13);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "Max Backup Capacity (GBs)";
             // 
             // btnLoadNodeSet
             // 
@@ -961,23 +978,6 @@
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(259, 12);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(136, 13);
-            this.label9.TabIndex = 13;
-            this.label9.Text = "Max Backup Support (GBs)";
-            // 
-            // maxBackupSupport
-            // 
-            this.maxBackupSupport.Location = new System.Drawing.Point(401, 12);
-            this.maxBackupSupport.Name = "maxBackupSupport";
-            this.maxBackupSupport.Size = new System.Drawing.Size(60, 20);
-            this.maxBackupSupport.TabIndex = 14;
-            this.maxBackupSupport.ValueChanged += new System.EventHandler(this.maxBackupSupport_ValueChanged);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -990,7 +990,6 @@
             this.Name = "MainForm";
             this.Text = "Echo Backup";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.MainForm_FormClosed);
-            this.Load += new System.EventHandler(this.MainForm2_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.pnlTabGUI.ResumeLayout(false);
@@ -1000,6 +999,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNodeSets)).EndInit();
             this.pnlNodeSetsBottom.ResumeLayout(false);
             this.pnlNodeSetsBottom.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.maxBackupCapacity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDwnRedundancy)).EndInit();
             this.NodeGrid.ResumeLayout(false);
             this.NodeGrid.PerformLayout();
@@ -1023,7 +1023,6 @@
             this.tabScheduler.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxBackupSupport)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1119,7 +1118,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nonBackup;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupData;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.NumericUpDown maxBackupSupport;
+        private System.Windows.Forms.NumericUpDown maxBackupCapacity;
         private System.Windows.Forms.Label label9;
     }
 }

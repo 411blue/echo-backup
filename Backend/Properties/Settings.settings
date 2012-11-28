@@ -3,10 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="guid" Type="System.Guid" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="backupLimit" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">00000000-0000-0000-0000-000000000000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

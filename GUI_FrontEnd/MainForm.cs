@@ -14,7 +14,7 @@ namespace GUI_FrontEnd
         public MainForm()
         {
             InitializeComponent();
-            maxBackupSupport.Value = Properties.Settings.Default.maxBackupSupport;
+            maxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
             
         }
 
@@ -85,7 +85,7 @@ namespace GUI_FrontEnd
 
         private void maxBackupSupport_ValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.maxBackupSupport = maxBackupSupport.Value;
+            Properties.Settings.Default.maxBackupCapacity = maxBackupCapacity.Value;
         }    
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)

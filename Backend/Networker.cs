@@ -14,7 +14,12 @@ namespace Backend
     {
         public Networker()
         {
-            uniqueId = Guid.Empty;
+            uniqueId = Properties.Settings.Default.guid;
+            if(uniqueId == Guid.Empty)
+            {
+                uniqueId = GenerateUniqueId();
+            }
+
             hostName = "";
             internetAddress = "";
             mac = "";
@@ -26,10 +31,16 @@ namespace Backend
             directorySize = 0;
         }
 
-        //Generate UniqeID
-        public Guid GetUniqueId()
+        //Generate UniqeId
+        public Guid GenerateUniqueId()
         {
             return Guid.NewGuid();
+        }
+
+        //Get UniqueId
+        public Guid GetUniqueId()
+        {
+            return uniqueId;
         }
 
         //Get name of local node
@@ -155,7 +166,7 @@ namespace Backend
         }
 
         //Set the max backup support of the local node
-        public void setMaxBackupSpace(int i1)
+        public void setMaxBackupCapacity(int i1)
         {
             backupLimit = i1;
         }
@@ -187,6 +198,11 @@ namespace Backend
         {
             string bye = string.Concat("Hello" + "/" + GetUniqueId());
             return bye;
+        }
+
+        public ~Networker()
+        {
+            Properties.Settings.Default.Save();
         }
 
         private Guid uniqueId;

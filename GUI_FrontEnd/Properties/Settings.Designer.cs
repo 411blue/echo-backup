@@ -37,24 +37,12 @@ namespace GUI_FrontEnd.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Guid myGUID {
+        public decimal maxBackupCapacity {
             get {
-                return ((global::System.Guid)(this["myGUID"]));
+                return ((decimal)(this["maxBackupCapacity"]));
             }
             set {
-                this["myGUID"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal maxBackupSupport {
-            get {
-                return ((decimal)(this["maxBackupSupport"]));
-            }
-            set {
-                this["maxBackupSupport"] = value;
+                this["maxBackupCapacity"] = value;
             }
         }
     }
