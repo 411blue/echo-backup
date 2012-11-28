@@ -6,7 +6,7 @@ using System.Data.SQLite;
 using System.Diagnostics;
 using System.Data;
 
-namespace Backend
+namespace Backend.Database
 {
     public struct Block
     {
