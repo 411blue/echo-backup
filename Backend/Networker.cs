@@ -57,6 +57,7 @@ namespace Backend
 
             for (int i = 0; i < addr.Length; ++i)
             {
+                //todo: this needs to be rewritten to not use a deprecated property
                 if (addr[i].AddressFamily == AddressFamily.InterNetwork && addr[i].Address != 16777343)
                 {
                     byte[] octets = addr[i].GetAddressBytes();
@@ -200,10 +201,11 @@ namespace Backend
             return bye;
         }
 
-        public ~Networker()
+        //commented out the destructor because it does not compile -- James 2012-11-29 12:10PM
+        /*public ~Networker()
         {
             Properties.Settings.Default.Save();
-        }
+        }*/
 
         private Guid uniqueId;
         private string hostName;
