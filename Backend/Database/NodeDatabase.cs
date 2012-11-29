@@ -24,7 +24,7 @@ namespace Backend.Database
             //This is the connection object. It basically represents the database.
             SQLiteConnection conn = new SQLiteConnection("Data Source=" + pathAndFileName);
 
-            //by opening and closing a connection to a file that does not exist, we create the file.
+            //By opening and closing a connection to a file that does not exist, we create the file.
             conn.Open();
             conn.Close();
 
@@ -32,7 +32,7 @@ namespace Backend.Database
         }
 
         /// <summary>Returns a connection to an existing database.</summary>
-        /// <param name="pathAndFileName"></param>
+        /// <param name="pathAndFileName">The path and filename of the existing SQLite database.</param>
         /// <returns></returns>
         public SQLiteConnection ConnectToExistingDatabase(string pathAndFileName)
         {
@@ -47,14 +47,14 @@ namespace Backend.Database
             return conn;
         }
 
-        /// <summary>Creates a table containing 'Nodes' records.</summary>
+        /// <summary>Creates an node table containing node records.</summary>
         /// <param name="conn">A SQLiteConnection object.</param>
         public void CreateNodeTable(SQLiteConnection conn)
         {
-            //This sql query creates a nodes table.
-            string sql = "CREATE TABLE nodes (uniqueId TEXT PRIMARY KEY ASC, name TEXT, ip TEXT, mac TEXT, maxBacupCapacity INTEGER,"
-                + " backupData INTEGER, nonBackupData INTEGER, freeSpace INTEGER, totalCapacity INTEGER, reliabilityMetric INTEGER,"
-                + " hops INTEGER, smart INTEGER, backupFailed INTEGER, backupPassed INTEGER, status TEXT)";
+            //This sql query creates a nodes table with uniqueId as the primary key and some other columns.
+            string sql = "CREATE TABLE nodes (UniqueId TEXT PRIMARY KEY, Name TEXT, Ip TEXT, Mac TEXT,"
+            + " MaxBackupCapacity INTEGER, BackupData INTEGER, NonBackupData INTEGER, FreeSpace INTEGER, TotalCapacity INTEGER,"
+            + " RelialibyMetric INTEGER, Hops INTEGER, Smart INTEGER, BackupsFailed INTEGER, BackupsPassed INTEGER, Status TEXT)";
 
             //SQLiteCommand objects are where we exectute sql statements.
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -66,10 +66,10 @@ namespace Backend.Database
             }
             catch (SQLiteException ex)
             {
-                //if anything is wrong with the sql statement or the database, SQLiteException will show information about it.
+                //if anything is wrong with the sql statement or the database, a SQLiteException will show information about it.
                 Debug.Print(ex.Message);
 
-                //always make sure the database connection is closed.
+                //Always make sure the database connectio is closed.
                 if (conn.State == ConnectionState.Open)
                 {
                     conn.Close();
@@ -77,61 +77,70 @@ namespace Backend.Database
             }
         }
 
-        public void InsertDVDRecord(string dvdTitle, string dvdGenre, SQLiteConnection conn)
+        /// <summary>Adds a record into the nodes table.</summary>
+        /// <param name="conn">A SQLiteConnection object.</param>
+        public void InsertNodeRecord(Node n1, SQLiteConnection conn)
         {
-            string sql = "INSERT INTO dvds (title, genre, date_added) VALUES (@pTitle, @pGenre, @pDateAdded)";
+            string sql = "INSERT INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
+                + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
+                + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Status)"
+                + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
+                + " @pTotalCapaciy, @pReliablityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pStatus)";
+
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pName", n1.name));
+            cmd.Parameters.Add(new SQLiteParameter("@pIp", n1.ip));
+            cmd.Parameters.Add(new SQLiteParameter("@pMac", n1.mac));
+            cmd.Parameters.Add(new SQLiteParameter("@pMaxBackupCapacity", n1.maxBackupCapacity));
+            cmd.Parameters.Add(new SQLiteParameter("@pBackupData", n1.backupData));
+            cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", n1.nonBackupData));
+            cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", n1.freeSpace));
+            cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", n1.totalCapacity));
+            cmd.Parameters.Add(new SQLiteParameter("@pReliabityMetric", n1.relialibyMetric));
+            cmd.Parameters.Add(new SQLiteParameter("@pHops", n1.hops));
+            cmd.Parameters.Add(new SQLiteParameter("@pSmart", n1.smart));
+            cmd.Parameters.Add(new SQLiteParameter("@pBackkupsFailed", n1.backupsFailed));
+            cmd.Parameters.Add(new SQLiteParameter("@pBackupsPassed", n1.backupsPassed));
+            cmd.Parameters.Add(new SQLiteParameter("@pStatus", n1.status));
 
-            //We know the title and the genre, so let's get the date for the date_added field.
-            //SQLite likes dates and times in a certain format (ISO-something or other).
-            //This is given as the parameter to ToString()
-            string currentTimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-            cmd.Parameters.Add(new SQLiteParameter("@pTitle", dvdTitle));
-            cmd.Parameters.Add(new SQLiteParameter("@pGenre", dvdGenre));
-            cmd.Parameters.Add(new SQLiteParameter("@pDateAdded", currentTimeString));
-
-            //open the connection, exectute the query, and close the connection.
-            //should probably be a try/catch block here
+            //Open the connection, exectute the query, and close the connection.
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
         }
-
-        public void SetNode(string s1, string s2, string s3, string s4, int i1, long l1 
-            ,long l2, long l3, long l4, int i2, int i3, int i4, int i5 ,int i6, string s5)
-        {
-
-        }
     }
 
-    public struct Node
-    {
-        public string uniqueId, name, ip, mac;
-        public int maxBackupCapacity;
-        public long backupData, nonBackupData, freeSpace, totalCapacity;
-        public int relialibyMetric, hops, smart, backupsFailed, backupsPassed;
-        public string status;
 
-        public Node(string s1, string s2, string s3, string s4, int i1, long l1, long l2, long l3, long l4, int i2, int i3, int i4, 
-            int i5, int i6, string s5)
+
+        public struct Node
         {
-            uniqueId = s1;
-            name = s2;
-            ip = s3;
-            mac = s4;
-            maxBackupCapacity = i1;
-            backupData = l1;
-            nonBackupData = l2;
-            freeSpace = l3;
-            totalCapacity = l4;
-            relialibyMetric = i2;
-            hops = i3;
-            smart = i4;
-            backupsFailed = i5;
-            backupsPassed = i6;
-            status = s5;
-        }
-    }
+            public Guid uniqueId; 
+            public string name, ip, mac;
+            public int maxBackupCapacity;
+            public long backupData, nonBackupData, freeSpace, totalCapacity;
+            public int relialibyMetric, hops, smart, backupsFailed, backupsPassed;
+            public string status;
 
+            public Node(Guid g1, string s1, string s2, string s3, int i1, long l1, long l2, long l3, long l4, int i2, int i3, int i4, 
+            int i5, int i6, string s4)
+            {
+                uniqueId = g1;
+                name = s1;
+                ip = s2;
+                mac = s3;
+                maxBackupCapacity = i1;
+                backupData = l1;
+                nonBackupData = l2;
+                freeSpace = l3;
+                totalCapacity = l4;
+                relialibyMetric = i2;
+                hops = i3;
+                smart = i4;
+                backupsFailed = i5;
+                backupsPassed = i6;
+                status = s4;
+            }
+        }
 }
