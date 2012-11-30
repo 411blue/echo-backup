@@ -35,7 +35,7 @@ namespace Backend
         private void RunClientThread(object client)
         {
             TcpClient tcpClient = (TcpClient)client;
-            TcpNetworkEvent tcpNetworkEvent = getMessage(tcpClient);
+            TcpNetworkEvent tcpNetworkEvent = receiveMessage(tcpClient);
             eventQueue.Enqueue(tcpNetworkEvent);
         }
 
@@ -85,11 +85,32 @@ namespace Backend
         }
 
         /// <summary>
+        /// Writes bytes to a TcpClient. Blocks until all bytes are written.
+        /// </summary>
+        /// <param name="tcpClient">The TCP connection to send the bytes to</param>
+        /// <param name="bytes">the byte array containing the bytes to send starting at index 0</param>
+        /// <param name="num">the number of bytes from the array to send. bytes must be at least num size.</param>
+        /// <returns>The number of bytes written or a -1 if an error occurred.</returns>
+        private int writeBytes(TcpClient tcpClient, byte[] bytes, int num)
+        {
+            NetworkStream clientStream = tcpClient.GetStream();
+            try
+            {
+                clientStream.Write(bytes, 0, num);
+            }
+            catch
+            {
+                return -1;
+            }
+            return num;
+        }
+
+        /// <summary>
         /// Gets the incoming message on a TCP Socket.
         /// </summary>
         /// <param name="tcpClient">The socket that is expected to receive a message</param>
         /// <returns>The TcpNetworkEvent received from the other end. Returns null if there was a problem.</returns>
-        private TcpNetworkEvent getMessage(TcpClient tcpClient)
+        private TcpNetworkEvent receiveMessage(TcpClient tcpClient)
         {
             byte[] sizeBytes = new byte[MESSAGE_SIZE_SIZE];
             uint num = readBytes(tcpClient, ref sizeBytes, MESSAGE_SIZE_SIZE);
@@ -108,6 +129,15 @@ namespace Backend
             }
             MemoryStream mem = new MemoryStream(messageBytes);
             return (TcpNetworkEvent)binaryFormatter.Deserialize(mem);
+        }
+
+        private void sendMessage(TcpClient tcpClient, TcpNetworkEvent tcpNetworkEvent)
+        {
+            MemoryStream mem = new MemoryStream();
+            binaryFormatter.Serialize(mem, tcpNetworkEvent);
+            byte[] bytes = mem.ToArray();
+            int num = bytes.Length;
+            writeBytes(tcpClient, bytes, num);
         }
     }
 }

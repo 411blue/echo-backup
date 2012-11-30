@@ -53,12 +53,12 @@ namespace Backend
     /// </summary>
     public abstract class TcpNetworkEvent : NetworkEvent
     {
-        private TcpClient myTcpClient;
+        /*private TcpClient myTcpClient;
         public TcpClient TcpClient
         {
             get { return myTcpClient; }
             set { myTcpClient = value; }
-        }
+        }*/
         
         public TcpNetworkEvent(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
         {
@@ -68,9 +68,9 @@ namespace Backend
             mySequenceNumber = sequenceNumber;
         }
 
-        public TcpNetworkEvent(TcpClient tcpClient)
+        public TcpNetworkEvent(/*TcpClient tcpClient*/)
         {
-            myTcpClient = tcpClient;
+            //myTcpClient = tcpClient;
         }
     }
 
@@ -81,10 +81,10 @@ namespace Backend
     {
         
         //these constructors is needed to compile!..Shane
-        public PushRequest(TcpClient tcpClient)
+        /*public PushRequest(TcpClient tcpClient)
             : base(tcpClient)
         {
-        }
+        }*/
 
         public PushRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
             : base(ipAddress, macAddress, guid, sequenceNumber)
@@ -113,6 +113,38 @@ namespace Backend
         {
             get { return myFileSize; }
             set { myFileSize = value; }
+        }
+    }
+    /// <summary>
+    /// Represents a pull request to recover a backup file or download some other file from the remote computer.
+    /// </summary>
+    public class PullRequest : TcpNetworkEvent
+    {
+        // The id of the backup this file is a part of
+        private long myBackupNumber;
+        public long BackupNumber
+        {
+            get { return myBackupNumber; }
+            set { myBackupNumber = value; }
+        }
+
+        // The chunk ID of this backup file
+        private long myChunkNumber;
+        public long ChunkNumber
+        {
+            get { return myChunkNumber; }
+            set { myChunkNumber = value; }
+        }
+        
+        //these constructors is needed to compile!..Shane
+        /*public PullRequest(TcpClient tcpClient)
+            : base(tcpClient)
+        {
+        }*/
+
+        public PullRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
+            : base(ipAddress, macAddress, guid, sequenceNumber)
+        {
         }
     }
 }
