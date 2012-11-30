@@ -29,6 +29,14 @@ namespace Backend
             backupLimit = 0;
             backupDirectory = "";
             directorySize = 0;
+            receiverAlive = false;
+            transmitterAlive = false;
+            ip = IPAddress.Parse("224.1.0.1");
+            receiver = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            transmitter = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+            rxBuffer = new byte[256];
+            txBuffer = new byte[256];
+            hellos = new Queue<string>();
         }
 
         //Generate UniqeId
@@ -202,10 +210,89 @@ namespace Backend
         }
 
         //commented out the destructor because it does not compile -- James 2012-11-29 12:10PM
-        /*public ~Networker()
+        ~Networker()
         {
             Properties.Settings.Default.Save();
-        }*/
+        }
+
+        //Starts reciever
+        public void startReciever()
+        {
+            receiverAlive = true;
+            IPEndPoint rxipep = new IPEndPoint(IPAddress.Any, 4567);
+            receiver.Bind(rxipep);
+            receiver.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ip, IPAddress.Any));
+        }
+
+        //Runs the receiver
+        public void runReceiver()
+        {
+            while (receiverAlive)
+            {
+                receiver.Receive(rxBuffer);
+                string str = System.Text.Encoding.ASCII.GetString(rxBuffer, 0, rxBuffer.Length);
+                hellos.Enqueue(str);
+            }
+        }
+
+        //process heartbeats
+        public void processMessages()
+        {
+            StreamWriter sw = new StreamWriter(@"C:\messages.txt");
+            while (receiverAlive)
+            {
+                if (hellos.Count > 0)
+                {
+                    sw.WriteLine(hellos.Dequeue());
+                }
+            }
+            sw.Close();
+        }
+        
+        //Starts transmitter
+        public void startTransmitter()
+        {
+            transmitterAlive = true;
+            transmitter.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ip));
+            transmitter.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 25);
+            IPEndPoint txipep = new IPEndPoint(ip, 4567);
+            transmitter.Connect(txipep);
+        }
+
+        //Run transmittter
+        public void runTransmitter()
+        {
+            while (transmitterAlive)
+            {
+                txBuffer = Encoding.ASCII.GetBytes("Hello");
+                transmitter.Send(txBuffer, txBuffer.Length, SocketFlags.None);
+                Thread.Sleep(10000);
+            }
+        }
+
+        //Close transmitter socket
+        public void stopTransmitter()
+        {
+            transmitter.Close();
+        }
+
+        //Close receiver socket
+        public void stopReciever()
+        {
+            receiver.Close();
+        }
+
+        //Receiver alive is used for thread control
+        public void setReceiverAlive(bool b1)
+        {
+            receiverAlive = b1;
+        }
+
+        //Transimitter
+        public void setTransmitterAlive(bool b1)
+        {
+            transmitterAlive = b1;
+        }
 
         private Guid uniqueId;
         private string hostName;
@@ -217,5 +304,13 @@ namespace Backend
         private int backupLimit;
         private long directorySize;
         private string backupDirectory;
+        private IPAddress ip;
+        private Socket receiver;
+        private Socket transmitter;
+        private byte[] rxBuffer;
+        private byte[] txBuffer;
+        private Queue<string> hellos;
+        private bool receiverAlive;
+        private bool transmitterAlive;
     }
 }
