@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace GUI_FrontEnd
 {
@@ -15,6 +16,15 @@ namespace GUI_FrontEnd
         {
             InitializeComponent();
             maxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
+            net = new Backend.Networker();
+            messageThread = new Thread(new ThreadStart(net.processMessages));
+            rxThread = new Thread(new ThreadStart(net.runReceiver));
+            txThread = new Thread(new ThreadStart(net.runTransmitter));
+            net.startTransmitter();
+            txThread.Start();
+            net.startReciever();
+            messageThread.Start();
+            rxThread.Start();
             
         }
 
@@ -86,6 +96,7 @@ namespace GUI_FrontEnd
         private void maxBackupSupport_ValueChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.maxBackupCapacity = maxBackupCapacity.Value;
+            net.SetMaxBackupCapacity(Convert.ToInt32(maxBackupCapacity.Value));
         }    
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -100,8 +111,18 @@ namespace GUI_FrontEnd
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Properties.Settings.Default.Save();
+            net.setReceiverAlive(false);
+            net.setTransmitterAlive(false);
+            messageThread.Abort();
+            rxThread.Abort();
+            txThread.Abort();
+            net.stopReciever();
+            net.stopTransmitter();
         }
 
-    
+        private Thread messageThread;
+        private Thread rxThread;
+        private Thread txThread;
+        private Backend.Networker net;  
     }
 }

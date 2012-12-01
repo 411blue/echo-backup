@@ -34,5 +34,29 @@ namespace Backend.Properties {
                 this["guid"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int hops {
+            get {
+                return ((int)(this["hops"]));
+            }
+            set {
+                this["hops"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int smart {
+            get {
+                return ((int)(this["smart"]));
+            }
+            set {
+                this["smart"] = value;
+            }
+        }
     }
 }

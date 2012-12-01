@@ -113,7 +113,7 @@ namespace Backend.Database
     }
 
 
-
+        //Defines a node and provides constructor
         public struct Node
         {
             public Guid uniqueId; 
