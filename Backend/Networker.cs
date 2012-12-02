@@ -15,17 +15,30 @@ namespace Backend
         public Networker()
         {
             uniqueId = Properties.Settings.Default.guid;
+            hops = Properties.Settings.Default.hops;
+            smart = Properties.Settings.Default.smart;
+
             if(uniqueId == Guid.Empty)
             {
                 uniqueId = GenerateUniqueId();
             }
 
-            hostName = "";
+            if (hops == 0)
+            {
+                SetHop(0, 51);
+            }
+
+            if (smart == 0)
+            {
+                SetSmart(0, 89);
+            }
+
             internetAddress = "";
             mac = "";
             freeSpace = 0;
             totalSize = 0;
-            usedSpace = 0;
+            nonBackupData = 0;
+            backupData = 0;
             backupLimit = 0;
             backupDirectory = "";
             directorySize = 0;
@@ -36,7 +49,8 @@ namespace Backend
             transmitter = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             rxBuffer = new byte[256];
             txBuffer = new byte[256];
-            hellos = new Queue<string>();
+            heartbeat = "";
+            heartbeats = new Queue<string>();
         }
 
         //Generate UniqeId
@@ -62,7 +76,6 @@ namespace Backend
         {
             IPHostEntry ipEntry = Dns.GetHostEntry(GetHostName());
             IPAddress[] addr = ipEntry.AddressList;
-
             for (int i = 0; i < addr.Length; ++i)
             {
                 //todo: this needs to be rewritten to not use a deprecated property
@@ -81,7 +94,6 @@ namespace Backend
         public string GetMAC()
         {
             NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-
             foreach (NetworkInterface adapter in nics)
             {
                 OperationalStatus ostate = adapter.OperationalStatus;
@@ -137,10 +149,16 @@ namespace Backend
             return totalSize;
         }
 
-        //Get used disk space of drive C on the local node
-        public long GetUsedSpace()
+        //Get disk space of drive C on the local node used for nonbackup data
+        public long GetNonBackupSpace()
         {
-            return usedSpace = GetTotalSize() - GetFreeSpace();
+            return nonBackupData = GetTotalSize() - GetDirectorySize(GetBackupDirectory()) - GetFreeSpace();
+        }
+
+        //Get disk space of drive C on the local node used for backup data
+        public long GetBackupSpace()
+        {
+            return GetDirectorySize(GetBackupDirectory());
         }
 
         //Get the max backup support of the local node
@@ -174,8 +192,20 @@ namespace Backend
             return backupDirectory;
         }
 
+        //Get Hop score
+        public int GetHops()
+        {
+            return hops;
+        }
+
+        //Get SMART score
+        public int GetSmart()
+        {
+            return smart;
+        }
+
         //Set the max backup support of the local node
-        public void setMaxBackupCapacity(int i1)
+        public void SetMaxBackupCapacity(int i1)
         {
             backupLimit = i1;
         }
@@ -186,30 +216,26 @@ namespace Backend
             backupDirectory = s1;
         }
 
-        //Get Hello message
-        public string GetHello()
+        //Set SMART Data
+        public int SetSmart(int min, int max)
         {
-            string hello = string.Concat("Hello" + "/" + Convert.ToString(GetUniqueId()));
-            return hello;
+            Random rnd = new Random();
+            return rnd.Next(min, max);
         }
 
-        //Get update message
-        public string GetUpdate()
+        //Set Hop Data
+        public int SetHop(int min, int max)
         {
-            string update = string.Concat("Update" + "/" + Convert.ToString(GetUniqueId()) + "/" + GetHostName() + "/" + GetInternetAddress() + "/"
-            + GetMAC()) + "/" + GetTotalSize() + "/" + GetUsedSpace() + "/" + GetFreeSpace()
-            + "/" + GetMaxBackupSpace();
-            return update;
+            Random rnd = new Random();
+            return rnd.Next(min, max);
         }
 
-        //Get Bye message
-        public string GetBye()
+        //Calculate reliabity metric
+        public int CalculateReliablity(int passed, int failed)
         {
-            string bye = string.Concat("Hello" + "/" + GetUniqueId());
-            return bye;
+            return 255 - GetSmart() - GetHops() - (114 * (failed/(failed + passed)));
         }
 
-        //commented out the destructor because it does not compile -- James 2012-11-29 12:10PM
         ~Networker()
         {
             Properties.Settings.Default.Save();
@@ -231,22 +257,29 @@ namespace Backend
             {
                 receiver.Receive(rxBuffer);
                 string str = System.Text.Encoding.ASCII.GetString(rxBuffer, 0, rxBuffer.Length);
-                hellos.Enqueue(str);
+                heartbeats.Enqueue(str);
             }
         }
 
-        //process heartbeats
+        //Get update message
+        public string GetHeartbeat()
+        {
+            heartbeat = string.Concat(GetUniqueId() + "/" + GetHostName() + "/" + GetInternetAddress() + "/" + GetMAC()) 
+            + "/" + GetMaxBackupSpace() + "/" + GetBackupSpace() + "/" + GetNonBackupSpace() + "/" + GetFreeSpace()
+            + "/" + GetTotalSize();
+            return heartbeat;
+        }
+
+        //Process heartbeats
         public void processMessages()
         {
-            StreamWriter sw = new StreamWriter(@"C:\messages.txt");
             while (receiverAlive)
             {
-                if (hellos.Count > 0)
+                if (heartbeats.Count > 0)
                 {
-                    sw.WriteLine(hellos.Dequeue());
+                    heartbeats.Dequeue();
                 }
             }
-            sw.Close();
         }
         
         //Starts transmitter
@@ -288,19 +321,19 @@ namespace Backend
             receiverAlive = b1;
         }
 
-        //Transimitter
+        //Transimitter alive is used for thread control
         public void setTransmitterAlive(bool b1)
         {
             transmitterAlive = b1;
-        }
+        }    
 
         private Guid uniqueId;
-        private string hostName;
         private string internetAddress;
         private string mac;
         private long freeSpace;
         private long totalSize;
-        private long usedSpace;
+        private long backupData;
+        private long nonBackupData;
         private int backupLimit;
         private long directorySize;
         private string backupDirectory;
@@ -309,8 +342,11 @@ namespace Backend
         private Socket transmitter;
         private byte[] rxBuffer;
         private byte[] txBuffer;
-        private Queue<string> hellos;
+        private string heartbeat;
+        private Queue<string> heartbeats;
         private bool receiverAlive;
         private bool transmitterAlive;
+        private int smart;
+        private int hops;
     }
 }

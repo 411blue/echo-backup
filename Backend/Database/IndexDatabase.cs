@@ -10,19 +10,21 @@ namespace Backend.Database
 {
     public struct Block
     {
-        public long sequence;
+        public string sourceGUID;
         public string storageGUID;
         public string storagePath;
         public long size;
         public string dateAndTime;
+        public long id;
 
-        public Block(long sequence, string storageGUID, string storagePath, long size, string dateAndTime)
+        public Block(string sourceGUID, string storageGUID, string storagePath, long size, string dateAndTime)
         {
-            this.sequence = sequence;
+            this.sourceGUID = sourceGUID;
             this.storageGUID = storageGUID;
             this.storagePath = storagePath;
             this.size = size;
             this.dateAndTime = dateAndTime;
+            this.id = 0;
         }
     }
 
@@ -34,7 +36,7 @@ namespace Backend.Database
         public long size;
         public string dateAndTime;
         public int backupLevel;
-        public long primaryKey;
+        public long id;
 
         public BackupIndex(string sourceGUID, string sourcePath, long firstBlockOffset, long size, string dateAndTime, int backupLevel)
         {
@@ -44,7 +46,19 @@ namespace Backend.Database
             this.size = size;
             this.dateAndTime = dateAndTime;
             this.backupLevel = backupLevel;
-            this.primaryKey = 0;
+            this.id = 0;
+        }
+    }
+
+    public struct key
+    {
+        public long id;
+        public string guid;
+
+        public key(long id, string guid)
+        {
+            this.id = id;
+            this.guid = guid;
         }
     }
 
@@ -91,14 +105,15 @@ namespace Backend.Database
         private void CreateIndexTables(SQLiteConnection conn)
         {
             //sqlite statements for creating each table
-            string backupIndexSql = "CREATE TABLE IF NOT EXISTS Backup_Indexes (id INTEGER PRIMARY KEY ASC, source_guid TEXT, source_path TEXT, first_block_offset INTEGER, size INTEGER, date_of_backup DATETIME, backup_level INTEGER)";
-            string blockStorageSql = "CREATE TABLE IF NOT EXISTS Block_Storage (id INTEGER PRIMARY KEY ASC, storage_guid TEXT, storage_path TEXT, size INTEGER, date_created DATETIME)";
-            string indexToBlockSql = "CREATE TABLE IF NOT EXISTS Index_to_Block (id INTEGER PRIMARY KEY ASC, index_foreign_key INTEGER, block_foreign_key INTEGER, sequence INTEGER, FOREIGN KEY (index_foreign_key) REFERENCES Backup_Indexes(id), FOREIGN KEY (block_foreign_key) REFERENCES Block_Storage(id))";
-
+            string backupIndexSql = "CREATE TABLE IF NOT EXISTS Backup_Indexes (id INTEGER, source_guid TEXT, source_path TEXT, first_block_offset INTEGER, size INTEGER, date_of_backup DATETIME, backup_level INTEGER, PRIMARY KEY (id, source_guid))";
+            string blockStorageSql = "CREATE TABLE IF NOT EXISTS Block_Storage (id INTEGER, source_guid TEXT, storage_guid TEXT, storage_path TEXT, size INTEGER, date_created DATETIME, PRIMARY KEY (id, source_guid))";
+            string indexToBlockSql = "CREATE TABLE IF NOT EXISTS Index_to_Block (id INTEGER PRIMARY KEY ASC, index_foreign_id INTEGER, index_foreign_guid TEXT, block_foreign_id INTEGER, block_foreign_guid TEXT, FOREIGN KEY (index_foreign_id, index_foreign_guid) REFERENCES Backup_Indexes(id, source_guid), FOREIGN KEY (block_foreign_id, block_foreign_guid) REFERENCES Block_Storage(id, storage_guid))";
+            
             //create tables
             SQLiteCommand backupIndexCmd = new SQLiteCommand(backupIndexSql, conn);
             SQLiteCommand blockStorageCmd = new SQLiteCommand(blockStorageSql, conn);
             SQLiteCommand indexToBlockCmd = new SQLiteCommand(indexToBlockSql, conn);
+
             try
             {
                 conn.Open();
@@ -129,18 +144,25 @@ namespace Backend.Database
         /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
         public void InsertIndex(BackupIndex index, List<Block> blocks, SQLiteConnection conn)
         {
-            long indexForeignKey = 0;
+            long indexID = 0;
+            long indexIDCount = 0;
 
             // Insert index into Backup_Indexes table
-            string backupIndexSql = "INSERT INTO Backup_Indexes (source_guid, source_path, first_block_offset, size, date_of_backup, backup_level) VALUES (@pSourceGUID, @pSourcePath, @pFirstBlockOffset, @pSize, @pDateOfBackup, @pBackupLevel)";
+            string backupIndexSql = "INSERT INTO Backup_Indexes (id, source_guid, source_path, first_block_offset, size, date_of_backup, backup_level) VALUES (@pID, @pSourceGUID, @pSourcePath, @pFirstBlockOffset, @pSize, @pDateOfBackup, @pBackupLevel)";
             SQLiteCommand backupIndexCmd = new SQLiteCommand(backupIndexSql, conn);
-            //Get primary key for index entry to insert into Index_to_Block entry
-            string indexPrimaryQuery = "SELECT last_insert_rowid()";
-            SQLiteCommand indexPrimaryCmd = new SQLiteCommand(indexPrimaryQuery, conn);
+            //Get ID for index
+            //Determine if there are any entries for the given guid
+            string indexInitialIDQuery = "SELECT COUNT(id) FROM Backup_Indexes WHERE source_guid = @pSourceGUID";
+            SQLiteCommand indexInitialIDCmd = new SQLiteCommand(indexInitialIDQuery, conn);
+            //Get previous row ID for given guid
+            string indexPreviousIDQuery = "SELECT max(id) FROM Backup_Indexes WHERE source_guid = @pSourceGUID";
+            SQLiteCommand indexPreviousIDCmd = new SQLiteCommand(indexPreviousIDQuery, conn);
 
             //SQLite likes dates and times in a certain format.
             //string currentTimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
+            indexInitialIDCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
+            indexPreviousIDCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
             backupIndexCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
             backupIndexCmd.Parameters.Add(new SQLiteParameter("@pSourcePath", index.sourcePath));
             backupIndexCmd.Parameters.Add(new SQLiteParameter("@pFirstBlockOffset", index.firstBlockOffset));
@@ -152,8 +174,18 @@ namespace Backend.Database
             try
             {
                 conn.Open();
+                indexIDCount = Convert.ToInt64(indexInitialIDCmd.ExecuteScalar());
+                if (indexIDCount == 0) // If there are no entries for given guid, then this is the first row
+                {
+                    indexID = 1;
+                }
+                else //otherwise get the ID for the previous row and increment
+                {
+                    indexID = Convert.ToInt64(indexPreviousIDCmd.ExecuteScalar());
+                    indexID++;
+                }
+                backupIndexCmd.Parameters.Add(new SQLiteParameter("@pID", indexID));
                 backupIndexCmd.ExecuteNonQuery();
-                indexForeignKey = Convert.ToInt64(indexPrimaryCmd.ExecuteScalar());
                 conn.Close();
             }
             catch (SQLiteException ex)
@@ -172,55 +204,54 @@ namespace Backend.Database
             // Go through the array of Blocks and add each to the Block_Storage table; also, for each block add an entry to Index_to_Block table
             foreach (Block currentBlock in blocks)
             {
-                long blockForeignKey = 0;
+                long blockID = 0;
+                long blockIDCount = 0;
 
-                string blockStorageSql = "INSERT INTO Block_Storage (storage_guid, storage_path, size, date_created) VALUES (@pStorageGUID, @pStoragePath, @pSize, @pDateCreated)";
+                string blockStorageSql = "INSERT INTO Block_Storage (id, source_guid, storage_guid, storage_path, size, date_created) VALUES (@pID, @pSourceGUID, @pStorageGUID, @pStoragePath, @pSize, @pDateCreated)";
                 SQLiteCommand blockStorageCmd = new SQLiteCommand(blockStorageSql, conn);
-                //Get primary key for the most recent Block_Storage entry to insert into corresponding Index_to_Block entry
-                string blockPrimaryQuery = "SELECT last_insert_rowid()";
-                SQLiteCommand blockPrimaryCmd = new SQLiteCommand(blockPrimaryQuery, conn);
+                //Get ID for block
+                //Determine if there are any entries for the given guid
+                string blockInitialIDQuery = "SELECT COUNT(id) FROM Index_to_Block WHERE index_foreign_guid = @pSourceGUID";
+                SQLiteCommand blockInitialIDCmd = new SQLiteCommand(blockInitialIDQuery, conn);
+                //Get previous row ID for given guid
+                string blockPreviousIDQuery = "SELECT max(block_foreign_id) FROM Index_to_Block WHERE index_foreign_guid = @pSourceGUID";
+                SQLiteCommand blockPreviousIDCmd = new SQLiteCommand(blockPreviousIDQuery, conn);
+                // Insert Index_to_Block entry
+                string indexToBlockSql = "INSERT INTO Index_to_Block (index_foreign_id, index_foreign_guid, block_foreign_id, block_foreign_guid) VALUES (@pIndexForeignID, @pIndexForeignGUID, @pBlockForeignID, @pBlockForeignGUID)";
+                SQLiteCommand indexToBlockCmd = new SQLiteCommand(indexToBlockSql, conn);
 
                 //SQLite likes dates and times in a certain format (ISO-something or other).
                 //string currentTimeString = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                blockInitialIDCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
+                blockPreviousIDCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
 
+                blockStorageCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
                 blockStorageCmd.Parameters.Add(new SQLiteParameter("@pStorageGUID", currentBlock.storageGUID));
                 blockStorageCmd.Parameters.Add(new SQLiteParameter("@pStoragePath", currentBlock.storagePath));
                 blockStorageCmd.Parameters.Add(new SQLiteParameter("@pSize", currentBlock.size));
                 blockStorageCmd.Parameters.Add(new SQLiteParameter("@pDateCreated", currentBlock.dateAndTime));
 
+                indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pIndexForeignID", indexID));
+                indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pIndexForeignGUID", index.sourceGUID));
+                indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pBlockForeignGUID", currentBlock.sourceGUID));
+
                 //open the connection, exectute the query, and close the connection.
                 try
                 {
                     conn.Open();
-                    blockStorageCmd.ExecuteNonQuery();
-                    blockForeignKey = Convert.ToInt64(blockPrimaryCmd.ExecuteScalar());
-                    conn.Close();
-                }
-                catch (SQLiteException ex)
-                {
-                    //if anything is wrong with the sql statement or the database,
-                    //a SQLiteException will show information about it.
-                    Debug.Print(ex.Message);
-
-                    //always make sure the database connection is closed.
-                    if (conn.State == ConnectionState.Open)
+                    blockIDCount = Convert.ToInt64(blockInitialIDCmd.ExecuteScalar());
+                    if (blockIDCount == 0) // If there are no entries for given guid, then this is the first row
                     {
-                        conn.Close();
+                        blockID = 1;
                     }
-                }
-
-                // Insert Index_to_Block entry
-                string indexToBlockSql = "INSERT INTO Index_to_Block (index_foreign_key, block_foreign_key, sequence) VALUES (@pIndexForeignKey, @pBlockForeignKey, @pSequence)";
-                SQLiteCommand indexToBlockCmd = new SQLiteCommand(indexToBlockSql, conn);
-
-                indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pIndexForeignKey", indexForeignKey));
-                indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pBlockForeignKey", blockForeignKey));
-                indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pSequence", currentBlock.sequence));
-
-                //open the connection, exectute the query, and close the connection.
-                try
-                {
-                    conn.Open();
+                    else //otherwise get the ID for the previous row and increment
+                    {
+                        blockID = Convert.ToInt64(blockPreviousIDCmd.ExecuteScalar());
+                        blockID++;
+                    }
+                    blockStorageCmd.Parameters.Add(new SQLiteParameter("@pID", blockID));
+                    blockStorageCmd.ExecuteNonQuery();
+                    indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pBlockForeignID", blockID));
                     indexToBlockCmd.ExecuteNonQuery();
                     conn.Close();
                 }
@@ -307,19 +338,19 @@ namespace Backend.Database
             long firstBlockOffset = 0;
             long size = 0;
             int backupLevel = 0;
-            long primaryKey = 0;
+            long id = 0;
 
             string pathQuery = "SELECT source_path FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateOfBackup";
             string offsetQuery = "SELECT first_block_offset FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateOfBackup";
             string sizeQuery = "SELECT size FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateOfBackup";
             string levelQuery = "SELECT backup_level FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateOfBackup";
-            string keyQuery = "SELECT id FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateOfBackup";
+            string idQuery = "SELECT id FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateOfBackup";
 
             SQLiteCommand pathCmd = new SQLiteCommand(pathQuery, conn);
             SQLiteCommand offsetCmd = new SQLiteCommand(offsetQuery, conn);
             SQLiteCommand sizeCmd = new SQLiteCommand(sizeQuery, conn);
             SQLiteCommand levelCmd = new SQLiteCommand(levelQuery, conn);
-            SQLiteCommand keyCmd = new SQLiteCommand(keyQuery, conn);
+            SQLiteCommand idCmd = new SQLiteCommand(idQuery, conn);
 
             SQLiteParameter pSourceGUID = new SQLiteParameter("@pSourceGUID", sourceGUID);
             SQLiteParameter pDateOfBackup = new SQLiteParameter("@pDateOfBackup", dateTimeOfBackup);
@@ -332,8 +363,8 @@ namespace Backend.Database
             sizeCmd.Parameters.Add(pDateOfBackup);
             levelCmd.Parameters.Add(pSourceGUID);
             levelCmd.Parameters.Add(pDateOfBackup);
-            keyCmd.Parameters.Add(pSourceGUID);
-            keyCmd.Parameters.Add(pDateOfBackup);
+            idCmd.Parameters.Add(pSourceGUID);
+            idCmd.Parameters.Add(pDateOfBackup);
 
             try
             {
@@ -342,7 +373,7 @@ namespace Backend.Database
                 firstBlockOffset = Convert.ToInt64(offsetCmd.ExecuteScalar());
                 size = Convert.ToInt64(sizeCmd.ExecuteScalar());
                 backupLevel = Convert.ToInt16(levelCmd.ExecuteScalar());
-                primaryKey = Convert.ToInt64(keyCmd.ExecuteScalar());
+                id = Convert.ToInt64(idCmd.ExecuteScalar());
                 conn.Close();
             }
             catch (SQLiteException ex)
@@ -359,30 +390,32 @@ namespace Backend.Database
             }
 
             BackupIndex index = new BackupIndex(sourceGUID, sourcePath, firstBlockOffset, size, dateTimeOfBackup, backupLevel);
-            index.primaryKey = primaryKey;
+            index.id = id;
             return index;
         }
 
         /// <summary>
-        /// Given the primary key for an entry in the Backup_Indexes database table, provides a list of blocks from the 
-        /// Block_Storage table that correspond to that entry
+        /// Given a backup index from the Backup_Indexes database table, provides a list of blocks from the 
+        /// Block_Storage table that correspond to that index
         /// </summary>
-        /// <param name="indexPrimaryKey">The primary key from the Backup_Indexes table</param>
+        /// <param name="index">The index from the Backup_Indexes table</param>
         /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
         /// <returns>A list of Block objects; each object corresponds to an entry in the Block_Storage database table</returns>
-        public List<Block> GetBlockList(long indexPrimaryKey, SQLiteConnection conn)
+        public List<Block> GetBlockList(BackupIndex index, SQLiteConnection conn)
         {
             List<Block> blockList = new List<Block>();
             //Get a list of block foreign keys from the Index_to_Block table
-            List<long> keyList = new List<long>();
+            List<key> keyList = new List<key>();
 
-            string query = "SELECT block_foreign_key FROM Index_to_Block WHERE index_foreign_key = @pIndexKey";
+            string query = "SELECT block_foreign_id,block_foreign_guid FROM Index_to_Block WHERE index_foreign_id = @pIndexID AND index_foreign_guid = @pIndexGUID";
             SQLiteCommand cmd = new SQLiteCommand(query, conn);
 
             //create a parameter for indexPrimaryKey
-            SQLiteParameter pIndexKey = new SQLiteParameter("@pIndexKey", indexPrimaryKey);
+            SQLiteParameter pIndexID = new SQLiteParameter("@pIndexID", index.id);
+            SQLiteParameter pIndexGUID = new SQLiteParameter("@pIndexGUID", index.sourceGUID);
 
-            cmd.Parameters.Add(pIndexKey);
+            cmd.Parameters.Add(pIndexID);
+            cmd.Parameters.Add(pIndexGUID);
 
             try
             {
@@ -394,9 +427,11 @@ namespace Backend.Database
                     while (reader.Read())
                     {
                         //'reader' iterates through returned
-                        //block_foreign_key records and each is added to list. 
-                        long blockForeignKey = reader.GetInt64(0);
-                        keyList.Add(blockForeignKey);
+                        //block foreign key records and each is added to list. 
+                        long blockForeignID = reader.GetInt64(reader.GetOrdinal("block_foreign_id"));
+                        string blockForeignGUID = reader.GetString(reader.GetOrdinal("block_foreign_guid"));
+                        key currentKey = new key(blockForeignID, blockForeignGUID);
+                        keyList.Add(currentKey);
                     }
                 }
 
@@ -417,42 +452,43 @@ namespace Backend.Database
             }
 
             //For each block_foreign_key, extract the block from the database and add it to the list of Blocks
-            foreach (long currentKey in keyList)
+            foreach (key currentKey in keyList)
             {
-                long sequence = 0;
+                long id = 0;
+                string sourceGUID = "";
                 string storageGUID = "";
                 string storagePath = "";
                 long size = 0;
                 string dateAndTime = "";
-                
-                string sequenceQuery = "SELECT sequence FROM Index_to_Block WHERE block_foreign_key = @pBlockForeignKey";
-                string guidQuery = "SELECT storage_guid FROM Block_Storage WHERE id = @pBlockForeignKey";
-                string pathQuery = "SELECT storage_path FROM Block_Storage WHERE id = @pBlockForeignKey";
-                string sizeQuery = "SELECT size FROM Block_Storage WHERE id = @pBlockForeignKey";
-                string dateTimeQuery = "SELECT date_created FROM Block_Storage WHERE id = @pBlockForeignKey";
 
-                SQLiteCommand sequenceCmd = new SQLiteCommand(sequenceQuery, conn);
-                SQLiteCommand guidCmd = new SQLiteCommand(guidQuery, conn);
-                SQLiteCommand pathCmd = new SQLiteCommand(pathQuery, conn);
-                SQLiteCommand sizeCmd = new SQLiteCommand(sizeQuery, conn);
-                SQLiteCommand dateTimeCmd = new SQLiteCommand(dateTimeQuery, conn);
+                string blockQuery = "SELECT id,source_guid,storage_guid,storage_path,size,date_created FROM Block_Storage WHERE id = @pBlockForeignID AND source_guid = @pBlockForeignGUID";
 
-                SQLiteParameter pBlockForeignKey = new SQLiteParameter("@pBlockForeignKey", currentKey);
+                SQLiteCommand blockCmd = new SQLiteCommand(blockQuery, conn);
 
-                sequenceCmd.Parameters.Add(pBlockForeignKey);
-                guidCmd.Parameters.Add(pBlockForeignKey);
-                pathCmd.Parameters.Add(pBlockForeignKey);
-                sizeCmd.Parameters.Add(pBlockForeignKey);
-                dateTimeCmd.Parameters.Add(pBlockForeignKey);
+                SQLiteParameter pBlockForeignID = new SQLiteParameter("@pBlockForeignID", currentKey.id);
+                SQLiteParameter pBlockForeignGUID = new SQLiteParameter("@pBlockForeignGUID", currentKey.guid);
+
+                blockCmd.Parameters.Add(pBlockForeignID);
+                blockCmd.Parameters.Add(pBlockForeignGUID);
 
                 try
                 {
                     conn.Open();
-                    sequence = Convert.ToInt64(sequenceCmd.ExecuteScalar());
-                    storageGUID = guidCmd.ExecuteScalar().ToString();
-                    storagePath = pathCmd.ExecuteScalar().ToString();
-                    size = Convert.ToInt64(sizeCmd.ExecuteScalar());
-                    dateAndTime = dateTimeCmd.ExecuteScalar().ToString();
+
+                    using (SQLiteDataReader reader = blockCmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            //'reader' iterates through returned block fields
+                            id = reader.GetInt64(reader.GetOrdinal("id"));
+                            sourceGUID = reader.GetString(reader.GetOrdinal("source_guid"));
+                            storageGUID = reader.GetString(reader.GetOrdinal("storage_guid"));
+                            storagePath = reader.GetString(reader.GetOrdinal("storage_path"));
+                            size = reader.GetInt64(reader.GetOrdinal("size"));
+                            dateAndTime = reader.GetString(reader.GetOrdinal("date_created"));
+                        }
+                    }
+
                     conn.Close();
                 }
                 catch (SQLiteException ex)
@@ -468,16 +504,19 @@ namespace Backend.Database
                     }
                 }
 
-                Block currentBlock = new Block(sequence, storageGUID, storagePath, size, dateAndTime);
+                Block currentBlock = new Block(sourceGUID, storageGUID, storagePath, size, dateAndTime);
+                currentBlock.id = id;
                 blockList.Add(currentBlock);
             }
-            
+
+            //sort into ascending order
+            blockList.Sort((block1, block2) => block1.id.CompareTo(block2.id));
             return blockList;
         }
 
-        private long RemoveBackupIndex(string sourceGUID, string dateTimeOfBackup, SQLiteConnection conn)
+        private key RemoveBackupIndex(string sourceGUID, string dateTimeOfBackup, SQLiteConnection conn)
         {
-            long indexPrimaryKey = 0;
+            key indexPrimaryKey = new key(0, sourceGUID);
 
             string indexKeyQuery = "SELECT id FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateTimeOfBackup";
             string backupIndexSql = "DELETE FROM Backup_Indexes WHERE source_guid = @pSourceGUID AND date_of_backup = @pDateTimeOfBackup";
@@ -496,7 +535,7 @@ namespace Backend.Database
             try
             {
                 conn.Open();
-                indexPrimaryKey = Convert.ToInt64(indexKeyCmd.ExecuteScalar());
+                indexPrimaryKey.id = Convert.ToInt64(indexKeyCmd.ExecuteScalar());
                 backupIndexCmd.ExecuteNonQuery();
                 conn.Close();
             }
@@ -516,20 +555,23 @@ namespace Backend.Database
             return indexPrimaryKey;
         }
 
-        private List<long> RemoveIndexToBlocks(long indexForeignKey, SQLiteConnection conn)
+        private List<key> RemoveIndexToBlocks(key indexForeignKey, SQLiteConnection conn)
         {
-            List<long> blockKeys = new List<long>();
+            List<key> blockKeys = new List<key>();
 
-            string blockKeyQuery = "SELECT block_foreign_key FROM Index_to_Block WHERE index_foreign_key = @pIndexForeignKey";
-            string indexToBlockSql = "DELETE FROM Index_to_Block WHERE index_foreign_key = @pIndexForeignKey";
+            string blockKeyQuery = "SELECT block_foreign_id,block_foreign_guid FROM Index_to_Block WHERE index_foreign_id = @pIndexForeignID AND index_foreign_guid = @pIndexForeignGUID";
+            string indexToBlockSql = "DELETE FROM Index_to_Block WHERE index_foreign_id = @pIndexForeignID AND index_foreign_guid = @pIndexForeignGUID";
 
             SQLiteCommand blockKeyCmd = new SQLiteCommand(blockKeyQuery, conn);
             SQLiteCommand indexToBlockCmd = new SQLiteCommand(indexToBlockSql, conn);
 
-            SQLiteParameter pIndexForeignKey = new SQLiteParameter("@pIndexForeignKey", indexForeignKey);
+            SQLiteParameter pIndexForeignID = new SQLiteParameter("@pIndexForeignID", indexForeignKey.id);
+            SQLiteParameter pIndexForeignGUID = new SQLiteParameter("@pIndexForeignGUID", indexForeignKey.guid);
 
-            blockKeyCmd.Parameters.Add(pIndexForeignKey);
-            indexToBlockCmd.Parameters.Add(pIndexForeignKey);
+            blockKeyCmd.Parameters.Add(pIndexForeignID);
+            indexToBlockCmd.Parameters.Add(pIndexForeignID);
+            blockKeyCmd.Parameters.Add(pIndexForeignGUID);
+            indexToBlockCmd.Parameters.Add(pIndexForeignGUID);
 
             try
             {
@@ -540,8 +582,10 @@ namespace Backend.Database
                     {
                         //'reader' iterates through returned
                         //block_foreign_key records and each is added to list. 
-                        long blockForeignKey = reader.GetInt64(0);
-                        blockKeys.Add(blockForeignKey);
+                        long blockForeignID = reader.GetInt64(reader.GetOrdinal("block_foreign_id"));
+                        string blockForeignGUID = reader.GetString(reader.GetOrdinal("block_foreign_guid"));
+                        key currentKey = new key(blockForeignID, blockForeignGUID);
+                        blockKeys.Add(currentKey);
                     }
                 }
                 indexToBlockCmd.ExecuteNonQuery();
@@ -563,17 +607,19 @@ namespace Backend.Database
             return blockKeys;
         }
 
-        private void RemoveBlocks(List<long> blockKeys, SQLiteConnection conn)
+        private void RemoveBlocks(List<key> blockKeys, SQLiteConnection conn)
         {
-            foreach (long currentBlockKey in blockKeys)
+            foreach (key currentBlockKey in blockKeys)
             {
-                string blockStorageSql = "DELETE FROM Block_Storage WHERE id = @pBlockPrimaryKey";
+                string blockStorageSql = "DELETE FROM Block_Storage WHERE id = @pBlockPrimaryID AND source_guid = @pBlockPrimaryGUID";
 
                 SQLiteCommand blockStorageCmd = new SQLiteCommand(blockStorageSql, conn);
 
-                SQLiteParameter pBlockPrimaryKey = new SQLiteParameter("@pBlockPrimaryKey", currentBlockKey);
+                SQLiteParameter pBlockPrimaryID = new SQLiteParameter("@pBlockPrimaryID", currentBlockKey.id);
+                SQLiteParameter pBlockPrimaryGUID = new SQLiteParameter("@pBlockPrimaryGUID", currentBlockKey.guid);
 
-                blockStorageCmd.Parameters.Add(pBlockPrimaryKey);
+                blockStorageCmd.Parameters.Add(pBlockPrimaryID);
+                blockStorageCmd.Parameters.Add(pBlockPrimaryGUID);
 
                 try
                 {
@@ -652,12 +698,12 @@ namespace Backend.Database
             }
 
             //Sort into descending order by date/time of backup
-            cleanList.Sort((a, b) => b.dateTime.CompareTo(a.dateTime));
+            cleanList.Sort((index1, index2) => index2.dateTime.CompareTo(index1.dateTime));
 
             DateTime? mostRecentFullBackup = null;
             int currentIncrementalCount = 0; // keep track of incremental backups that other backups will depend on
 
-            //Remove from the list indexes that do not qualify for removal
+            //Remove from the list indexes that do not qualify for removal from the database
             foreach (dateTimeLevel currentIndex in cleanList)
             {
                 TimeSpan indexAge = DateTime.Now - currentIndex.dateTime;
@@ -695,16 +741,15 @@ namespace Backend.Database
                 }
             }
 
-            //All indexes in the list at this point qualify for removal 
-            //Remove all indexes in the list
+            //All indexes in the list at this point qualify for removal from the database
+            //Remove all indexes in the list from the database
             foreach (dateTimeLevel currentIndex in cleanList)
             {
-                long indexPrimaryKey = 0;
-                List<long> blockKeys = new List<long>();
+                List<key> blockKeys = new List<key>();
                 string dateTimeOfBackup = currentIndex.dateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
                 //Remove entries from Backup_Indexes table
-                indexPrimaryKey = RemoveBackupIndex(guid, dateTimeOfBackup, conn);
+                key indexPrimaryKey = RemoveBackupIndex(guid, dateTimeOfBackup, conn);
 
                 //Remove entries from Index_to_Block table
                 blockKeys = RemoveIndexToBlocks(indexPrimaryKey, conn);
