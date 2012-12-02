@@ -18,6 +18,9 @@ namespace Backend
     {
         //size of message prefix that specifies size of message
         const int MESSAGE_SIZE_SIZE = 2;
+        //maximum number of bytes we will buffer at a time
+        const int BYTES_PER_READ = 1048576;
+        private Guid guid;
         private Thread thread;
         private TcpClient tcpClient;
         //a queue of requests received from the remote node
@@ -30,8 +33,9 @@ namespace Backend
         // if true, the thread is working on something. if false, the thread is idle (waiting for work). Only applies to isClient=false instances
         private bool working;
         object _lock;
-        public ClientThread(TcpClient c, bool isClient)
+        public ClientThread(TcpClient c, bool isClient, Guid guid)
         {
+            this.guid = guid;
             tcpClient = c;
             this.isClient = isClient;
             binaryFormatter = new BinaryFormatter();
@@ -93,6 +97,7 @@ namespace Backend
                     if (sleep)
                     {
                         Thread.Sleep(100);
+                        continue;
                     }
                     //todo: handle work
                 }
@@ -226,14 +231,26 @@ namespace Backend
         /// Send a message to the remote node.
         /// </summary>
         /// <param name="tcpClient">The TcpClient for communication with the remote node</param>
-        /// <param name="request">The NetworkRequest to send to the remote node</param>
-        private void sendMessage(TcpClient tcpClient, NetworkRequest request)
+        /// <param name="message">The NetworkRequest to send to the remote node</param>
+        /// <returns>The number of bytes written to the remote node or -1 if an error occurred.</returns>
+        private int sendMessage(TcpClient tcpClient, NetworkEvent message)
         {
             MemoryStream mem = new MemoryStream();
-            binaryFormatter.Serialize(mem, request);
+            binaryFormatter.Serialize(mem, message);
             byte[] bytes = mem.ToArray();
             int num = bytes.Length;
-            writeBytes(tcpClient, bytes, num);
+            byte[] numBytes = BitConverter.GetBytes((ushort)num);
+            int ret = writeBytes(tcpClient, numBytes, MESSAGE_SIZE_SIZE);
+            if (ret == -1)
+            {
+                Logger.Log("ClientThread:sendMessage failed to send message size");
+            }
+            ret = writeBytes(tcpClient, bytes, num);
+            if (ret == -1)
+            {
+                Logger.Log("ClientThread:sendMessage failed to send a message");
+            }
+            return ret;
         }
 
         /// <summary>
@@ -244,8 +261,6 @@ namespace Backend
         /// <returns>Zero if successful or non-zero if there was some failure</returns>
         private int readFileToDisk(long numBytes, string path)
         {
-            //maximum number of bytes we will buffer at a time
-            const int BYTES_PER_READ = 1048576;
             long bytesRemaining = numBytes;
             byte[] bytes = new byte[BYTES_PER_READ];
 
@@ -289,6 +304,70 @@ namespace Backend
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Reads a file from disk and writes it to this instance's TcpClient.
+        /// </summary>
+        /// <param name="path">The path to the file that should be transmitted</param>
+        /// <returns>If successful, 0 is returned. Any kind of failure will return a nonzero integer.</returns>
+        private int writeFileToNetwork(string path)
+        {
+            FileStream fileStream;
+            byte[] bytes = new byte[BYTES_PER_READ];
+            try
+            {
+                fileStream = File.OpenRead(path);
+            }
+            catch
+            {
+                Logger.Log("ClientThread:writeFiletoNetwork failed to open '" + path + "' for reading");
+                return 1;
+            }
+            while (true)
+            {
+                //read a block of data
+                int count;
+                try
+                {
+                    count = fileStream.Read(bytes, 0, BYTES_PER_READ);
+                    if (count == 0) break;
+                }
+                catch
+                {
+                    Logger.Log("ClientThread:writeFiletoNetwork failed to read from '" + path + "'");
+                    return 2;
+                }
+                //send a block of data
+                count = writeBytes(tcpClient, bytes, count);
+                if (count == -1)
+                {
+                    Logger.Log("ClientThread:writeFiletoNetwork failed to write bytes to remote node");
+                    break;
+                }
+            }
+            fileStream.Close();
+            return 0;
+        }
+
+        /// <summary>
+        /// Responds to a QueryRequest from a remote node by sending a NetworkResponse object
+        /// </summary>
+        /// <param name="request">The NetworkRequest that we are responding to</param>
+        /// <param name="response">The response code to be sent to the remote node</param>
+        /// <param name="details">The details of or reason for the response</param>
+        public void respondToQuery(QueryRequest request, ResponseType response, string details)
+        {
+            NetworkResponse networkResponse = new NetworkResponse(response, details, guid, request.SequenceNumber);
+            int ret = sendMessage(tcpClient, networkResponse);
+            if (ret == -1)
+            {
+                Logger.Error("ClientThread:respondToQuery failed to respond to a node. Response: " + response + " sequenceNumber: " + request.SequenceNumber + " Details: " + details);
+            }
+            else
+            {
+                Logger.Info("ClientThread:respondToQuery successfully responded to a node. Response: " + response + " sequenceNumber: " + request.SequenceNumber + " Details: " + details);
+            }
         }
     }
 }

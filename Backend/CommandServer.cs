@@ -18,7 +18,7 @@ namespace Backend
     {
         //arbitrary unprivileged port
         private const int SERVER_PORT = 7890;
-        
+        private Guid guid;
         //flag to continue listening
         private bool keepGoing = true;
         //queue of threads from incoming clients. obviates eventQueue
@@ -26,8 +26,9 @@ namespace Backend
         private Thread serverThread;
         private TcpListener tcpListener;
 
-        public CommandServer()
+        public CommandServer(Guid guid)
         {
+            this.guid = guid;
             clientThreads = new Queue<ClientThread>();
             tcpListener = new TcpListener(IPAddress.Any, SERVER_PORT);
             serverThread = new Thread(new ThreadStart(RunServerThread));
@@ -43,10 +44,40 @@ namespace Backend
             while (keepGoing)
             {
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
-                ClientThread clientThread = new ClientThread(tcpClient, true);
-                clientThreads.Enqueue(clientThread);
+                ClientThread clientThread = new ClientThread(tcpClient, true, guid);
+                lock (clientThreads)
+                {
+                    clientThreads.Enqueue(clientThread);
+                }
             }
         }
-        
+
+        /// <summary>
+        /// Returns the next ClientThread in the queue. Returns null if the queue is empty.
+        /// </summary>
+        /// <returns></returns>
+        public ClientThread getClientThread()
+        {
+            lock (clientThreads)
+            {
+                if (clientThreads.Count() > 0)
+                {
+                    return clientThreads.Dequeue();
+                }
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Returns the number of ClientThreads in the queue.
+        /// </summary>
+        /// <returns></returns>
+        public int clientThreadCount()
+        {
+            lock (clientThreads)
+            {
+                return clientThreads.Count();
+            }
+        }
     }
 }

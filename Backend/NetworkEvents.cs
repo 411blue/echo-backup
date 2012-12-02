@@ -181,11 +181,20 @@ namespace Backend
             set { type = value; }
         }
 
+        //A string containing any details about the response type. For successful query responses, this string will contain the requested information.
         private string reason;
         public string Reason
         {
             get { return reason; }
             set { reason = value; }
+        }
+
+        public NetworkResponse(ResponseType type, string reason, Guid guid, int seqNum)
+        {
+            this.type = type;
+            this.reason = reason;
+            this.mySourceGuid = guid;
+            this.mySequenceNumber = seqNum;
         }
     }
 }
