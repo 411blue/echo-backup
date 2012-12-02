@@ -107,7 +107,7 @@ namespace Backend.Database
             //sqlite statements for creating each table
             string backupIndexSql = "CREATE TABLE IF NOT EXISTS Backup_Indexes (id INTEGER, source_guid TEXT, source_path TEXT, first_block_offset INTEGER, size INTEGER, date_of_backup DATETIME, backup_level INTEGER, PRIMARY KEY (id, source_guid))";
             string blockStorageSql = "CREATE TABLE IF NOT EXISTS Block_Storage (id INTEGER, source_guid TEXT, storage_guid TEXT, storage_path TEXT, size INTEGER, date_created DATETIME, PRIMARY KEY (id, source_guid))";
-            string indexToBlockSql = "CREATE TABLE IF NOT EXISTS Index_to_Block (id INTEGER PRIMARY KEY ASC, index_foreign_id INTEGER, index_foreign_guid TEXT, block_foreign_id INTEGER, block_foreign_guid TEXT, FOREIGN KEY (index_foreign_id, index_foreign_guid) REFERENCES Backup_Indexes(id, source_guid), FOREIGN KEY (block_foreign_id, block_foreign_guid) REFERENCES Block_Storage(id, storage_guid))";
+            string indexToBlockSql = "CREATE TABLE IF NOT EXISTS Index_to_Block (index_foreign_id INTEGER, index_foreign_guid TEXT, block_foreign_id INTEGER, block_foreign_guid TEXT, FOREIGN KEY (index_foreign_id, index_foreign_guid) REFERENCES Backup_Indexes(id, source_guid), FOREIGN KEY (block_foreign_id, block_foreign_guid) REFERENCES Block_Storage(id, source_guid))";
             
             //create tables
             SQLiteCommand backupIndexCmd = new SQLiteCommand(backupIndexSql, conn);
@@ -211,7 +211,7 @@ namespace Backend.Database
                 SQLiteCommand blockStorageCmd = new SQLiteCommand(blockStorageSql, conn);
                 //Get ID for block
                 //Determine if there are any entries for the given guid
-                string blockInitialIDQuery = "SELECT COUNT(id) FROM Index_to_Block WHERE index_foreign_guid = @pSourceGUID";
+                string blockInitialIDQuery = "SELECT COUNT(block_foreign_id) FROM Index_to_Block WHERE index_foreign_guid = @pSourceGUID";
                 SQLiteCommand blockInitialIDCmd = new SQLiteCommand(blockInitialIDQuery, conn);
                 //Get previous row ID for given guid
                 string blockPreviousIDQuery = "SELECT max(block_foreign_id) FROM Index_to_Block WHERE index_foreign_guid = @pSourceGUID";
@@ -225,7 +225,7 @@ namespace Backend.Database
                 blockInitialIDCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
                 blockPreviousIDCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
 
-                blockStorageCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", index.sourceGUID));
+                blockStorageCmd.Parameters.Add(new SQLiteParameter("@pSourceGUID", currentBlock.sourceGUID));
                 blockStorageCmd.Parameters.Add(new SQLiteParameter("@pStorageGUID", currentBlock.storageGUID));
                 blockStorageCmd.Parameters.Add(new SQLiteParameter("@pStoragePath", currentBlock.storagePath));
                 blockStorageCmd.Parameters.Add(new SQLiteParameter("@pSize", currentBlock.size));
