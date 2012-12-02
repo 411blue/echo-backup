@@ -43,7 +43,7 @@ namespace Backend
             while (keepGoing)
             {
                 TcpClient tcpClient = tcpListener.AcceptTcpClient();
-                ClientThread clientThread = new ClientThread(tcpClient);
+                ClientThread clientThread = new ClientThread(tcpClient, true);
                 clientThreads.Enqueue(clientThread);
             }
         }

@@ -5,7 +5,8 @@ using System;
 
 namespace Backend
 {
-    enum NetworkEventType {Hello, Push, Pull, Query};
+    public enum NetworkEventType {Hello, Push, Pull, Query};
+    public enum ResponseType { Yes, CanNot, WillNot, NotImplemented };
 
     /// <summary>
     /// An abstract representation of a network event. Used to provide a base for the definition of push, pull and query requests.
@@ -49,9 +50,9 @@ namespace Backend
     }
 
     /// <summary>
-    /// Abstract class with base code for TCP network events. Contains a TcpClient object.
+    /// Abstract class with base code for network requests.
     /// </summary>
-    public abstract class TcpNetworkEvent : NetworkEvent
+    public abstract class NetworkRequest : NetworkEvent
     {
         /*private TcpClient myTcpClient;
         public TcpClient TcpClient
@@ -60,7 +61,7 @@ namespace Backend
             set { myTcpClient = value; }
         }*/
         
-        public TcpNetworkEvent(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
+        public NetworkRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
         {
             mySourceIPAddress = ipAddress;
             mySourceMacAddress = macAddress;
@@ -68,7 +69,7 @@ namespace Backend
             mySequenceNumber = sequenceNumber;
         }
 
-        public TcpNetworkEvent(/*TcpClient tcpClient*/)
+        public NetworkRequest(/*TcpClient tcpClient*/)
         {
             //myTcpClient = tcpClient;
         }
@@ -77,7 +78,7 @@ namespace Backend
     /// <summary>
     /// Represents a push request to store a backup file.
     /// </summary>
-    public class PushRequest : TcpNetworkEvent
+    public class PushRequest : NetworkRequest
     {
         
         //these constructors is needed to compile!..Shane
@@ -115,10 +116,11 @@ namespace Backend
             set { myFileSize = value; }
         }
     }
+
     /// <summary>
     /// Represents a pull request to recover a backup file or download some other file from the remote computer.
     /// </summary>
-    public class PullRequest : TcpNetworkEvent
+    public class PullRequest : NetworkRequest
     {
         // The id of the backup this file is a part of
         private long myBackupNumber;
@@ -145,6 +147,45 @@ namespace Backend
         public PullRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
             : base(ipAddress, macAddress, guid, sequenceNumber)
         {
+        }
+    }
+
+    /// <summary>
+    /// Represents a request to get information from another node.
+    /// </summary>
+    public class QueryRequest : NetworkRequest
+    {
+        // The name of the data we want, e.g. "CPU usage." The names need to be stadardized somewhere, however.
+        private string field;
+        public string Field
+        {
+            get { return field; }
+            set { field = value; }
+        }
+
+        public QueryRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
+            : base(ipAddress, macAddress, guid, sequenceNumber)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Class which represents a response to a network response. Includes a response type and a reason string.
+    /// </summary>
+    public class NetworkResponse : NetworkEvent
+    {
+        private ResponseType type;
+        public ResponseType Type
+        {
+            get { return type; }
+            set { type = value; }
+        }
+
+        private string reason;
+        public string Reason
+        {
+            get { return reason; }
+            set { reason = value; }
         }
     }
 }
