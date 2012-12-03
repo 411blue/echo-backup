@@ -158,7 +158,7 @@ namespace Backend
         //Get disk space of drive C on the local node used for backup data
         public long GetBackupSpace()
         {
-            return GetDirectorySize(GetBackupDirectory());
+            return backupData = GetDirectorySize(GetBackupDirectory());
         }
 
         //Get the max backup support of the local node
