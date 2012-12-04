@@ -15,17 +15,12 @@ namespace Backend
         public Networker()
         {
             uniqueId = Properties.Settings.Default.guid;
-            hops = Properties.Settings.Default.hops;
             smart = Properties.Settings.Default.smart;
+            hops = 0;
 
             if(uniqueId == Guid.Empty)
             {
                 uniqueId = GenerateUniqueId();
-            }
-
-            if (hops == 0)
-            {
-                SetHop(0, 51);
             }
 
             if (smart == 0)
@@ -42,6 +37,7 @@ namespace Backend
             backupLimit = 0;
             backupDirectory = "";
             directorySize = 0;
+            reliabilityMetric = 0;
             receiverAlive = false;
             transmitterAlive = false;
             ip = IPAddress.Parse("224.1.0.1");
@@ -152,13 +148,15 @@ namespace Backend
         //Get disk space of drive C on the local node used for nonbackup data
         public long GetNonBackupSpace()
         {
-            return nonBackupData = GetTotalSize() - GetDirectorySize(GetBackupDirectory()) - GetFreeSpace();
+            nonBackupData = GetTotalSize() - GetDirectorySize(GetBackupDirectory()) - GetFreeSpace();
+            return nonBackupData;
         }
 
         //Get disk space of drive C on the local node used for backup data
         public long GetBackupSpace()
         {
-            return backupData = GetDirectorySize(GetBackupDirectory());
+            backupData = GetDirectorySize(GetBackupDirectory());
+            return backupData;
         }
 
         //Get the max backup support of the local node
@@ -233,7 +231,8 @@ namespace Backend
         //Calculate reliabity metric
         public int CalculateReliablity(int passed, int failed)
         {
-            return 255 - GetSmart() - GetHops() - (114 * (failed/(failed + passed)));
+            reliabilityMetric = 255 - GetSmart() - GetHops() - (114 * (failed / (failed + passed)));
+            return reliabilityMetric;
         }
 
         ~Networker()
@@ -264,9 +263,9 @@ namespace Backend
         //Get update message
         public string GetHeartbeat()
         {
-            heartbeat = string.Concat(GetUniqueId() + "/" + GetHostName() + "/" + GetInternetAddress() + "/" + GetMAC()) 
+            heartbeat = string.Concat(GetUniqueId() + "/" + GetHostName() + "/" + GetInternetAddress() + "/" + GetMAC() 
             + "/" + GetMaxBackupSpace() + "/" + GetBackupSpace() + "/" + GetNonBackupSpace() + "/" + GetFreeSpace()
-            + "/" + GetTotalSize();
+            + "/" + GetTotalSize() + "/" + GetSmart());
             return heartbeat;
         }
 
@@ -348,5 +347,6 @@ namespace Backend
         private bool transmitterAlive;
         private int smart;
         private int hops;
+        private int reliabilityMetric;
     }
 }
