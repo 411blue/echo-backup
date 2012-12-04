@@ -50,7 +50,8 @@ namespace Backend
     /// </summary>
     public class StorageThread
     {
-        public const long CHUNK_SIZE = 104857600;
+        public const int COPY_BUFFER_SIZE = 262144;
+        public const int CHUNK_SIZE = 104857600;
         private Guid guid;
         private Thread thread;
         private bool working = true;
@@ -117,16 +118,17 @@ namespace Backend
             TarArchive archive = TarArchive.CreateOutputTarArchive(bz2Stream);
             archive.RootPath = task.path;
             //generate list of files
-            Queue<string> allFiles = new Queue<string>();
+            LinkedList<string> allFiles = new LinkedList<string>();
             recursivelyFillFileQueue(ref allFiles, task.path);
             while (true)
             { //while need more chunks
                 //create new list -- append files until total file size >= chunk size
                 long size = 0;
                 string filename;
+                long resumeOffset = 0;
                 while (true)
                 { //while need more files in chunk
-                    filename = allFiles.Peek();
+                    filename = allFiles.First();
                     FileInfo info = new FileInfo(filename);
                     long s = info.Length;
                     //add file header size to chunk size
@@ -141,34 +143,71 @@ namespace Backend
                             s += 512 - (s % 512);
                         }
                         size += s;
-                        allFiles.Dequeue();
+                        allFiles.RemoveFirst();
                     }
                     else
                     { //file is to big to fit in chunk in entirety
+                        long partLength = CHUNK_SIZE - size;
+                        //split file into all parts in temp storage
                         //create entry for part of file
                         //add entry to archive
                         //add size to size
                         //somehow record where we left off
+                        resumeOffset = partLength;
+                        archive.Close();
+                        break;
                     }
-                    if (size >= CHUNK_SIZE) break;
+                    if (size >= CHUNK_SIZE)
+                    {
+                        resumeOffset = 0;
+                        archive.Close();
+                        break;
+                    }
                 }
             chunkID++;
             }
         }
 
-        private void recursivelyFillFileQueue(ref Queue<string> queue, string path)
+        private void recursivelyFillFileQueue(ref LinkedList<string> queue, string path)
         {
             string[] names = Directory.GetFiles(path);
             foreach (string filename in names)
             {
-                queue.Enqueue(filename);
+                queue.AddLast(filename);
             }
             names = Directory.GetDirectories(path);
             foreach (string filename in names)
             {
-                queue.Enqueue(filename);
+                queue.AddLast(filename);
                 recursivelyFillFileQueue(ref queue, filename);
             }
+        }
+
+        private void splitFileToTemp(ref LinkedList<String> files, string source, string dest, int firstSize)
+        {
+            LinkedListNode<string> firstFile = files.First;
+            byte[] buffer = new byte[COPY_BUFFER_SIZE];
+            Stream input = File.OpenRead(source);
+            //input.Seek(offset, SeekOrigin.Begin);
+            int id = 0;
+            long fileSize = new FileInfo(source).Length;
+            while (fileSize > 0)
+            { //while we need to make another partial file
+                string outputFilename = dest + '.' + id + ".ebpart";
+                Stream output = File.OpenWrite(outputFilename);
+                int bytesRead = 1;
+                while (firstSize > 0 && bytesRead > 0 && fileSize > 0)
+                {
+                    bytesRead = input.Read(buffer, 0, (int)Math.Min(Math.Min(firstSize, COPY_BUFFER_SIZE),fileSize));
+                    output.Write(buffer, 0, bytesRead);
+                    firstSize -= bytesRead;
+                    fileSize -= bytesRead;
+                }
+                output.Close();
+                files.AddBefore(firstFile, firstFile);
+                firstSize = CHUNK_SIZE;
+            }
+            input.Close();
         }
     }
 }
