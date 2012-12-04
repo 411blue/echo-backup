@@ -15,7 +15,8 @@ namespace GUI_FrontEnd
         public MainForm()
         {
             InitializeComponent();
-            maxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
+            spnMaxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
+            
             net = new Backend.Networker();
             messageThread = new Thread(new ThreadStart(net.processMessages));
             rxThread = new Thread(new ThreadStart(net.runReceiver));
@@ -95,8 +96,9 @@ namespace GUI_FrontEnd
 
         private void maxBackupSupport_ValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.maxBackupCapacity = maxBackupCapacity.Value;
-            net.SetMaxBackupCapacity(Convert.ToInt32(maxBackupCapacity.Value));
+            Properties.Settings.Default.maxBackupCapacity = spnMaxBackupCapacity.Value;
+            net.SetMaxBackupCapacity(Convert.ToInt32(spnMaxBackupCapacity.Value));
+            Properties.Settings.Default.Save();
         }    
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)

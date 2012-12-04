@@ -60,7 +60,7 @@ namespace Backend
         private Queue<BackupTask> backupTasks;
         private Queue<BackupTask> backupResults;
 
-        public StorageThread(string path, bool full, string tempDir, Guid guid)
+        public StorageThread(bool full, string tempDir, Guid guid)
         {
             this.guid = guid;
             this.tempDir = tempDir;

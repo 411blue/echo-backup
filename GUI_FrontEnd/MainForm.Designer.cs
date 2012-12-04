@@ -47,7 +47,7 @@
             this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
-            this.maxBackupCapacity = new System.Windows.Forms.NumericUpDown();
+            this.spnMaxBackupCapacity = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
             this.btnLoadNodeSet = new System.Windows.Forms.Button();
             this.btnSaveNodeSet = new System.Windows.Forms.Button();
@@ -125,7 +125,7 @@
             this.pnlNodeSetsFill.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNodeSets)).BeginInit();
             this.pnlNodeSetsBottom.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxBackupCapacity)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spnMaxBackupCapacity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDwnRedundancy)).BeginInit();
             this.NodeGrid.SuspendLayout();
             this.tabDiskReport.SuspendLayout();
@@ -296,7 +296,7 @@
             // pnlNodeSetsBottom
             // 
             this.pnlNodeSetsBottom.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlNodeSetsBottom.Controls.Add(this.maxBackupCapacity);
+            this.pnlNodeSetsBottom.Controls.Add(this.spnMaxBackupCapacity);
             this.pnlNodeSetsBottom.Controls.Add(this.label9);
             this.pnlNodeSetsBottom.Controls.Add(this.btnLoadNodeSet);
             this.pnlNodeSetsBottom.Controls.Add(this.btnSaveNodeSet);
@@ -309,13 +309,13 @@
             this.pnlNodeSetsBottom.Size = new System.Drawing.Size(770, 72);
             this.pnlNodeSetsBottom.TabIndex = 1;
             // 
-            // maxBackupCapacity
+            // spnMaxBackupCapacity
             // 
-            this.maxBackupCapacity.Location = new System.Drawing.Point(401, 12);
-            this.maxBackupCapacity.Name = "maxBackupCapacity";
-            this.maxBackupCapacity.Size = new System.Drawing.Size(60, 20);
-            this.maxBackupCapacity.TabIndex = 14;
-            this.maxBackupCapacity.ValueChanged += new System.EventHandler(this.maxBackupSupport_ValueChanged);
+            this.spnMaxBackupCapacity.Location = new System.Drawing.Point(401, 12);
+            this.spnMaxBackupCapacity.Name = "spnMaxBackupCapacity";
+            this.spnMaxBackupCapacity.Size = new System.Drawing.Size(60, 20);
+            this.spnMaxBackupCapacity.TabIndex = 14;
+            this.spnMaxBackupCapacity.ValueChanged += new System.EventHandler(this.maxBackupSupport_ValueChanged);
             // 
             // label9
             // 
@@ -999,7 +999,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewNodeSets)).EndInit();
             this.pnlNodeSetsBottom.ResumeLayout(false);
             this.pnlNodeSetsBottom.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.maxBackupCapacity)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.spnMaxBackupCapacity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDwnRedundancy)).EndInit();
             this.NodeGrid.ResumeLayout(false);
             this.NodeGrid.PerformLayout();
@@ -1118,7 +1118,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn nonBackup;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupData;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.NumericUpDown maxBackupCapacity;
+        private System.Windows.Forms.NumericUpDown spnMaxBackupCapacity;
         private System.Windows.Forms.Label label9;
     }
 }

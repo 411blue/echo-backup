@@ -51,6 +51,11 @@ namespace Backend {
             Logger.Log("Opened log file: " + filename);
         }
 
+        public static string getLogFilename()
+        {
+            return filename;
+        }
+
         /// <summary>
         /// Logs a string to file with the default LogLevel (Logger constant member)
         /// </summary>
