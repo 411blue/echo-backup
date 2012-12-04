@@ -32,6 +32,9 @@ namespace Backend
         private bool isClient;
         // if true, the thread is working on something. if false, the thread is idle (waiting for work). Only applies to isClient=false instances
         private bool working;
+        private bool doWork = true;
+        //the path that file should be written to/from when accepting a Push/PullRequest
+        private string path;
         object _lock;
         public ClientThread(TcpClient c, bool isClient, Guid guid)
         {
@@ -52,9 +55,14 @@ namespace Backend
         private void RunClientThread(object client)
         {
             TcpClient tcpClient = (TcpClient)client;
-            if (isClient)
+            mainLoop();
+        }
+
+        private void mainLoop()
+        {
+            while (true)
             {
-                while (true)
+                if (isClient)
                 {
                     lock (_lock)
                     {
@@ -73,21 +81,22 @@ namespace Backend
                     lock (_lock)
                     {
                         eventQueue.Enqueue(request);
+                        //spin while waiting to be told what to do with this request
+                        doWork = true;
                     }
                 }
-            }
-            else
-            {
-                while (true)
+                while (doWork | !isClient)
                 {
                     bool sleep = false;
+                    NetworkRequest request;
                     lock (_lock)
                     {
                         working = false;
                         if (workQueue.Count() > 0)
                         {
                             working = true;
-                            NetworkRequest request = workQueue.Dequeue();
+                            request = workQueue.Dequeue();
+                            doWork = false;
                         }
                         else
                         {
@@ -100,6 +109,8 @@ namespace Backend
                         continue;
                     }
                     //todo: handle work
+                    //if sourceguid=this.guid: make a network request and go from there
+                    //if sourceguid!=this.guid: receive or send the file requested
                 }
             }
         }
@@ -367,6 +378,32 @@ namespace Backend
             else
             {
                 Logger.Info("ClientThread:respondToQuery successfully responded to a node. Response: " + response + " sequenceNumber: " + request.SequenceNumber + " Details: " + details);
+            }
+        }
+
+        public void AcceptFileTransfer(PushRequest request, string path)
+        {
+            acceptFileTransfer(request, path);
+        }
+
+        public void AcceptFileTransfer(PullRequest request, string path)
+        {
+            acceptFileTransfer(request, path);
+        }
+
+        private void acceptFileTransfer(NetworkRequest request, string path)
+        {
+            //doWork = true
+            //send affirmative response
+            //enqueue request in work queue
+            //this function should be called when this thread has received a message and that message has been dequeued.
+            //if this function is called while this thread is in the wrong state, it will not do anything until a message is received or the socket closes.
+            doWork = true;
+            sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, request.SequenceNumber));
+            this.path = path;
+            lock (_lock)
+            {
+                workQueue.Enqueue(request);
             }
         }
     }
