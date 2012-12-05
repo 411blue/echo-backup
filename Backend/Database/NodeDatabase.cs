@@ -12,6 +12,11 @@ namespace Backend.Database
 {
     class NodeDatabase
     {
+        public NodeDatabase()
+        {
+            value = null;
+        }
+
         /// Returns a connection to an existing. If it does not exist, it will be created on an open attempted.
         public SQLiteConnection ConnectToDatabase(string pathAndFileName)
         {
@@ -604,6 +609,28 @@ namespace Backend.Database
             cmd.ExecuteNonQuery();
             conn.Close();
         }
+
+        //Return true if primary key was found and false if not
+        public bool PrimaryKeyCheck(int id, SQLiteConnection conn)
+        {
+            string sql = "SELECT Id FROM dvds WHERE Id = @pId";
+            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+
+            conn.Open();
+            value = cmd.ExecuteScalar();
+            conn.Close();
+
+            if (value != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private object value;
     }
 
         //Defines a node and provides constructor
