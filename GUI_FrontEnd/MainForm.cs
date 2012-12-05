@@ -101,6 +101,55 @@ namespace GUI_FrontEnd
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Properties.Settings.Default.Save();
+        }
+
+        private void btnSaveSchedule_Click(object sender, EventArgs e)
+        {
+            saveScheduleDialog.ShowDialog();
+        }
+
+        private void btnLoadSchedule_Click(object sender, EventArgs e)
+        {
+            string text = "";
+            DialogResult result = openScheduleDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string schedulePath = openScheduleDialog.FileName;
+                try
+                {
+                    using (System.IO.StreamReader sr = new System.IO.StreamReader(schedulePath))
+                    {
+                        text = sr.ReadLine();
+                        startDatePicker.Value = Convert.ToDateTime(text);
+                        Console.WriteLine(text);
+                        text = sr.ReadLine();
+                        startTimePicker.Value = Convert.ToDateTime(text);
+                        Console.WriteLine(text);
+                        text = sr.ReadLine();
+                        comboFrequency.SelectedItem = text;
+                        Console.WriteLine(text);
+                        text = sr.ReadLine();
+                        comboNodeSets.SelectedItem = text;
+                        Console.WriteLine(text);
+                    }
+                }
+                catch (System.IO.IOException)
+                {
+                }
+            }
+        }
+
+        private void saveScheduleDialog_FileOk(object sender, CancelEventArgs e)
+        {
+            string schedulePath = saveScheduleDialog.FileName;
+
+            using (System.IO.StreamWriter file = new System.IO.StreamWriter(schedulePath, true))
+            {
+                file.WriteLine(startDatePicker.Value.ToString("d"));
+                file.WriteLine(startTimePicker.Value.ToString("T"));
+                file.WriteLine(comboFrequency.SelectedItem);
+                file.WriteLine(comboNodeSets.SelectedItem);
+            } 
         } 
     }
 }

@@ -55,7 +55,6 @@
             this.label9 = new System.Windows.Forms.Label();
             this.btnLoadNodeSet = new System.Windows.Forms.Button();
             this.btnSaveNodeSet = new System.Windows.Forms.Button();
-            this.chkUtilizationOverride = new System.Windows.Forms.CheckBox();
             this.lblRedundancy = new System.Windows.Forms.Label();
             this.numUpDwnRedundancy = new System.Windows.Forms.NumericUpDown();
             this.NodeGrid = new System.Windows.Forms.Panel();
@@ -101,16 +100,16 @@
             this.pnlDataRecoveryBottom = new System.Windows.Forms.Panel();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnRestore = new System.Windows.Forms.Button();
-            this.btnBrowseDestinations = new System.Windows.Forms.Button();
-            this.txtDestination = new System.Windows.Forms.TextBox();
+            this.btnRecoveryBrowseDestinations = new System.Windows.Forms.Button();
+            this.txtRecoveryDestination = new System.Windows.Forms.TextBox();
             this.lblDestination = new System.Windows.Forms.Label();
             this.pnlDataRecoveryTop = new System.Windows.Forms.Panel();
-            this.btnFileBrowser = new System.Windows.Forms.Button();
-            this.txtFileBrowser = new System.Windows.Forms.TextBox();
+            this.btnRecoveryFileBrowser = new System.Windows.Forms.Button();
+            this.txtRecoveryFileBrowser = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.tabScheduler = new System.Windows.Forms.TabPage();
-            this.btnLoad = new System.Windows.Forms.Button();
-            this.btmSave = new System.Windows.Forms.Button();
+            this.btnLoadSchedule = new System.Windows.Forms.Button();
+            this.btnSaveSchedule = new System.Windows.Forms.Button();
             this.lblNodeSets = new System.Windows.Forms.Label();
             this.comboNodeSets = new System.Windows.Forms.ComboBox();
             this.lblFrequency = new System.Windows.Forms.Label();
@@ -122,6 +121,8 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitEchoBackupToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.openScheduleDialog = new System.Windows.Forms.OpenFileDialog();
+            this.saveScheduleDialog = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -257,7 +258,7 @@
             // 
             // mac
             // 
-            this.mac.HeaderText = "Pyshical Address";
+            this.mac.HeaderText = "Physical Address";
             this.mac.Name = "mac";
             // 
             // maxBackup
@@ -327,7 +328,6 @@
             this.pnlNodeSetsBottom.Controls.Add(this.label9);
             this.pnlNodeSetsBottom.Controls.Add(this.btnLoadNodeSet);
             this.pnlNodeSetsBottom.Controls.Add(this.btnSaveNodeSet);
-            this.pnlNodeSetsBottom.Controls.Add(this.chkUtilizationOverride);
             this.pnlNodeSetsBottom.Controls.Add(this.lblRedundancy);
             this.pnlNodeSetsBottom.Controls.Add(this.numUpDwnRedundancy);
             this.pnlNodeSetsBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -370,16 +370,6 @@
             this.btnSaveNodeSet.TabIndex = 11;
             this.btnSaveNodeSet.Text = "Save Node Set";
             this.btnSaveNodeSet.UseVisualStyleBackColor = true;
-            // 
-            // chkUtilizationOverride
-            // 
-            this.chkUtilizationOverride.AutoSize = true;
-            this.chkUtilizationOverride.Location = new System.Drawing.Point(552, 40);
-            this.chkUtilizationOverride.Name = "chkUtilizationOverride";
-            this.chkUtilizationOverride.Size = new System.Drawing.Size(200, 17);
-            this.chkUtilizationOverride.TabIndex = 10;
-            this.chkUtilizationOverride.Text = "Allow Utilization Percentage Override";
-            this.chkUtilizationOverride.UseVisualStyleBackColor = true;
             // 
             // lblRedundancy
             // 
@@ -784,8 +774,8 @@
             this.pnlDataRecoveryBottom.BackColor = System.Drawing.SystemColors.Control;
             this.pnlDataRecoveryBottom.Controls.Add(this.progressBar1);
             this.pnlDataRecoveryBottom.Controls.Add(this.btnRestore);
-            this.pnlDataRecoveryBottom.Controls.Add(this.btnBrowseDestinations);
-            this.pnlDataRecoveryBottom.Controls.Add(this.txtDestination);
+            this.pnlDataRecoveryBottom.Controls.Add(this.btnRecoveryBrowseDestinations);
+            this.pnlDataRecoveryBottom.Controls.Add(this.txtRecoveryDestination);
             this.pnlDataRecoveryBottom.Controls.Add(this.lblDestination);
             this.pnlDataRecoveryBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.pnlDataRecoveryBottom.Location = new System.Drawing.Point(0, 404);
@@ -809,21 +799,21 @@
             this.btnRestore.Text = "Restore Now";
             this.btnRestore.UseVisualStyleBackColor = true;
             // 
-            // btnBrowseDestinations
+            // btnRecoveryBrowseDestinations
             // 
-            this.btnBrowseDestinations.Location = new System.Drawing.Point(664, 6);
-            this.btnBrowseDestinations.Name = "btnBrowseDestinations";
-            this.btnBrowseDestinations.Size = new System.Drawing.Size(104, 23);
-            this.btnBrowseDestinations.TabIndex = 11;
-            this.btnBrowseDestinations.Text = "Browse Directories";
-            this.btnBrowseDestinations.UseVisualStyleBackColor = true;
+            this.btnRecoveryBrowseDestinations.Location = new System.Drawing.Point(664, 6);
+            this.btnRecoveryBrowseDestinations.Name = "btnRecoveryBrowseDestinations";
+            this.btnRecoveryBrowseDestinations.Size = new System.Drawing.Size(104, 23);
+            this.btnRecoveryBrowseDestinations.TabIndex = 11;
+            this.btnRecoveryBrowseDestinations.Text = "Browse Directories";
+            this.btnRecoveryBrowseDestinations.UseVisualStyleBackColor = true;
             // 
-            // txtDestination
+            // txtRecoveryDestination
             // 
-            this.txtDestination.Location = new System.Drawing.Point(125, 8);
-            this.txtDestination.Name = "txtDestination";
-            this.txtDestination.Size = new System.Drawing.Size(536, 20);
-            this.txtDestination.TabIndex = 10;
+            this.txtRecoveryDestination.Location = new System.Drawing.Point(125, 8);
+            this.txtRecoveryDestination.Name = "txtRecoveryDestination";
+            this.txtRecoveryDestination.Size = new System.Drawing.Size(536, 20);
+            this.txtRecoveryDestination.TabIndex = 10;
             // 
             // lblDestination
             // 
@@ -837,8 +827,8 @@
             // pnlDataRecoveryTop
             // 
             this.pnlDataRecoveryTop.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlDataRecoveryTop.Controls.Add(this.btnFileBrowser);
-            this.pnlDataRecoveryTop.Controls.Add(this.txtFileBrowser);
+            this.pnlDataRecoveryTop.Controls.Add(this.btnRecoveryFileBrowser);
+            this.pnlDataRecoveryTop.Controls.Add(this.txtRecoveryFileBrowser);
             this.pnlDataRecoveryTop.Controls.Add(this.label8);
             this.pnlDataRecoveryTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlDataRecoveryTop.Location = new System.Drawing.Point(0, 0);
@@ -846,21 +836,21 @@
             this.pnlDataRecoveryTop.Size = new System.Drawing.Size(776, 47);
             this.pnlDataRecoveryTop.TabIndex = 0;
             // 
-            // btnFileBrowser
+            // btnRecoveryFileBrowser
             // 
-            this.btnFileBrowser.Location = new System.Drawing.Point(664, 12);
-            this.btnFileBrowser.Name = "btnFileBrowser";
-            this.btnFileBrowser.Size = new System.Drawing.Size(104, 23);
-            this.btnFileBrowser.TabIndex = 5;
-            this.btnFileBrowser.Text = "Browse Directories";
-            this.btnFileBrowser.UseVisualStyleBackColor = true;
+            this.btnRecoveryFileBrowser.Location = new System.Drawing.Point(664, 12);
+            this.btnRecoveryFileBrowser.Name = "btnRecoveryFileBrowser";
+            this.btnRecoveryFileBrowser.Size = new System.Drawing.Size(104, 23);
+            this.btnRecoveryFileBrowser.TabIndex = 5;
+            this.btnRecoveryFileBrowser.Text = "Browse Directories";
+            this.btnRecoveryFileBrowser.UseVisualStyleBackColor = true;
             // 
-            // txtFileBrowser
+            // txtRecoveryFileBrowser
             // 
-            this.txtFileBrowser.Location = new System.Drawing.Point(125, 14);
-            this.txtFileBrowser.Name = "txtFileBrowser";
-            this.txtFileBrowser.Size = new System.Drawing.Size(533, 20);
-            this.txtFileBrowser.TabIndex = 4;
+            this.txtRecoveryFileBrowser.Location = new System.Drawing.Point(125, 14);
+            this.txtRecoveryFileBrowser.Name = "txtRecoveryFileBrowser";
+            this.txtRecoveryFileBrowser.Size = new System.Drawing.Size(533, 20);
+            this.txtRecoveryFileBrowser.TabIndex = 4;
             // 
             // label8
             // 
@@ -874,8 +864,8 @@
             // tabScheduler
             // 
             this.tabScheduler.BackColor = System.Drawing.SystemColors.Control;
-            this.tabScheduler.Controls.Add(this.btnLoad);
-            this.tabScheduler.Controls.Add(this.btmSave);
+            this.tabScheduler.Controls.Add(this.btnLoadSchedule);
+            this.tabScheduler.Controls.Add(this.btnSaveSchedule);
             this.tabScheduler.Controls.Add(this.lblNodeSets);
             this.tabScheduler.Controls.Add(this.comboNodeSets);
             this.tabScheduler.Controls.Add(this.lblFrequency);
@@ -890,23 +880,25 @@
             this.tabScheduler.TabIndex = 4;
             this.tabScheduler.Text = "Scheduler";
             // 
-            // btnLoad
+            // btnLoadSchedule
             // 
-            this.btnLoad.Location = new System.Drawing.Point(112, 115);
-            this.btnLoad.Name = "btnLoad";
-            this.btnLoad.Size = new System.Drawing.Size(128, 23);
-            this.btnLoad.TabIndex = 19;
-            this.btnLoad.Text = "Load Existing Schedule";
-            this.btnLoad.UseVisualStyleBackColor = true;
+            this.btnLoadSchedule.Location = new System.Drawing.Point(112, 115);
+            this.btnLoadSchedule.Name = "btnLoadSchedule";
+            this.btnLoadSchedule.Size = new System.Drawing.Size(128, 23);
+            this.btnLoadSchedule.TabIndex = 19;
+            this.btnLoadSchedule.Text = "Load Existing Schedule";
+            this.btnLoadSchedule.UseVisualStyleBackColor = true;
+            this.btnLoadSchedule.Click += new System.EventHandler(this.btnLoadSchedule_Click);
             // 
-            // btmSave
+            // btnSaveSchedule
             // 
-            this.btmSave.Location = new System.Drawing.Point(13, 115);
-            this.btmSave.Name = "btmSave";
-            this.btmSave.Size = new System.Drawing.Size(93, 23);
-            this.btmSave.TabIndex = 18;
-            this.btmSave.Text = "Save Schedule";
-            this.btmSave.UseVisualStyleBackColor = true;
+            this.btnSaveSchedule.Location = new System.Drawing.Point(13, 115);
+            this.btnSaveSchedule.Name = "btnSaveSchedule";
+            this.btnSaveSchedule.Size = new System.Drawing.Size(93, 23);
+            this.btnSaveSchedule.TabIndex = 18;
+            this.btnSaveSchedule.Text = "Save Schedule";
+            this.btnSaveSchedule.UseVisualStyleBackColor = true;
+            this.btnSaveSchedule.Click += new System.EventHandler(this.btnSaveSchedule_Click);
             // 
             // lblNodeSets
             // 
@@ -920,6 +912,10 @@
             // comboNodeSets
             // 
             this.comboNodeSets.FormattingEnabled = true;
+            this.comboNodeSets.Items.AddRange(new object[] {
+            "Nodeset 1",
+            "Nodeset 2",
+            "Nodeset 3"});
             this.comboNodeSets.Location = new System.Drawing.Point(91, 88);
             this.comboNodeSets.Name = "comboNodeSets";
             this.comboNodeSets.Size = new System.Drawing.Size(121, 21);
@@ -1005,6 +1001,10 @@
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
+            // saveScheduleDialog
+            // 
+            this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1071,7 +1071,6 @@
         private System.Windows.Forms.DataGridView dataGridViewNodeSets;
         private System.Windows.Forms.Button btnLoadNodeSet;
         private System.Windows.Forms.Button btnSaveNodeSet;
-        private System.Windows.Forms.CheckBox chkUtilizationOverride;
         private System.Windows.Forms.Label lblRedundancy;
         private System.Windows.Forms.NumericUpDown numUpDwnRedundancy;
         private System.Windows.Forms.Label gb4;
@@ -1108,21 +1107,21 @@
         private System.Windows.Forms.Panel pnlDataRecoveryTop;
         private System.Windows.Forms.Panel pnlDataRecoveryFill;
         private System.Windows.Forms.Panel pnlDataRecoveryBottom;
-        private System.Windows.Forms.Button btnFileBrowser;
-        private System.Windows.Forms.TextBox txtFileBrowser;
+        private System.Windows.Forms.Button btnRecoveryFileBrowser;
+        private System.Windows.Forms.TextBox txtRecoveryFileBrowser;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnRestore;
-        private System.Windows.Forms.Button btnBrowseDestinations;
-        private System.Windows.Forms.TextBox txtDestination;
+        private System.Windows.Forms.Button btnRecoveryBrowseDestinations;
+        private System.Windows.Forms.TextBox txtRecoveryDestination;
         private System.Windows.Forms.Label lblDestination;
         private System.Windows.Forms.DataGridView dataGridViewDataRecovery;
         private System.Windows.Forms.DataGridViewTextBoxColumn colVersion;
         private System.Windows.Forms.DataGridViewTextBoxColumn colDateTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn colOrigSize;
         private System.Windows.Forms.TabPage tabScheduler;
-        private System.Windows.Forms.Button btnLoad;
-        private System.Windows.Forms.Button btmSave;
+        private System.Windows.Forms.Button btnLoadSchedule;
+        private System.Windows.Forms.Button btnSaveSchedule;
         private System.Windows.Forms.Label lblNodeSets;
         private System.Windows.Forms.ComboBox comboNodeSets;
         private System.Windows.Forms.Label lblFrequency;
@@ -1151,5 +1150,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsFailed;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsPassed;
         private System.Windows.Forms.DataGridViewTextBoxColumn status;
+        private System.Windows.Forms.OpenFileDialog openScheduleDialog;
+        private System.Windows.Forms.SaveFileDialog saveScheduleDialog;
     }
 }
