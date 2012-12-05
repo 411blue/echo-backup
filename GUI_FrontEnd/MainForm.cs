@@ -15,18 +15,7 @@ namespace GUI_FrontEnd
         public MainForm()
         {
             InitializeComponent();
-            spnMaxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
-            
-            net = new Backend.Networker();
-            messageThread = new Thread(new ThreadStart(net.processMessages));
-            rxThread = new Thread(new ThreadStart(net.runReceiver));
-            txThread = new Thread(new ThreadStart(net.runTransmitter));
-            net.startTransmitter();
-            txThread.Start();
-            net.startReciever();
-            messageThread.Start();
-            rxThread.Start();
-            
+            numUpDownMaxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
         }
 
         #region DiskReportTabStuff
@@ -36,7 +25,7 @@ namespace GUI_FrontEnd
             {
                 for (int i = 0; i < dataGridViewNodeSets.Rows.Count - 1; ++i)
                 {
-                    DiskList.Items.Add(dataGridViewNodeSets.Rows[i].Cells[0].Value);
+                    DiskList.Items.Add(dataGridViewNodeSets.Rows[i].Cells[1].Value);
                 }
             }
         }
@@ -54,7 +43,7 @@ namespace GUI_FrontEnd
             }
         }
 
-        public void draw(long capacity, long free, long nonBackupData, long backupData)
+        public void draw(long backupData, long nonBackupData, long free, long capacity)
         {
             float total = capacity;
             float deg1 = (free / total) * 360;
@@ -62,7 +51,8 @@ namespace GUI_FrontEnd
             float deg3 = (backupData / total) * 360;
 
             Pen p = new Pen(Color.Black, 2);
-            Rectangle rec = new Rectangle(163, 12, 150, 150);
+            
+            Rectangle rec = new Rectangle(169, 27, 150, 150);
             Brush b1 = new SolidBrush(Color.Blue);
             Brush b2 = new SolidBrush(Color.Red);
             Brush b3 = new SolidBrush(Color.Orange);
@@ -96,9 +86,7 @@ namespace GUI_FrontEnd
 
         private void maxBackupSupport_ValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.maxBackupCapacity = spnMaxBackupCapacity.Value;
-            net.SetMaxBackupCapacity(Convert.ToInt32(spnMaxBackupCapacity.Value));
-            Properties.Settings.Default.Save();
+            Properties.Settings.Default.maxBackupCapacity = numUpDownMaxBackupCapacity.Value;
         }    
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -113,18 +101,6 @@ namespace GUI_FrontEnd
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             Properties.Settings.Default.Save();
-            net.setReceiverAlive(false);
-            net.setTransmitterAlive(false);
-            messageThread.Abort();
-            rxThread.Abort();
-            txThread.Abort();
-            net.stopReciever();
-            net.stopTransmitter();
-        }
-
-        private Thread messageThread;
-        private Thread rxThread;
-        private Thread txThread;
-        private Backend.Networker net;  
+        } 
     }
 }
