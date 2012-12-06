@@ -29,7 +29,7 @@ namespace Backend.Database
         {
             string sql = "CREATE TABLE nodes (UniqueId TEXT PRIMARY KEY, Name TEXT, Ip TEXT, Mac TEXT,"
             + " MaxBackupCapacity INTEGER, BackupData INTEGER, NonBackupData INTEGER, FreeSpace INTEGER, TotalCapacity INTEGER,"
-            + " RelialibyMetric INTEGER, Hops INTEGER, Smart INTEGER, BackupsFailed INTEGER, BackupsPassed INTEGER, Status TEXT)";
+            + " RelialibyMetric INTEGER, Hops INTEGER, Smart INTEGER, BackupsFailed INTEGER, BackupsPassed INTEGER, Trusted TEXT)";
             
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
@@ -45,9 +45,9 @@ namespace Backend.Database
             {
                 string sql = "INSERT INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
                     + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
-                    + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Status)"
+                    + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
                     + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
-                    + " @pTotalCapaciy, @pReliablityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pStatus)";
+                    + " @pTotalCapaciy, @pReliablityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
 
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
                 cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
@@ -64,7 +64,7 @@ namespace Backend.Database
                 cmd.Parameters.Add(new SQLiteParameter("@pSmart", n1.smart));
                 cmd.Parameters.Add(new SQLiteParameter("@pBackkupsFailed", n1.backupsFailed));
                 cmd.Parameters.Add(new SQLiteParameter("@pBackupsPassed", n1.backupsPassed));
-                cmd.Parameters.Add(new SQLiteParameter("@pStatus", n1.status));
+                cmd.Parameters.Add(new SQLiteParameter("@pTrusted", n1.trusted));
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
@@ -82,9 +82,9 @@ namespace Backend.Database
         {
             string sql = "REPLACE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
                 + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
-                + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Status)"
+                + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
                 + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
-                + " @pTotalCapaciy, @pReliablityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pStatus)";
+                + " @pTotalCapaciy, @pReliablityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
             cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
@@ -101,7 +101,7 @@ namespace Backend.Database
             cmd.Parameters.Add(new SQLiteParameter("@pSmart", n1.smart));
             cmd.Parameters.Add(new SQLiteParameter("@pBackkupsFailed", n1.backupsFailed));
             cmd.Parameters.Add(new SQLiteParameter("@pBackupsPassed", n1.backupsPassed));
-            cmd.Parameters.Add(new SQLiteParameter("@pStatus", n1.status));
+            cmd.Parameters.Add(new SQLiteParameter("@pTrusted", n1.trusted));
 
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -576,19 +576,19 @@ namespace Backend.Database
         }
 
         //Select the Name in a record. If id is not present, null is returned.
-        public string SelectNodeStatus(Guid id, SQLiteConnection conn)
+        public string SelectNodeTrusted(Guid id, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT Status FROM nodes WHERE Id = @pId";
+                string sql = "SELECT Trusted FROM nodes WHERE Id = @pId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
                 cmd.Parameters.Add(new SQLiteParameter("@pId", id));
 
                 conn.Open();
-                string Status = cmd.ExecuteScalar().ToString();
+                string Trusted = cmd.ExecuteScalar().ToString();
                 conn.Close();
 
-                return Status;
+                return Trusted;
             }
             catch (NullReferenceException)
             {
@@ -597,13 +597,13 @@ namespace Backend.Database
         }
 
         //Update the Status in a record.If id is not present, table is unchanged.
-        public void UpdateNodeStatus(Guid id, string Status, SQLiteConnection conn)
+        public void UpdateNodeTrusted(Guid id, string Status, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set Status = @pStatus WHERE Id = @pId";
+            string sql = "UPDATE nodes Set Trusted = @pTrusted WHERE Id = @pId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
             cmd.Parameters.Add(new SQLiteParameter("@pId", id));
-            cmd.Parameters.Add(new SQLiteParameter("@pStatus", Status));
+            cmd.Parameters.Add(new SQLiteParameter("@pTrusted", Status));
 
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -613,7 +613,7 @@ namespace Backend.Database
         //Return true if primary key was found and false if not
         public bool PrimaryKeyCheck(int id, SQLiteConnection conn)
         {
-            string sql = "SELECT Id FROM dvds WHERE Id = @pId";
+            string sql = "SELECT Id FROM nodes WHERE Id = @pId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
             cmd.Parameters.Add(new SQLiteParameter("@pId", id));
 
@@ -643,7 +643,7 @@ namespace Backend.Database
             public int maxBackupCapacity;
             public long backupData, nonBackupData, freeSpace, totalCapacity;
             public int reliablityMetric, hops, smart, backupsFailed, backupsPassed;
-            public string status;
+            public string trusted;
 
             public Node(Guid g1, string s1, IPAddress ip1, string s2, int i1, long l1, long l2, long l3, long l4, int i2, int i3, int i4, 
             int i5, int i6, string s3)
@@ -662,7 +662,7 @@ namespace Backend.Database
                 smart = i4;
                 backupsFailed = i5;
                 backupsPassed = i6;
-                status = s3;
+                trusted = s3;
             }
         }
 }

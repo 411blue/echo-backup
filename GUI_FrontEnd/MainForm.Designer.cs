@@ -35,21 +35,6 @@
             this.tabNodeSets = new System.Windows.Forms.TabPage();
             this.pnlNodeSetsFill = new System.Windows.Forms.Panel();
             this.dataGridViewNodeSets = new System.Windows.Forms.DataGridView();
-            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.maxBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nonBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.freeSpace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.numUpDownMaxBackupCapacity = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
@@ -123,6 +108,21 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openScheduleDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveScheduleDialog = new System.Windows.Forms.SaveFileDialog();
+            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.maxBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.nonBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.freeSpace = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.totalCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.trusted = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -233,93 +233,12 @@
             this.smartScore,
             this.backupsFailed,
             this.backupsPassed,
-            this.status});
+            this.trusted});
             this.dataGridViewNodeSets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewNodeSets.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewNodeSets.Name = "dataGridViewNodeSets";
             this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 347);
             this.dataGridViewNodeSets.TabIndex = 1;
-            // 
-            // guid
-            // 
-            this.guid.HeaderText = "GUID";
-            this.guid.Name = "guid";
-            this.guid.Visible = false;
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            // 
-            // ip
-            // 
-            this.ip.HeaderText = "Logical Address";
-            this.ip.Name = "ip";
-            // 
-            // mac
-            // 
-            this.mac.HeaderText = "Physical Address";
-            this.mac.Name = "mac";
-            // 
-            // maxBackup
-            // 
-            this.maxBackup.HeaderText = "Max Backup Capacity";
-            this.maxBackup.Name = "maxBackup";
-            this.maxBackup.Visible = false;
-            // 
-            // backupData
-            // 
-            this.backupData.HeaderText = "Backup Data";
-            this.backupData.Name = "backupData";
-            this.backupData.Visible = false;
-            // 
-            // nonBackup
-            // 
-            this.nonBackup.HeaderText = "Non-Backup Data";
-            this.nonBackup.Name = "nonBackup";
-            this.nonBackup.Visible = false;
-            // 
-            // freeSpace
-            // 
-            this.freeSpace.HeaderText = "Avaliable Space";
-            this.freeSpace.Name = "freeSpace";
-            this.freeSpace.Visible = false;
-            // 
-            // totalCapacity
-            // 
-            this.totalCapacity.HeaderText = "Total Capacity";
-            this.totalCapacity.Name = "totalCapacity";
-            this.totalCapacity.Visible = false;
-            // 
-            // reliablity
-            // 
-            this.reliablity.HeaderText = "Reliablity Metric";
-            this.reliablity.Name = "reliablity";
-            // 
-            // hopScore
-            // 
-            this.hopScore.HeaderText = "Hop Score";
-            this.hopScore.Name = "hopScore";
-            // 
-            // smartScore
-            // 
-            this.smartScore.HeaderText = "Smart Score";
-            this.smartScore.Name = "smartScore";
-            // 
-            // backupsFailed
-            // 
-            this.backupsFailed.HeaderText = "Backups Failed";
-            this.backupsFailed.Name = "backupsFailed";
-            // 
-            // backupsPassed
-            // 
-            this.backupsPassed.HeaderText = "Backups Passed";
-            this.backupsPassed.Name = "backupsPassed";
-            // 
-            // status
-            // 
-            this.status.HeaderText = "Block Status";
-            this.status.Name = "status";
             // 
             // pnlNodeSetsBottom
             // 
@@ -1005,6 +924,87 @@
             // 
             this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
             // 
+            // guid
+            // 
+            this.guid.HeaderText = "GUID";
+            this.guid.Name = "guid";
+            this.guid.Visible = false;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            // 
+            // ip
+            // 
+            this.ip.HeaderText = "Logical Address";
+            this.ip.Name = "ip";
+            // 
+            // mac
+            // 
+            this.mac.HeaderText = "Physical Address";
+            this.mac.Name = "mac";
+            // 
+            // maxBackup
+            // 
+            this.maxBackup.HeaderText = "Max Backup Capacity";
+            this.maxBackup.Name = "maxBackup";
+            this.maxBackup.Visible = false;
+            // 
+            // backupData
+            // 
+            this.backupData.HeaderText = "Backup Data";
+            this.backupData.Name = "backupData";
+            this.backupData.Visible = false;
+            // 
+            // nonBackup
+            // 
+            this.nonBackup.HeaderText = "Non-Backup Data";
+            this.nonBackup.Name = "nonBackup";
+            this.nonBackup.Visible = false;
+            // 
+            // freeSpace
+            // 
+            this.freeSpace.HeaderText = "Avaliable Space";
+            this.freeSpace.Name = "freeSpace";
+            this.freeSpace.Visible = false;
+            // 
+            // totalCapacity
+            // 
+            this.totalCapacity.HeaderText = "Total Capacity";
+            this.totalCapacity.Name = "totalCapacity";
+            this.totalCapacity.Visible = false;
+            // 
+            // reliablity
+            // 
+            this.reliablity.HeaderText = "Reliablity Metric";
+            this.reliablity.Name = "reliablity";
+            // 
+            // hopScore
+            // 
+            this.hopScore.HeaderText = "Hop Score";
+            this.hopScore.Name = "hopScore";
+            // 
+            // smartScore
+            // 
+            this.smartScore.HeaderText = "Smart Score";
+            this.smartScore.Name = "smartScore";
+            // 
+            // backupsFailed
+            // 
+            this.backupsFailed.HeaderText = "Backups Failed";
+            this.backupsFailed.Name = "backupsFailed";
+            // 
+            // backupsPassed
+            // 
+            this.backupsPassed.HeaderText = "Backups Passed";
+            this.backupsPassed.Name = "backupsPassed";
+            // 
+            // trusted
+            // 
+            this.trusted.HeaderText = "Trusted";
+            this.trusted.Name = "trusted";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1135,6 +1135,8 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.NumericUpDown numUpDownMaxBackupCapacity;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.OpenFileDialog openScheduleDialog;
+        private System.Windows.Forms.SaveFileDialog saveScheduleDialog;
         private System.Windows.Forms.DataGridViewTextBoxColumn guid;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn ip;
@@ -1149,8 +1151,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn smartScore;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsFailed;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsPassed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn status;
-        private System.Windows.Forms.OpenFileDialog openScheduleDialog;
-        private System.Windows.Forms.SaveFileDialog saveScheduleDialog;
+        private System.Windows.Forms.DataGridViewTextBoxColumn trusted;
     }
 }

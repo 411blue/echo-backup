@@ -16,6 +16,7 @@ namespace GUI_FrontEnd
         {
             InitializeComponent();
             numUpDownMaxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
+
         }
 
         #region DiskReportTabStuff
@@ -93,7 +94,6 @@ namespace GUI_FrontEnd
         {
             if (tabControl.SelectedIndex == 1)
             {
-                //initialize the disk report tab
                 InitializeDiskReportTab();
             }
         }
