@@ -46,5 +46,29 @@ namespace GUI_FrontEnd.Properties {
                 this["maxBackupCapacity"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string localBackupPath {
+            get {
+                return ((string)(this["localBackupPath"]));
+            }
+            set {
+                this["localBackupPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public decimal redundantBackups {
+            get {
+                return ((decimal)(this["redundantBackups"]));
+            }
+            set {
+                this["redundantBackups"] = value;
+            }
+        }
     }
 }

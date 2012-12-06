@@ -7,16 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Data.SQLite;
+using Backend.Database;
 
 namespace GUI_FrontEnd
 {
     public partial class MainForm : Form
     {
+        NodeDatabase db;
+        SQLiteConnection cnn;
+
         public MainForm()
         {
             InitializeComponent();
             numUpDownMaxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
-
+            db = new NodeDatabase();   
         }
 
         #region DiskReportTabStuff
@@ -149,7 +154,212 @@ namespace GUI_FrontEnd
                 file.WriteLine(startTimePicker.Value.ToString("T"));
                 file.WriteLine(comboFrequency.SelectedItem);
                 file.WriteLine(comboNodeSets.SelectedItem);
-            } 
+            }
+        }
+
+        private void btnBackupFiles_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openBackupFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string backupFilePath = openBackupFileDialog.FileName;
+                try
+                {
+                    txtBackupFiles.Text = backupFilePath;
+                }
+                catch (System.IO.IOException)
+                {
+                }
+            }
+        }
+
+        private void btnAddBackupFile_Click(object sender, EventArgs e)
+        {
+            string[] rowArray = new string[] {txtBackupFiles.Text};
+            dataGridViewBackupFiles.Rows.Add(rowArray[0]);
+        }
+
+        private void btnBackupDirectory_Click(object sender, EventArgs e)
+        {
+            DialogResult result = LocalBackupDirectoryBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string backupFilePath = LocalBackupDirectoryBrowserDialog.SelectedPath;
+                try
+                {
+                    txtBackupDirectory.Text = backupFilePath;
+                }
+                catch (System.IO.IOException)
+                {
+                }
+            }
+        }
+
+        private void btnSetBackupDirectory_Click(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.localBackupPath = txtBackupDirectory.Text;
+            MessageBox.Show("Local Backup Directory Saved.");
+        }
+
+        private void btnRefreshList_Click(object sender, EventArgs e)
+        {
+            string sql = "select * from Nodes";
+            string sqliteDBFile = @"C:\Users\Tom\Desktop\nodes.db";
+            cnn = db.ConnectToDatabase(sqliteDBFile);
+            try
+            {
+                
+                cnn.Open();
+                
+                SQLiteCommand myCommand = new SQLiteCommand(sql, cnn);
+                SQLiteDataReader reader = myCommand.ExecuteReader();
+
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+
+                string text = "";
+                foreach (DataRow row in dt.Rows)
+                {
+                    for (int i = 0; i < 15; i++)
+                    {
+                        text += row[i] + ", ";
+                    }
+                    text += "\n";
+
+                    string[] rowArray = new string[] {row[0].ToString(), row[1].ToString(), row[2].ToString(), row[3].ToString(), row[9].ToString(), row[10].ToString(), 
+                                                        row[11].ToString(), row[12].ToString(), row[13].ToString(), row[14].ToString()};
+                    dataGridViewNodeSets.Rows.Add(rowArray[0]);
+
+                    numUpDownMaxBackupCapacity.Value = decimal.Parse(row[4].ToString());
+                }
+                Console.WriteLine(text);
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine("Caught exception: " + error.Message);
+            }
+            finally
+            {
+                if (cnn != null)
+                {
+                    cnn.Close();
+                }
+            }
+        }
+
+        private void btnSaveNodePreferences_Click(object sender, EventArgs e)
+        {
+            string sqliteDBFile = @"C:\Users\Tom\Desktop\nodes.db";
+            cnn = db.ConnectToDatabase(sqliteDBFile);
+
+            Properties.Settings.Default.redundantBackups = numUpDwnRedundancy.Value;
+            Properties.Settings.Default.maxBackupCapacity = numUpDownMaxBackupCapacity.Value;
+            for (int i = 0; i < dataGridViewNodeSets.Rows.Count; i++)
+            {
+                Guid id = new Guid(dataGridViewNodeSets.Rows[i].Cells[0].Value.ToString());
+                db.UpdateNodeTrusted(id, dataGridViewNodeSets.Rows[i].Cells[9].Value.ToString(), cnn);
+                db.UpdateNodeMaxBackupCapacity(id, (int)numUpDownMaxBackupCapacity.Value, cnn);
+            }
+
+            MessageBox.Show("Node Preferences Saved.");
+        }
+
+        private void btnRecoveryFileBrowser_Click(object sender, EventArgs e)
+        {
+            DialogResult result = openRecoveryFileDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string recoveryFilePath = openRecoveryFileDialog.FileName;
+                try
+                {
+                    txtRecoveryFileBrowser.Text = recoveryFilePath;
+
+                    string sqliteDBFile = @"C:\Users\Tom\Desktop\index.db";
+                    cnn = db.ConnectToDatabase(sqliteDBFile);
+                    
+                    string query = "SELECT date_of_backup, size FROM Backup_Indexes WHERE source_path = @pSourcePath";
+                    SQLiteCommand cmd = new SQLiteCommand(query, cnn);
+
+                    //create a parameter for sourceGUID
+                    SQLiteParameter pSourceGUID = new SQLiteParameter("@pSourcePath", recoveryFilePath);
+
+                    cmd.Parameters.Add(pSourceGUID);
+                    try
+                    {
+                        cnn.Open();
+
+                        SQLiteCommand myCommand = new SQLiteCommand(query, cnn);
+                        SQLiteDataReader reader = myCommand.ExecuteReader();
+
+                        DataTable dt = new DataTable();
+                        dt.Load(reader);
+
+                        string text = "";
+                        foreach (DataRow row in dt.Rows)
+                        {
+                            for (int i = 0; i < 15; i++)
+                            {
+                                text += row[i] + ", ";
+                            }
+                            text += "\n";
+
+                            string[] rowArray = new string[] {row[0].ToString(), row[1].ToString()};
+                            dataGridViewDataRecovery.Rows.Add(rowArray[0]);
+                        }
+                        Console.WriteLine(text);
+                    }
+                    catch (Exception error)
+                    {
+                        Console.WriteLine("Caught exception: " + error.Message);
+                    }
+                    finally
+                    {
+                        if (cnn != null)
+                        {
+                            cnn.Close();
+                        }
+                    }
+                }
+                catch (System.IO.IOException)
+                {
+                }
+            }
+        }
+
+        private void btnRecoveryBrowseDestinations_Click(object sender, EventArgs e)
+        {
+            DialogResult result = RecoveryDestinationBrowserDialog.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string recoveryDestination = RecoveryDestinationBrowserDialog.SelectedPath;
+                try
+                {
+                    txtRecoveryDestination.Text = recoveryDestination;
+                }
+                catch (System.IO.IOException)
+                {
+                }
+            }
+        }
+
+        //Placeholder for Jame's code to backup files
+        private void btnBackupNow_Click(object sender, EventArgs e)
+        {
+            //Collects all filepaths into an array
+            string[] rowArray = new string[dataGridViewBackupFiles.Rows.Count];
+            for (int i = 0; i < (dataGridViewBackupFiles.Rows.Count - 1); i++)
+            {
+                rowArray[i] = dataGridViewBackupFiles.Rows[i].Cells[0].Value.ToString();
+            }
+        }
+
+        //Placeholder for Jame's code to restore files
+        private void btnRestore_Click(object sender, EventArgs e)
+        {
+            //Retrieves data about selected recovery file, stores in object {date/time, original size}
+            string[] recoveryFile = new string[]{dataGridViewDataRecovery.SelectedRows[0].Cells[0].Value.ToString(), dataGridViewDataRecovery.SelectedRows[0].Cells[1].Value.ToString()};
+
+            string recoveryDestination = txtRecoveryDestination.Text;
         } 
     }
 }

@@ -10,7 +10,7 @@ using System.Net;
 
 namespace Backend.Database
 {
-    class NodeDatabase
+    public class NodeDatabase
     {
         public NodeDatabase()
         {

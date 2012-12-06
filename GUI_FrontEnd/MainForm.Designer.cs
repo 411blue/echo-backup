@@ -38,8 +38,7 @@
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.numUpDownMaxBackupCapacity = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
-            this.btnLoadNodeSet = new System.Windows.Forms.Button();
-            this.btnSaveNodeSet = new System.Windows.Forms.Button();
+            this.btnSaveNodePreferences = new System.Windows.Forms.Button();
             this.lblRedundancy = new System.Windows.Forms.Label();
             this.numUpDwnRedundancy = new System.Windows.Forms.NumericUpDown();
             this.NodeGrid = new System.Windows.Forms.Panel();
@@ -67,19 +66,21 @@
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
             this.tabBackupStatus = new System.Windows.Forms.TabPage();
             this.pnlBackupStatusFill = new System.Windows.Forms.Panel();
-            this.dataGridViewBackupStatus = new System.Windows.Forms.DataGridView();
-            this.colNodeSet = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colLastBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colNextBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.pnlBackupStatusTop = new System.Windows.Forms.Panel();
-            this.pnlBackupStatusBottom = new System.Windows.Forms.Panel();
+            this.btnAddBackupFile = new System.Windows.Forms.Button();
+            this.btnBackupFiles = new System.Windows.Forms.Button();
+            this.txtBackupFiles = new System.Windows.Forms.TextBox();
+            this.lblBackupFiles = new System.Windows.Forms.Label();
             this.btnLogs = new System.Windows.Forms.Button();
-            this.btnDiskUsage = new System.Windows.Forms.Button();
+            this.dataGridViewBackupFiles = new System.Windows.Forms.DataGridView();
             this.btnBackupNow = new System.Windows.Forms.Button();
+            this.pnlBackupStatusBottom = new System.Windows.Forms.Panel();
+            this.btnSetBackupDirectory = new System.Windows.Forms.Button();
+            this.lblBackupDirectory = new System.Windows.Forms.Label();
+            this.btnBackupDirectory = new System.Windows.Forms.Button();
+            this.txtBackupDirectory = new System.Windows.Forms.TextBox();
             this.tabDataRecovery = new System.Windows.Forms.TabPage();
             this.pnlDataRecoveryFill = new System.Windows.Forms.Panel();
             this.dataGridViewDataRecovery = new System.Windows.Forms.DataGridView();
-            this.colVersion = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colOrigSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlDataRecoveryBottom = new System.Windows.Forms.Panel();
@@ -91,7 +92,7 @@
             this.pnlDataRecoveryTop = new System.Windows.Forms.Panel();
             this.btnRecoveryFileBrowser = new System.Windows.Forms.Button();
             this.txtRecoveryFileBrowser = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
+            this.lblRecoveryFile = new System.Windows.Forms.Label();
             this.tabScheduler = new System.Windows.Forms.TabPage();
             this.btnLoadSchedule = new System.Windows.Forms.Button();
             this.btnSaveSchedule = new System.Windows.Forms.Button();
@@ -108,21 +109,21 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.openScheduleDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveScheduleDialog = new System.Windows.Forms.SaveFileDialog();
+            this.LocalBackupDirectoryBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.RecoveryDestinationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.openRecoveryFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.maxBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupData = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nonBackup = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.freeSpace = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.totalCapacity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.trusted = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colFilepath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -139,7 +140,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
             this.tabBackupStatus.SuspendLayout();
             this.pnlBackupStatusFill.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackupStatus)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackupFiles)).BeginInit();
             this.pnlBackupStatusBottom.SuspendLayout();
             this.tabDataRecovery.SuspendLayout();
             this.pnlDataRecoveryFill.SuspendLayout();
@@ -168,8 +169,8 @@
             // 
             // pnlTabGUI
             // 
-            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTabGUI.Controls.Add(this.tabControl);
             this.pnlTabGUI.Location = new System.Drawing.Point(0, 27);
             this.pnlTabGUI.Name = "pnlTabGUI";
@@ -208,9 +209,9 @@
             // 
             this.pnlNodeSetsFill.Controls.Add(this.dataGridViewNodeSets);
             this.pnlNodeSetsFill.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlNodeSetsFill.Location = new System.Drawing.Point(3, 65);
+            this.pnlNodeSetsFill.Location = new System.Drawing.Point(3, 35);
             this.pnlNodeSetsFill.Name = "pnlNodeSetsFill";
-            this.pnlNodeSetsFill.Size = new System.Drawing.Size(770, 347);
+            this.pnlNodeSetsFill.Size = new System.Drawing.Size(770, 377);
             this.pnlNodeSetsFill.TabIndex = 2;
             // 
             // dataGridViewNodeSets
@@ -223,11 +224,6 @@
             this.name,
             this.ip,
             this.mac,
-            this.maxBackup,
-            this.backupData,
-            this.nonBackup,
-            this.freeSpace,
-            this.totalCapacity,
             this.reliablity,
             this.hopScore,
             this.smartScore,
@@ -237,7 +233,7 @@
             this.dataGridViewNodeSets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewNodeSets.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewNodeSets.Name = "dataGridViewNodeSets";
-            this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 347);
+            this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 377);
             this.dataGridViewNodeSets.TabIndex = 1;
             // 
             // pnlNodeSetsBottom
@@ -245,8 +241,7 @@
             this.pnlNodeSetsBottom.BackColor = System.Drawing.SystemColors.Control;
             this.pnlNodeSetsBottom.Controls.Add(this.numUpDownMaxBackupCapacity);
             this.pnlNodeSetsBottom.Controls.Add(this.label9);
-            this.pnlNodeSetsBottom.Controls.Add(this.btnLoadNodeSet);
-            this.pnlNodeSetsBottom.Controls.Add(this.btnSaveNodeSet);
+            this.pnlNodeSetsBottom.Controls.Add(this.btnSaveNodePreferences);
             this.pnlNodeSetsBottom.Controls.Add(this.lblRedundancy);
             this.pnlNodeSetsBottom.Controls.Add(this.numUpDwnRedundancy);
             this.pnlNodeSetsBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -272,23 +267,15 @@
             this.label9.TabIndex = 13;
             this.label9.Text = "Max Backup Capacity (GBs)";
             // 
-            // btnLoadNodeSet
+            // btnSaveNodePreferences
             // 
-            this.btnLoadNodeSet.Location = new System.Drawing.Point(107, 36);
-            this.btnLoadNodeSet.Name = "btnLoadNodeSet";
-            this.btnLoadNodeSet.Size = new System.Drawing.Size(136, 23);
-            this.btnLoadNodeSet.TabIndex = 12;
-            this.btnLoadNodeSet.Text = "Load Existing Node Set";
-            this.btnLoadNodeSet.UseVisualStyleBackColor = true;
-            // 
-            // btnSaveNodeSet
-            // 
-            this.btnSaveNodeSet.Location = new System.Drawing.Point(9, 36);
-            this.btnSaveNodeSet.Name = "btnSaveNodeSet";
-            this.btnSaveNodeSet.Size = new System.Drawing.Size(92, 23);
-            this.btnSaveNodeSet.TabIndex = 11;
-            this.btnSaveNodeSet.Text = "Save Node Set";
-            this.btnSaveNodeSet.UseVisualStyleBackColor = true;
+            this.btnSaveNodePreferences.Location = new System.Drawing.Point(9, 36);
+            this.btnSaveNodePreferences.Name = "btnSaveNodePreferences";
+            this.btnSaveNodePreferences.Size = new System.Drawing.Size(157, 23);
+            this.btnSaveNodePreferences.TabIndex = 11;
+            this.btnSaveNodePreferences.Text = "Save Node Preferences";
+            this.btnSaveNodePreferences.UseVisualStyleBackColor = true;
+            this.btnSaveNodePreferences.Click += new System.EventHandler(this.btnSaveNodePreferences_Click);
             // 
             // lblRedundancy
             // 
@@ -314,23 +301,24 @@
             this.NodeGrid.Dock = System.Windows.Forms.DockStyle.Top;
             this.NodeGrid.Location = new System.Drawing.Point(3, 3);
             this.NodeGrid.Name = "NodeGrid";
-            this.NodeGrid.Size = new System.Drawing.Size(770, 62);
+            this.NodeGrid.Size = new System.Drawing.Size(770, 32);
             this.NodeGrid.TabIndex = 0;
             // 
             // btnRefreshList
             // 
             this.btnRefreshList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRefreshList.Location = new System.Drawing.Point(690, 33);
+            this.btnRefreshList.Location = new System.Drawing.Point(690, 3);
             this.btnRefreshList.Name = "btnRefreshList";
             this.btnRefreshList.Size = new System.Drawing.Size(75, 23);
             this.btnRefreshList.TabIndex = 4;
             this.btnRefreshList.Text = "Refresh List";
             this.btnRefreshList.UseVisualStyleBackColor = true;
+            this.btnRefreshList.Click += new System.EventHandler(this.btnRefreshList_Click);
             // 
             // lblListTitle
             // 
             this.lblListTitle.AutoSize = true;
-            this.lblListTitle.Location = new System.Drawing.Point(5, 46);
+            this.lblListTitle.Location = new System.Drawing.Point(5, 13);
             this.lblListTitle.Name = "lblListTitle";
             this.lblListTitle.Size = new System.Drawing.Size(98, 13);
             this.lblListTitle.TabIndex = 3;
@@ -542,7 +530,6 @@
             // 
             this.tabBackupStatus.BackColor = System.Drawing.SystemColors.Control;
             this.tabBackupStatus.Controls.Add(this.pnlBackupStatusFill);
-            this.tabBackupStatus.Controls.Add(this.pnlBackupStatusTop);
             this.tabBackupStatus.Controls.Add(this.pnlBackupStatusBottom);
             this.tabBackupStatus.Location = new System.Drawing.Point(4, 22);
             this.tabBackupStatus.Name = "tabBackupStatus";
@@ -552,90 +539,135 @@
             // 
             // pnlBackupStatusFill
             // 
-            this.pnlBackupStatusFill.Controls.Add(this.dataGridViewBackupStatus);
+            this.pnlBackupStatusFill.Controls.Add(this.btnAddBackupFile);
+            this.pnlBackupStatusFill.Controls.Add(this.btnBackupFiles);
+            this.pnlBackupStatusFill.Controls.Add(this.txtBackupFiles);
+            this.pnlBackupStatusFill.Controls.Add(this.lblBackupFiles);
+            this.pnlBackupStatusFill.Controls.Add(this.btnLogs);
+            this.pnlBackupStatusFill.Controls.Add(this.dataGridViewBackupFiles);
+            this.pnlBackupStatusFill.Controls.Add(this.btnBackupNow);
             this.pnlBackupStatusFill.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlBackupStatusFill.Location = new System.Drawing.Point(0, 22);
+            this.pnlBackupStatusFill.Location = new System.Drawing.Point(0, 0);
             this.pnlBackupStatusFill.Name = "pnlBackupStatusFill";
-            this.pnlBackupStatusFill.Size = new System.Drawing.Size(776, 428);
+            this.pnlBackupStatusFill.Size = new System.Drawing.Size(776, 436);
             this.pnlBackupStatusFill.TabIndex = 2;
             // 
-            // dataGridViewBackupStatus
+            // btnAddBackupFile
             // 
-            this.dataGridViewBackupStatus.AllowUserToOrderColumns = true;
-            this.dataGridViewBackupStatus.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewBackupStatus.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewBackupStatus.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colNodeSet,
-            this.colLastBackup,
-            this.colNextBackup});
-            this.dataGridViewBackupStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewBackupStatus.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewBackupStatus.Name = "dataGridViewBackupStatus";
-            this.dataGridViewBackupStatus.Size = new System.Drawing.Size(776, 428);
-            this.dataGridViewBackupStatus.TabIndex = 2;
+            this.btnAddBackupFile.Location = new System.Drawing.Point(646, 4);
+            this.btnAddBackupFile.Name = "btnAddBackupFile";
+            this.btnAddBackupFile.Size = new System.Drawing.Size(127, 23);
+            this.btnAddBackupFile.TabIndex = 11;
+            this.btnAddBackupFile.Text = "Add File to Backup List";
+            this.btnAddBackupFile.UseVisualStyleBackColor = true;
+            this.btnAddBackupFile.Click += new System.EventHandler(this.btnAddBackupFile_Click);
             // 
-            // colNodeSet
+            // btnBackupFiles
             // 
-            this.colNodeSet.HeaderText = "Node Set";
-            this.colNodeSet.Name = "colNodeSet";
+            this.btnBackupFiles.Location = new System.Drawing.Point(560, 4);
+            this.btnBackupFiles.Name = "btnBackupFiles";
+            this.btnBackupFiles.Size = new System.Drawing.Size(80, 23);
+            this.btnBackupFiles.TabIndex = 10;
+            this.btnBackupFiles.Text = "Browse Files";
+            this.btnBackupFiles.UseVisualStyleBackColor = true;
+            this.btnBackupFiles.Click += new System.EventHandler(this.btnBackupFiles_Click);
             // 
-            // colLastBackup
+            // txtBackupFiles
             // 
-            this.colLastBackup.HeaderText = "Last Successful Backup";
-            this.colLastBackup.Name = "colLastBackup";
+            this.txtBackupFiles.Location = new System.Drawing.Point(82, 6);
+            this.txtBackupFiles.Name = "txtBackupFiles";
+            this.txtBackupFiles.Size = new System.Drawing.Size(472, 20);
+            this.txtBackupFiles.TabIndex = 9;
             // 
-            // colNextBackup
+            // lblBackupFiles
             // 
-            this.colNextBackup.HeaderText = "Next Scheduled Backup";
-            this.colNextBackup.Name = "colNextBackup";
-            // 
-            // pnlBackupStatusTop
-            // 
-            this.pnlBackupStatusTop.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlBackupStatusTop.Dock = System.Windows.Forms.DockStyle.Top;
-            this.pnlBackupStatusTop.Location = new System.Drawing.Point(0, 0);
-            this.pnlBackupStatusTop.Name = "pnlBackupStatusTop";
-            this.pnlBackupStatusTop.Size = new System.Drawing.Size(776, 22);
-            this.pnlBackupStatusTop.TabIndex = 1;
-            // 
-            // pnlBackupStatusBottom
-            // 
-            this.pnlBackupStatusBottom.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlBackupStatusBottom.Controls.Add(this.btnLogs);
-            this.pnlBackupStatusBottom.Controls.Add(this.btnDiskUsage);
-            this.pnlBackupStatusBottom.Controls.Add(this.btnBackupNow);
-            this.pnlBackupStatusBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.pnlBackupStatusBottom.Location = new System.Drawing.Point(0, 450);
-            this.pnlBackupStatusBottom.Name = "pnlBackupStatusBottom";
-            this.pnlBackupStatusBottom.Size = new System.Drawing.Size(776, 37);
-            this.pnlBackupStatusBottom.TabIndex = 0;
+            this.lblBackupFiles.AutoSize = true;
+            this.lblBackupFiles.Location = new System.Drawing.Point(8, 9);
+            this.lblBackupFiles.Name = "lblBackupFiles";
+            this.lblBackupFiles.Size = new System.Drawing.Size(68, 13);
+            this.lblBackupFiles.TabIndex = 8;
+            this.lblBackupFiles.Text = "Select a File:";
             // 
             // btnLogs
             // 
-            this.btnLogs.Location = new System.Drawing.Point(91, 6);
+            this.btnLogs.Location = new System.Drawing.Point(91, 385);
             this.btnLogs.Name = "btnLogs";
             this.btnLogs.Size = new System.Drawing.Size(75, 23);
             this.btnLogs.TabIndex = 7;
             this.btnLogs.Text = "View Logs";
             this.btnLogs.UseVisualStyleBackColor = true;
             // 
-            // btnDiskUsage
+            // dataGridViewBackupFiles
             // 
-            this.btnDiskUsage.Location = new System.Drawing.Point(172, 6);
-            this.btnDiskUsage.Name = "btnDiskUsage";
-            this.btnDiskUsage.Size = new System.Drawing.Size(146, 23);
-            this.btnDiskUsage.TabIndex = 6;
-            this.btnDiskUsage.Text = "Launch Disk Usage Report";
-            this.btnDiskUsage.UseVisualStyleBackColor = true;
+            this.dataGridViewBackupFiles.AllowUserToOrderColumns = true;
+            this.dataGridViewBackupFiles.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewBackupFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewBackupFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colFilepath});
+            this.dataGridViewBackupFiles.Location = new System.Drawing.Point(0, 33);
+            this.dataGridViewBackupFiles.Name = "dataGridViewBackupFiles";
+            this.dataGridViewBackupFiles.ReadOnly = true;
+            this.dataGridViewBackupFiles.Size = new System.Drawing.Size(776, 346);
+            this.dataGridViewBackupFiles.TabIndex = 2;
             // 
             // btnBackupNow
             // 
-            this.btnBackupNow.Location = new System.Drawing.Point(8, 6);
+            this.btnBackupNow.Location = new System.Drawing.Point(8, 385);
             this.btnBackupNow.Name = "btnBackupNow";
             this.btnBackupNow.Size = new System.Drawing.Size(77, 23);
             this.btnBackupNow.TabIndex = 5;
             this.btnBackupNow.Text = "Backup Now";
             this.btnBackupNow.UseVisualStyleBackColor = true;
+            this.btnBackupNow.Click += new System.EventHandler(this.btnBackupNow_Click);
+            // 
+            // pnlBackupStatusBottom
+            // 
+            this.pnlBackupStatusBottom.BackColor = System.Drawing.SystemColors.Control;
+            this.pnlBackupStatusBottom.Controls.Add(this.btnSetBackupDirectory);
+            this.pnlBackupStatusBottom.Controls.Add(this.lblBackupDirectory);
+            this.pnlBackupStatusBottom.Controls.Add(this.btnBackupDirectory);
+            this.pnlBackupStatusBottom.Controls.Add(this.txtBackupDirectory);
+            this.pnlBackupStatusBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.pnlBackupStatusBottom.Location = new System.Drawing.Point(0, 436);
+            this.pnlBackupStatusBottom.Name = "pnlBackupStatusBottom";
+            this.pnlBackupStatusBottom.Size = new System.Drawing.Size(776, 51);
+            this.pnlBackupStatusBottom.TabIndex = 0;
+            // 
+            // btnSetBackupDirectory
+            // 
+            this.btnSetBackupDirectory.Location = new System.Drawing.Point(638, 17);
+            this.btnSetBackupDirectory.Name = "btnSetBackupDirectory";
+            this.btnSetBackupDirectory.Size = new System.Drawing.Size(135, 23);
+            this.btnSetBackupDirectory.TabIndex = 10;
+            this.btnSetBackupDirectory.Text = "Set as Backup Directory";
+            this.btnSetBackupDirectory.UseVisualStyleBackColor = true;
+            this.btnSetBackupDirectory.Click += new System.EventHandler(this.btnSetBackupDirectory_Click);
+            // 
+            // lblBackupDirectory
+            // 
+            this.lblBackupDirectory.AutoSize = true;
+            this.lblBackupDirectory.Location = new System.Drawing.Point(8, 3);
+            this.lblBackupDirectory.Name = "lblBackupDirectory";
+            this.lblBackupDirectory.Size = new System.Drawing.Size(206, 13);
+            this.lblBackupDirectory.TabIndex = 9;
+            this.lblBackupDirectory.Text = "Select a Local Directory to store Backups:";
+            // 
+            // btnBackupDirectory
+            // 
+            this.btnBackupDirectory.Location = new System.Drawing.Point(528, 17);
+            this.btnBackupDirectory.Name = "btnBackupDirectory";
+            this.btnBackupDirectory.Size = new System.Drawing.Size(104, 23);
+            this.btnBackupDirectory.TabIndex = 8;
+            this.btnBackupDirectory.Text = "Browse Directories";
+            this.btnBackupDirectory.UseVisualStyleBackColor = true;
+            this.btnBackupDirectory.Click += new System.EventHandler(this.btnBackupDirectory_Click);
+            // 
+            // txtBackupDirectory
+            // 
+            this.txtBackupDirectory.Location = new System.Drawing.Point(8, 19);
+            this.txtBackupDirectory.Name = "txtBackupDirectory";
+            this.txtBackupDirectory.Size = new System.Drawing.Size(514, 20);
+            this.txtBackupDirectory.TabIndex = 7;
             // 
             // tabDataRecovery
             // 
@@ -664,19 +696,15 @@
             this.dataGridViewDataRecovery.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewDataRecovery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDataRecovery.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colVersion,
             this.colDateTime,
             this.colOrigSize});
             this.dataGridViewDataRecovery.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewDataRecovery.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewDataRecovery.Name = "dataGridViewDataRecovery";
+            this.dataGridViewDataRecovery.ReadOnly = true;
+            this.dataGridViewDataRecovery.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewDataRecovery.Size = new System.Drawing.Size(776, 357);
             this.dataGridViewDataRecovery.TabIndex = 4;
-            // 
-            // colVersion
-            // 
-            this.colVersion.HeaderText = "Version Number";
-            this.colVersion.Name = "colVersion";
             // 
             // colDateTime
             // 
@@ -717,6 +745,7 @@
             this.btnRestore.TabIndex = 12;
             this.btnRestore.Text = "Restore Now";
             this.btnRestore.UseVisualStyleBackColor = true;
+            this.btnRestore.Click += new System.EventHandler(this.btnRestore_Click);
             // 
             // btnRecoveryBrowseDestinations
             // 
@@ -726,10 +755,11 @@
             this.btnRecoveryBrowseDestinations.TabIndex = 11;
             this.btnRecoveryBrowseDestinations.Text = "Browse Directories";
             this.btnRecoveryBrowseDestinations.UseVisualStyleBackColor = true;
+            this.btnRecoveryBrowseDestinations.Click += new System.EventHandler(this.btnRecoveryBrowseDestinations_Click);
             // 
             // txtRecoveryDestination
             // 
-            this.txtRecoveryDestination.Location = new System.Drawing.Point(125, 8);
+            this.txtRecoveryDestination.Location = new System.Drawing.Point(122, 8);
             this.txtRecoveryDestination.Name = "txtRecoveryDestination";
             this.txtRecoveryDestination.Size = new System.Drawing.Size(536, 20);
             this.txtRecoveryDestination.TabIndex = 10;
@@ -748,7 +778,7 @@
             this.pnlDataRecoveryTop.BackColor = System.Drawing.SystemColors.Control;
             this.pnlDataRecoveryTop.Controls.Add(this.btnRecoveryFileBrowser);
             this.pnlDataRecoveryTop.Controls.Add(this.txtRecoveryFileBrowser);
-            this.pnlDataRecoveryTop.Controls.Add(this.label8);
+            this.pnlDataRecoveryTop.Controls.Add(this.lblRecoveryFile);
             this.pnlDataRecoveryTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlDataRecoveryTop.Location = new System.Drawing.Point(0, 0);
             this.pnlDataRecoveryTop.Name = "pnlDataRecoveryTop";
@@ -761,24 +791,25 @@
             this.btnRecoveryFileBrowser.Name = "btnRecoveryFileBrowser";
             this.btnRecoveryFileBrowser.Size = new System.Drawing.Size(104, 23);
             this.btnRecoveryFileBrowser.TabIndex = 5;
-            this.btnRecoveryFileBrowser.Text = "Browse Directories";
+            this.btnRecoveryFileBrowser.Text = "Browse Files";
             this.btnRecoveryFileBrowser.UseVisualStyleBackColor = true;
+            this.btnRecoveryFileBrowser.Click += new System.EventHandler(this.btnRecoveryFileBrowser_Click);
             // 
             // txtRecoveryFileBrowser
             // 
-            this.txtRecoveryFileBrowser.Location = new System.Drawing.Point(125, 14);
+            this.txtRecoveryFileBrowser.Location = new System.Drawing.Point(82, 14);
             this.txtRecoveryFileBrowser.Name = "txtRecoveryFileBrowser";
-            this.txtRecoveryFileBrowser.Size = new System.Drawing.Size(533, 20);
+            this.txtRecoveryFileBrowser.Size = new System.Drawing.Size(576, 20);
             this.txtRecoveryFileBrowser.TabIndex = 4;
             // 
-            // label8
+            // lblRecoveryFile
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 17);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(115, 13);
-            this.label8.TabIndex = 3;
-            this.label8.Text = "Select a Directory/File:";
+            this.lblRecoveryFile.AutoSize = true;
+            this.lblRecoveryFile.Location = new System.Drawing.Point(8, 17);
+            this.lblRecoveryFile.Name = "lblRecoveryFile";
+            this.lblRecoveryFile.Size = new System.Drawing.Size(68, 13);
+            this.lblRecoveryFile.TabIndex = 3;
+            this.lblRecoveryFile.Text = "Select a File:";
             // 
             // tabScheduler
             // 
@@ -934,76 +965,60 @@
             // 
             this.name.HeaderText = "Name";
             this.name.Name = "name";
+            this.name.ReadOnly = true;
             // 
             // ip
             // 
             this.ip.HeaderText = "Logical Address";
             this.ip.Name = "ip";
+            this.ip.ReadOnly = true;
             // 
             // mac
             // 
             this.mac.HeaderText = "Physical Address";
             this.mac.Name = "mac";
-            // 
-            // maxBackup
-            // 
-            this.maxBackup.HeaderText = "Max Backup Capacity";
-            this.maxBackup.Name = "maxBackup";
-            this.maxBackup.Visible = false;
-            // 
-            // backupData
-            // 
-            this.backupData.HeaderText = "Backup Data";
-            this.backupData.Name = "backupData";
-            this.backupData.Visible = false;
-            // 
-            // nonBackup
-            // 
-            this.nonBackup.HeaderText = "Non-Backup Data";
-            this.nonBackup.Name = "nonBackup";
-            this.nonBackup.Visible = false;
-            // 
-            // freeSpace
-            // 
-            this.freeSpace.HeaderText = "Avaliable Space";
-            this.freeSpace.Name = "freeSpace";
-            this.freeSpace.Visible = false;
-            // 
-            // totalCapacity
-            // 
-            this.totalCapacity.HeaderText = "Total Capacity";
-            this.totalCapacity.Name = "totalCapacity";
-            this.totalCapacity.Visible = false;
+            this.mac.ReadOnly = true;
             // 
             // reliablity
             // 
             this.reliablity.HeaderText = "Reliablity Metric";
             this.reliablity.Name = "reliablity";
+            this.reliablity.ReadOnly = true;
             // 
             // hopScore
             // 
             this.hopScore.HeaderText = "Hop Score";
             this.hopScore.Name = "hopScore";
+            this.hopScore.ReadOnly = true;
             // 
             // smartScore
             // 
             this.smartScore.HeaderText = "Smart Score";
             this.smartScore.Name = "smartScore";
+            this.smartScore.ReadOnly = true;
             // 
             // backupsFailed
             // 
             this.backupsFailed.HeaderText = "Backups Failed";
             this.backupsFailed.Name = "backupsFailed";
+            this.backupsFailed.ReadOnly = true;
             // 
             // backupsPassed
             // 
             this.backupsPassed.HeaderText = "Backups Passed";
             this.backupsPassed.Name = "backupsPassed";
+            this.backupsPassed.ReadOnly = true;
             // 
             // trusted
             // 
             this.trusted.HeaderText = "Trusted";
             this.trusted.Name = "trusted";
+            // 
+            // colFilepath
+            // 
+            this.colFilepath.HeaderText = "Backup Files";
+            this.colFilepath.Name = "colFilepath";
+            this.colFilepath.ReadOnly = true;
             // 
             // MainForm
             // 
@@ -1037,8 +1052,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
             this.tabBackupStatus.ResumeLayout(false);
             this.pnlBackupStatusFill.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackupStatus)).EndInit();
+            this.pnlBackupStatusFill.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackupFiles)).EndInit();
             this.pnlBackupStatusBottom.ResumeLayout(false);
+            this.pnlBackupStatusBottom.PerformLayout();
             this.tabDataRecovery.ResumeLayout(false);
             this.pnlDataRecoveryFill.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDataRecovery)).EndInit();
@@ -1069,8 +1086,7 @@
         private System.Windows.Forms.Button btnRefreshList;
         private System.Windows.Forms.Label lblListTitle;
         private System.Windows.Forms.DataGridView dataGridViewNodeSets;
-        private System.Windows.Forms.Button btnLoadNodeSet;
-        private System.Windows.Forms.Button btnSaveNodeSet;
+        private System.Windows.Forms.Button btnSaveNodePreferences;
         private System.Windows.Forms.Label lblRedundancy;
         private System.Windows.Forms.NumericUpDown numUpDwnRedundancy;
         private System.Windows.Forms.Label gb4;
@@ -1094,14 +1110,9 @@
         private System.Windows.Forms.PictureBox pictureBox3;
         private System.Windows.Forms.TabPage tabBackupStatus;
         private System.Windows.Forms.Panel pnlBackupStatusFill;
-        private System.Windows.Forms.Panel pnlBackupStatusTop;
         private System.Windows.Forms.Panel pnlBackupStatusBottom;
-        private System.Windows.Forms.DataGridView dataGridViewBackupStatus;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNodeSet;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colLastBackup;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colNextBackup;
+        private System.Windows.Forms.DataGridView dataGridViewBackupFiles;
         private System.Windows.Forms.Button btnLogs;
-        private System.Windows.Forms.Button btnDiskUsage;
         private System.Windows.Forms.Button btnBackupNow;
         private System.Windows.Forms.TabPage tabDataRecovery;
         private System.Windows.Forms.Panel pnlDataRecoveryTop;
@@ -1109,16 +1120,13 @@
         private System.Windows.Forms.Panel pnlDataRecoveryBottom;
         private System.Windows.Forms.Button btnRecoveryFileBrowser;
         private System.Windows.Forms.TextBox txtRecoveryFileBrowser;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lblRecoveryFile;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.Button btnRestore;
         private System.Windows.Forms.Button btnRecoveryBrowseDestinations;
         private System.Windows.Forms.TextBox txtRecoveryDestination;
         private System.Windows.Forms.Label lblDestination;
         private System.Windows.Forms.DataGridView dataGridViewDataRecovery;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colVersion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDateTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colOrigSize;
         private System.Windows.Forms.TabPage tabScheduler;
         private System.Windows.Forms.Button btnLoadSchedule;
         private System.Windows.Forms.Button btnSaveSchedule;
@@ -1137,20 +1145,30 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.OpenFileDialog openScheduleDialog;
         private System.Windows.Forms.SaveFileDialog saveScheduleDialog;
+        private System.Windows.Forms.Button btnAddBackupFile;
+        private System.Windows.Forms.Button btnBackupFiles;
+        private System.Windows.Forms.TextBox txtBackupFiles;
+        private System.Windows.Forms.Label lblBackupFiles;
+        private System.Windows.Forms.Label lblBackupDirectory;
+        private System.Windows.Forms.Button btnBackupDirectory;
+        private System.Windows.Forms.TextBox txtBackupDirectory;
+        private System.Windows.Forms.FolderBrowserDialog LocalBackupDirectoryBrowserDialog;
+        private System.Windows.Forms.OpenFileDialog openBackupFileDialog;
+        private System.Windows.Forms.FolderBrowserDialog RecoveryDestinationBrowserDialog;
+        private System.Windows.Forms.OpenFileDialog openRecoveryFileDialog;
+        private System.Windows.Forms.Button btnSetBackupDirectory;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDateTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colOrigSize;
         private System.Windows.Forms.DataGridViewTextBoxColumn guid;
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn ip;
         private System.Windows.Forms.DataGridViewTextBoxColumn mac;
-        private System.Windows.Forms.DataGridViewTextBoxColumn maxBackup;
-        private System.Windows.Forms.DataGridViewTextBoxColumn backupData;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nonBackup;
-        private System.Windows.Forms.DataGridViewTextBoxColumn freeSpace;
-        private System.Windows.Forms.DataGridViewTextBoxColumn totalCapacity;
         private System.Windows.Forms.DataGridViewTextBoxColumn reliablity;
         private System.Windows.Forms.DataGridViewTextBoxColumn hopScore;
         private System.Windows.Forms.DataGridViewTextBoxColumn smartScore;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsFailed;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsPassed;
         private System.Windows.Forms.DataGridViewTextBoxColumn trusted;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colFilepath;
     }
 }
