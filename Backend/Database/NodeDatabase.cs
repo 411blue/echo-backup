@@ -24,7 +24,7 @@ namespace Backend.Database
             return conn;
         }
 
-        //Create a node table with id as the primary key
+        //Create a node table with UniqueId as the primary key
         public void CreateNodeTable(SQLiteConnection conn)
         {
             string sql = "CREATE TABLE nodes (UniqueId TEXT PRIMARY KEY, Name TEXT, Ip TEXT, Mac TEXT,"
@@ -77,7 +77,7 @@ namespace Backend.Database
             }
         }
 
-        //Replace a record. Table unchanged if id is not present, table unchanged. 
+        //Replace a record. Table unchanged if UniqueId is not present, table unchanged. 
         public void ReplaceNodeRecord(Node n1, SQLiteConnection conn)
         {
             string sql = "REPLACE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
@@ -108,25 +108,25 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Delete a record. If id is not present, table is unchanged.
-        public void DeleteNodeRecord(Guid id, SQLiteConnection conn)
+        //Delete a record. If UniqueId is not present, table is unchanged.
+        public void DeleteNodeRecord(Guid UniqueId, SQLiteConnection conn)
         {
-            string sql = "DELETE FROM nodes where Id = @pId";
+            string sql = "DELETE FROM nodes where UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
         }
 
-        //Select the Name in a record. If id is not present, null is returned.
-        public string SelectNodeName(Guid id, SQLiteConnection conn)
+        //Select the Name in a record. If UniqueId is not present, null is returned.
+        public string SelectNodeName(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT Name FROM nodes WHERE Id = @pId";
+                string sql = "SELECT Name FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 string name = cmd.ExecuteScalar().ToString();
@@ -140,13 +140,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the Name in a record.If id is not present, table is unchanged.
-        public void UpdateNodeName(Guid id, string name, SQLiteConnection conn)
+        //Update the Name in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeName(Guid UniqueId, string name, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set Name = @pName WHERE Id = @pId";
+            string sql = "UPDATE nodes Set Name = @pName WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pName", name));
 
             conn.Open();
@@ -154,14 +154,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the Ip in a record. If id is not present, 0.0.0.0 is returned.
-        public IPAddress SelectNodeIp(Guid id, SQLiteConnection conn)
+        //Select the Ip in a record. If UniqueId is not present, 0.0.0.0 is returned.
+        public IPAddress SelectNodeIp(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT Ip FROM nodes WHERE Id = @pId";
+                string sql = "SELECT Ip FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 string ip = cmd.ExecuteScalar().ToString();
@@ -176,13 +176,13 @@ namespace Backend.Database
 
         }
 
-        //Update the Ip in a record.If id is not present, table is unchanged.
-        public void UpdateNodeIp(Guid id, IPAddress ip, SQLiteConnection conn)
+        //Update the Ip in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeIp(Guid UniqueId, IPAddress ip, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set Ip = @pIp WHERE Id = @pId";
+            string sql = "UPDATE nodes Set Ip = @pIp WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pIp", ip));
 
             conn.Open();
@@ -190,14 +190,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the Name in a record. If id is not present, null is returned.
-        public string SelectNodeMac(Guid id, SQLiteConnection conn)
+        //Select the Name in a record. If UniqueId is not present, null is returned.
+        public string SelectNodeMac(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT Mac FROM nodes WHERE Id = @pId";
+                string sql = "SELECT Mac FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 string mac = cmd.ExecuteScalar().ToString();
@@ -211,13 +211,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the Mac in a record.If id is not present, table is unchanged.
-        public void UpdateNodeMac(Guid id, string mac, SQLiteConnection conn)
+        //Update the Mac in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeMac(Guid UniqueId, string mac, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set Mac = @pMac WHERE Id = @pId";
+            string sql = "UPDATE nodes Set Mac = @pMac WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pMac", mac));
 
             conn.Open();
@@ -225,14 +225,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the MaxBackupCapacity in a record. If id is not present, 0 is returned.
-        public int SelectNodeMaxBackupCapacity(Guid id, SQLiteConnection conn)
+        //Select the MaxBackupCapacity in a record. If UniqueId is not present, 0 is returned.
+        public int SelectNodeMaxBackupCapacity(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT MaxBackupCapacity FROM nodes WHERE Id = @pId";
+                string sql = "SELECT MaxBackupCapacity FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 int maxBackupCapacity = (Int32) cmd.ExecuteScalar();
@@ -246,13 +246,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the MaxBackupCapacity in a record.If id is not present, table is unchanged.
-        public void UpdateNodeMaxBackupCapacity(Guid id, int MaxBackupCapacity, SQLiteConnection conn)
+        //Update the MaxBackupCapacity in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeMaxBackupCapacity(Guid UniqueId, int MaxBackupCapacity, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set MaxBackupCapacity = @pMaxBackupCapacity WHERE Id = @pId";
+            string sql = "UPDATE nodes Set MaxBackupCapacity = @pMaxBackupCapacity WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pMaxBackupCapacity", MaxBackupCapacity));
 
             conn.Open();
@@ -260,14 +260,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the BackupData in a record. If id is not present, 0 is returned.
-        public long SelectNodeBackupData(Guid id, SQLiteConnection conn)
+        //Select the BackupData in a record. If UniqueId is not present, 0 is returned.
+        public long SelectNodeBackupData(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT BackupData FROM nodes WHERE Id = @pId";
+                string sql = "SELECT BackupData FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 long BackupData = (long)cmd.ExecuteScalar();
@@ -281,13 +281,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the BackupData in a record.If id is not present, table is unchanged.
-        public void UpdateNodeBackupData(Guid id, long BackupData, SQLiteConnection conn)
+        //Update the BackupData in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeBackupData(Guid UniqueId, long BackupData, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set BackupData = @pBacupData WHERE Id = @pId";
+            string sql = "UPDATE nodes Set BackupData = @pBacupData WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pBackupData", BackupData));
 
             conn.Open();
@@ -295,14 +295,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the NonBackupData in a record. If id is not present, 0 is returned.
-        public long SelectNodeNonBackupData(Guid id, SQLiteConnection conn)
+        //Select the NonBackupData in a record. If UniqueId is not present, 0 is returned.
+        public long SelectNodeNonBackupData(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT NonBackupData FROM nodes WHERE Id = @pId";
+                string sql = "SELECT NonBackupData FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 long NonBackupData = (long)cmd.ExecuteScalar();
@@ -316,13 +316,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the NonBackupData in a record.If id is not present, table is unchanged.
-        public void UpdateNodeNonBackupData(Guid id, long NonBackupData, SQLiteConnection conn)
+        //Update the NonBackupData in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeNonBackupData(Guid UniqueId, long NonBackupData, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set NonBackupData = @pNonBacupData WHERE Id = @pId";
+            string sql = "UPDATE nodes Set NonBackupData = @pNonBacupData WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", NonBackupData));
 
             conn.Open();
@@ -330,14 +330,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the FreeSpace in a record. If id is not present, 0 is returned.
-        public long SelectFreeSpace(Guid id, SQLiteConnection conn)
+        //Select the FreeSpace in a record. If UniqueId is not present, 0 is returned.
+        public long SelectFreeSpace(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT FreeSpace FROM nodes WHERE Id = @pId";
+                string sql = "SELECT FreeSpace FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 long NonBackupData = (long)cmd.ExecuteScalar();
@@ -351,13 +351,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the FreeSpace in a record.If id is not present, table is unchanged.
-        public void UpdateNodeFreeSpace(Guid id, long FreeSpace, SQLiteConnection conn)
+        //Update the FreeSpace in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeFreeSpace(Guid UniqueId, long FreeSpace, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set FreeSpace = @pFreeSpace WHERE Id = @pId";
+            string sql = "UPDATE nodes Set FreeSpace = @pFreeSpace WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", FreeSpace));
 
             conn.Open();
@@ -365,14 +365,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the TotalCapacity in a record. If id is not present, 0 is returned.
-        public long SelectTotalCapacity(Guid id, SQLiteConnection conn)
+        //Select the TotalCapacity in a record. If UniqueId is not present, 0 is returned.
+        public long SelectTotalCapacity(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT TotalCapacity FROM nodes WHERE Id = @pId";
+                string sql = "SELECT TotalCapacity FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 long NonBackupData = (long)cmd.ExecuteScalar();
@@ -386,13 +386,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the TotalCapacity in a record.If id is not present, table is unchanged.
-        public void UpdateNodeTotalCapacity(Guid id, long TotalCapacity, SQLiteConnection conn)
+        //Update the TotalCapacity in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeTotalCapacity(Guid UniqueId, long TotalCapacity, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set TotalCapacity = @pTotalCapacity WHERE Id = @pId";
+            string sql = "UPDATE nodes Set TotalCapacity = @pTotalCapacity WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", TotalCapacity));
 
             conn.Open();
@@ -400,14 +400,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the ReliablityMetric in a record. If id is not present, 0 is returned.
-        public int SelectNodeRelialibyMetric(Guid id, SQLiteConnection conn)
+        //Select the ReliablityMetric in a record. If UniqueId is not present, 0 is returned.
+        public int SelectNodeRelialibyMetric(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT ReliablityMetric FROM nodes WHERE Id = @pId";
+                string sql = "SELECT ReliablityMetric FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 int ReliablityMetric = (Int32)cmd.ExecuteScalar();
@@ -421,13 +421,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the ReliablityMetric in a record.If id is not present, table is unchanged.
-        public void UpdateNodeReliablityMetric(Guid id, int ReliablityMetric, SQLiteConnection conn)
+        //Update the ReliablityMetric in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeReliablityMetric(Guid UniqueId, int ReliablityMetric, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set ReliablityMetric = @pRelialibyMetric WHERE Id = @pId";
+            string sql = "UPDATE nodes Set ReliablityMetric = @pRelialibyMetric WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pReliablityMetric", ReliablityMetric));
 
             conn.Open();
@@ -435,14 +435,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the Hops in a record. If id is not present, 0 is returned.
-        public int SelectNodeHops(Guid id, SQLiteConnection conn)
+        //Select the Hops in a record. If UniqueId is not present, 0 is returned.
+        public int SelectNodeHops(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT Hops FROM nodes WHERE Id = @pId";
+                string sql = "SELECT Hops FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 int Hops = (Int32)cmd.ExecuteScalar();
@@ -456,13 +456,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the Hops in a record.If id is not present, table is unchanged.
-        public void UpdateNodeHops(Guid id, int Hops, SQLiteConnection conn)
+        //Update the Hops in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeHops(Guid UniqueId, int Hops, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set Hops = @pHops WHERE Id = @pId";
+            string sql = "UPDATE nodes Set Hops = @pHops WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pHops", Hops));
 
             conn.Open();
@@ -470,14 +470,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the Smart in a record. If id is not present, 0 is returned.
-        public int SelectNodeSmart(Guid id, SQLiteConnection conn)
+        //Select the Smart in a record. If UniqueId is not present, 0 is returned.
+        public int SelectNodeSmart(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT Smart FROM nodes WHERE Id = @pId";
+                string sql = "SELECT Smart FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 int Smart = (Int32)cmd.ExecuteScalar();
@@ -491,13 +491,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the Smart in a record.If id is not present, table is unchanged.
-        public void UpdateNodeSmart(Guid id, int Smart, SQLiteConnection conn)
+        //Update the Smart in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeSmart(Guid UniqueId, int Smart, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set Smart = @pSmart WHERE Id = @pId";
+            string sql = "UPDATE nodes Set Smart = @pSmart WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pSmart", Smart));
 
             conn.Open();
@@ -505,14 +505,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the BackupsFailed in a record. If id is not present, 0 is returned.
-        public int SelectNodeBackupsFailed(Guid id, SQLiteConnection conn)
+        //Select the BackupsFailed in a record. If UniqueId is not present, 0 is returned.
+        public int SelectNodeBackupsFailed(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT BackupsFailed FROM nodes WHERE Id = @pId";
+                string sql = "SELECT BackupsFailed FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 int BackupsFailed = (Int32)cmd.ExecuteScalar();
@@ -526,13 +526,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the BackupsFailed in a record.If id is not present, table is unchanged.
-        public void UpdateNodeBackupsFailed(Guid id, int BackupsFailed, SQLiteConnection conn)
+        //Update the BackupsFailed in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeBackupsFailed(Guid UniqueId, int BackupsFailed, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set BackupsFailed = @pBackupsFailed WHERE Id = @pId";
+            string sql = "UPDATE nodes Set BackupsFailed = @pBackupsFailed WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pBackupsFailed", BackupsFailed));
 
             conn.Open();
@@ -540,14 +540,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the BackupsPassed in a record. If id is not present, 0 is returned.
-        public int SelectNodeBackupsPassed(Guid id, SQLiteConnection conn)
+        //Select the BackupsPassed in a record. If UniqueId is not present, 0 is returned.
+        public int SelectNodeBackupsPassed(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT BackupsPassed FROM nodes WHERE Id = @pId";
+                string sql = "SELECT BackupsPassed FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 int BackupsPassed = (Int32)cmd.ExecuteScalar();
@@ -561,13 +561,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the BackupsPassed in a record.If id is not present, table is unchanged.
-        public void UpdateNodeBackupsPassed(Guid id, int BackupsPassed, SQLiteConnection conn)
+        //Update the BackupsPassed in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeBackupsPassed(Guid UniqueId, int BackupsPassed, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set BackupsPassed = @pBackupsPassed WHERE Id = @pId";
+            string sql = "UPDATE nodes Set BackupsPassed = @pBackupsPassed WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pBackupsPassed", BackupsPassed));
 
             conn.Open();
@@ -575,14 +575,14 @@ namespace Backend.Database
             conn.Close();
         }
 
-        //Select the Name in a record. If id is not present, null is returned.
-        public string SelectNodeTrusted(Guid id, SQLiteConnection conn)
+        //Select the Name in a record. If UniqueId is not present, null is returned.
+        public string SelectNodeTrusted(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
-                string sql = "SELECT Trusted FROM nodes WHERE Id = @pId";
+                string sql = "SELECT Trusted FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
                 conn.Open();
                 string Trusted = cmd.ExecuteScalar().ToString();
@@ -596,13 +596,13 @@ namespace Backend.Database
             }
         }
 
-        //Update the Status in a record.If id is not present, table is unchanged.
-        public void UpdateNodeTrusted(Guid id, string Status, SQLiteConnection conn)
+        //Update the Status in a record.If UniqueId is not present, table is unchanged.
+        public void UpdateNodeTrusted(Guid UniqueId, string Status, SQLiteConnection conn)
         {
-            string sql = "UPDATE nodes Set Trusted = @pTrusted WHERE Id = @pId";
+            string sql = "UPDATE nodes Set Trusted = @pTrusted WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pTrusted", Status));
 
             conn.Open();
@@ -611,11 +611,11 @@ namespace Backend.Database
         }
 
         //Return true if primary key was found and false if not
-        public bool PrimaryKeyCheck(int id, SQLiteConnection conn)
+        public bool PrimaryKeyCheck(Guid UniqueId, SQLiteConnection conn)
         {
-            string sql = "SELECT Id FROM nodes WHERE Id = @pId";
+            string sql = "SELECT UniqueId FROM nodes WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pId", id));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
 
             conn.Open();
             value = cmd.ExecuteScalar();

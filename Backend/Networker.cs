@@ -276,7 +276,37 @@ namespace Backend
             {
                 if (heartbeats.Count > 0)
                 {
-                    Backend.Database.NodeDatabase nd = new nd();
+                    string[] attributes = new string[10];
+                    string hb = heartbeats.Dequeue();
+                    attributes = hb.Split();
+                    Backend.Database.NodeDatabase nd = new Backend.Database.NodeDatabase();
+                    
+                    //If node is new, then add record with heartbreat attributes and set other attritbutes to default
+                    //If node is existing, then just add heartbeat attributes
+                    if(nd.PrimaryKeyCheck(Guid.Parse(attributes[0]), nd.ConnectToDatabase(@"C:\nodes.db")))
+                    {
+                        Backend.Database.Node existingNode = new Backend.Database.Node(
+
+                        nd.UpdateNodeBackupData(
+                    }
+                        else
+                        {
+                            Backend.Database.Node newNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
+                            IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
+                            long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
+                            CalculateReliablity(0,0), GetHops(), Convert.ToInt32(attributes[9]), 0, 0, "yes");
+                            nd.InsertNodeRecord(newNode, nd.ConnectToDatabase(@"C:\nodes.db"));
+                        }
+
+                                        public Guid uniqueId; 
+            public string name;
+            public IPAddress ip;
+            public string mac;
+            public int maxBackupCapacity;
+            public long backupData, nonBackupData, freeSpace, totalCapacity;
+            public int reliablityMetric, hops, smart, backupsFailed, backupsPassed;
+            public string trusted;
+                    
                 }
             }
         }
