@@ -35,6 +35,16 @@
             this.tabNodeSets = new System.Windows.Forms.TabPage();
             this.pnlNodeSetsFill = new System.Windows.Forms.Panel();
             this.dataGridViewNodeSets = new System.Windows.Forms.DataGridView();
+            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.trusted = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.numUpDownMaxBackupCapacity = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
@@ -72,6 +82,7 @@
             this.lblBackupFiles = new System.Windows.Forms.Label();
             this.btnLogs = new System.Windows.Forms.Button();
             this.dataGridViewBackupFiles = new System.Windows.Forms.DataGridView();
+            this.colFilepath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnBackupNow = new System.Windows.Forms.Button();
             this.pnlBackupStatusBottom = new System.Windows.Forms.Panel();
             this.btnSetBackupDirectory = new System.Windows.Forms.Button();
@@ -113,17 +124,6 @@
             this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.RecoveryDestinationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openRecoveryFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.trusted = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colFilepath = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -169,8 +169,8 @@
             // 
             // pnlTabGUI
             // 
-            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTabGUI.Controls.Add(this.tabControl);
             this.pnlTabGUI.Location = new System.Drawing.Point(0, 27);
             this.pnlTabGUI.Name = "pnlTabGUI";
@@ -235,6 +235,65 @@
             this.dataGridViewNodeSets.Name = "dataGridViewNodeSets";
             this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 377);
             this.dataGridViewNodeSets.TabIndex = 1;
+            // 
+            // guid
+            // 
+            this.guid.HeaderText = "GUID";
+            this.guid.Name = "guid";
+            this.guid.Visible = false;
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            // 
+            // ip
+            // 
+            this.ip.HeaderText = "Logical Address";
+            this.ip.Name = "ip";
+            this.ip.ReadOnly = true;
+            // 
+            // mac
+            // 
+            this.mac.HeaderText = "Physical Address";
+            this.mac.Name = "mac";
+            this.mac.ReadOnly = true;
+            // 
+            // reliablity
+            // 
+            this.reliablity.HeaderText = "Reliablity Metric";
+            this.reliablity.Name = "reliablity";
+            this.reliablity.ReadOnly = true;
+            // 
+            // hopScore
+            // 
+            this.hopScore.HeaderText = "Hop Score";
+            this.hopScore.Name = "hopScore";
+            this.hopScore.ReadOnly = true;
+            // 
+            // smartScore
+            // 
+            this.smartScore.HeaderText = "Smart Score";
+            this.smartScore.Name = "smartScore";
+            this.smartScore.ReadOnly = true;
+            // 
+            // backupsFailed
+            // 
+            this.backupsFailed.HeaderText = "Backups Failed";
+            this.backupsFailed.Name = "backupsFailed";
+            this.backupsFailed.ReadOnly = true;
+            // 
+            // backupsPassed
+            // 
+            this.backupsPassed.HeaderText = "Backups Passed";
+            this.backupsPassed.Name = "backupsPassed";
+            this.backupsPassed.ReadOnly = true;
+            // 
+            // trusted
+            // 
+            this.trusted.HeaderText = "Trusted";
+            this.trusted.Name = "trusted";
             // 
             // pnlNodeSetsBottom
             // 
@@ -610,6 +669,12 @@
             this.dataGridViewBackupFiles.Size = new System.Drawing.Size(776, 346);
             this.dataGridViewBackupFiles.TabIndex = 2;
             // 
+            // colFilepath
+            // 
+            this.colFilepath.HeaderText = "Backup Files";
+            this.colFilepath.Name = "colFilepath";
+            this.colFilepath.ReadOnly = true;
+            // 
             // btnBackupNow
             // 
             this.btnBackupNow.Location = new System.Drawing.Point(8, 385);
@@ -710,11 +775,13 @@
             // 
             this.colDateTime.HeaderText = "Date/Time of Backup";
             this.colDateTime.Name = "colDateTime";
+            this.colDateTime.ReadOnly = true;
             // 
             // colOrigSize
             // 
             this.colOrigSize.HeaderText = "Original Size";
             this.colOrigSize.Name = "colOrigSize";
+            this.colOrigSize.ReadOnly = true;
             // 
             // pnlDataRecoveryBottom
             // 
@@ -938,7 +1005,7 @@
             // exitEchoBackupToolStripMenuItem
             // 
             this.exitEchoBackupToolStripMenuItem.Name = "exitEchoBackupToolStripMenuItem";
-            this.exitEchoBackupToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
+            this.exitEchoBackupToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.exitEchoBackupToolStripMenuItem.Text = "Exit Echo Backup";
             // 
             // menuStrip1
@@ -954,71 +1021,6 @@
             // saveScheduleDialog
             // 
             this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
-            // 
-            // guid
-            // 
-            this.guid.HeaderText = "GUID";
-            this.guid.Name = "guid";
-            this.guid.Visible = false;
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            // 
-            // ip
-            // 
-            this.ip.HeaderText = "Logical Address";
-            this.ip.Name = "ip";
-            this.ip.ReadOnly = true;
-            // 
-            // mac
-            // 
-            this.mac.HeaderText = "Physical Address";
-            this.mac.Name = "mac";
-            this.mac.ReadOnly = true;
-            // 
-            // reliablity
-            // 
-            this.reliablity.HeaderText = "Reliablity Metric";
-            this.reliablity.Name = "reliablity";
-            this.reliablity.ReadOnly = true;
-            // 
-            // hopScore
-            // 
-            this.hopScore.HeaderText = "Hop Score";
-            this.hopScore.Name = "hopScore";
-            this.hopScore.ReadOnly = true;
-            // 
-            // smartScore
-            // 
-            this.smartScore.HeaderText = "Smart Score";
-            this.smartScore.Name = "smartScore";
-            this.smartScore.ReadOnly = true;
-            // 
-            // backupsFailed
-            // 
-            this.backupsFailed.HeaderText = "Backups Failed";
-            this.backupsFailed.Name = "backupsFailed";
-            this.backupsFailed.ReadOnly = true;
-            // 
-            // backupsPassed
-            // 
-            this.backupsPassed.HeaderText = "Backups Passed";
-            this.backupsPassed.Name = "backupsPassed";
-            this.backupsPassed.ReadOnly = true;
-            // 
-            // trusted
-            // 
-            this.trusted.HeaderText = "Trusted";
-            this.trusted.Name = "trusted";
-            // 
-            // colFilepath
-            // 
-            this.colFilepath.HeaderText = "Backup Files";
-            this.colFilepath.Name = "colFilepath";
-            this.colFilepath.ReadOnly = true;
             // 
             // MainForm
             // 

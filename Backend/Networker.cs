@@ -276,7 +276,7 @@ namespace Backend
             {
                 if (heartbeats.Count > 0)
                 {
-                    heartbeats.Dequeue();
+                    Backend.Database.NodeDatabase nd = new nd();
                 }
             }
         }

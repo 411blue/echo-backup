@@ -360,6 +360,6 @@ namespace GUI_FrontEnd
             string[] recoveryFile = new string[]{dataGridViewDataRecovery.SelectedRows[0].Cells[0].Value.ToString(), dataGridViewDataRecovery.SelectedRows[0].Cells[1].Value.ToString()};
 
             string recoveryDestination = txtRecoveryDestination.Text;
-        } 
+        }
     }
 }
