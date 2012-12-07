@@ -43,6 +43,7 @@ namespace Backend {
         public static void init()
         {
             filename = defaultFileName;
+            privateInit();
         }
 
         private static void privateInit()

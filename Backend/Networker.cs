@@ -283,7 +283,8 @@ namespace Backend
                     
                     //If node is new, then add record with heartbreat attributes and set other attritbutes to default
                     //If node is existing, then just add heartbeat attributes
-                    if(nd.PrimaryKeyCheck(Guid.Parse(attributes[0]), nd.ConnectToDatabase(@"C:\nodes.db")))
+                    //the below code is heavily broken and prevents build. commented-out. James 2012-12-07 15:24PM
+                    /*if(nd.PrimaryKeyCheck(Guid.Parse(attributes[0]), nd.ConnectToDatabase(@"C:\nodes.db")))
                     {
                         Backend.Database.Node existingNode = new Backend.Database.Node(
 
@@ -298,14 +299,14 @@ namespace Backend
                             nd.InsertNodeRecord(newNode, nd.ConnectToDatabase(@"C:\nodes.db"));
                         }
 
-                                        public Guid uniqueId; 
+            public Guid uniqueId; 
             public string name;
             public IPAddress ip;
             public string mac;
             public int maxBackupCapacity;
             public long backupData, nonBackupData, freeSpace, totalCapacity;
             public int reliablityMetric, hops, smart, backupsFailed, backupsPassed;
-            public string trusted;
+            public string trusted;*/
                     
                 }
             }

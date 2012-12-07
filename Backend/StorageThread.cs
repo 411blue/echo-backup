@@ -54,14 +54,20 @@ namespace Backend
         public const int CHUNK_SIZE = 104857600;
         private Guid guid;
         private Thread thread;
-        private bool working = true;
+        private bool working = true, stop = false;
         private object _lock;
         private string tempDir;
         private Queue<BackupTask> backupTasks;
         private Queue<BackupTask> backupResults;
 
-        public StorageThread(bool full, string tempDir, Guid guid)
+        /// <summary>
+        /// Creates a StorageThread with the specified temporary directory and Guid.
+        /// </summary>
+        /// <param name="tempDir">The temporary directory in which to store generated files. Intermediate and output files will be stored in this directory.</param>
+        /// <param name="guid">The Guid of the node to which this thread belongs. Used in filenames.</param>
+        public StorageThread(string tempDir, Guid guid)
         {
+            _lock = new Object();
             this.guid = guid;
             this.tempDir = tempDir;
             backupTasks = new Queue<BackupTask>();
@@ -79,6 +85,7 @@ namespace Backend
                 BackupTask task = new BackupTask();
                 lock (_lock)
                 {
+                    if (stop) return;
                     if (backupTasks.Count() > 0)
                     {
                         sleep = false;
@@ -100,6 +107,19 @@ namespace Backend
             }
         }
 
+        /// <summary>
+        /// Adds a BackupTask to the end of the task queue. Blocks if the queue is locked by another thread.
+        /// </summary>
+        /// <param name="task">The BackupTask that should be processed</param>
+        public void EnqueueBackupTask(BackupTask task)
+        {
+            lock (_lock)
+            {
+                backupTasks.Enqueue(task);
+                working = true;
+            }
+        }
+
         public bool IsWorking()
         {
             lock (_lock)
@@ -108,11 +128,25 @@ namespace Backend
             }
         }
 
+        public bool IsAlive()
+        {
+            return thread.IsAlive;
+        }
+
+        public void RequestStop()
+        {
+            lock (_lock)
+            {
+                stop = true;
+            }
+        }
+
         private void processTask(BackupTask task)
         {
+            Logger.Debug("StorageThread:processTask");
             //setup
             int chunkID = 0;
-            string oFilename = task.tempPath + guid + '_' + task.backupID + '_' + chunkID + ".tgz";
+            string oFilename = task.tempPath + '\\' + guid + '_' + task.backupID + '_' + chunkID + ".tbz2";
             Stream oStream = File.Create(oFilename);
             Stream bz2Stream = new BZip2OutputStream(oStream);
             TarArchive archive = TarArchive.CreateOutputTarArchive(bz2Stream);
@@ -120,14 +154,22 @@ namespace Backend
             //generate list of files
             LinkedList<string> allFiles = new LinkedList<string>();
             recursivelyFillFileQueue(ref allFiles, task.path);
+            long resumeOffset = 0;
             while (true)
             { //while need more chunks
+                Logger.Debug("StorageThread:processTask outer loop");
                 //create new list -- append files until total file size >= chunk size
                 long size = 0;
+                if (allFiles.Count() == 0) break;
                 string filename;
-                long resumeOffset = 0;
                 while (true)
                 { //while need more files in chunk
+                    Logger.Debug("StorageThread:processTask inner loop");
+                    if (allFiles.Count() == 0)
+                    {
+                        archive.Close();
+                        break;
+                    }
                     filename = allFiles.First();
                     FileInfo info = new FileInfo(filename);
                     long s = info.Length;
@@ -135,6 +177,7 @@ namespace Backend
                     size += 512;
                     if (size + s < CHUNK_SIZE)
                     {
+                        Logger.Debug("StorageThread:processTask inner loop if 1");
                         TarEntry entry = TarEntry.CreateEntryFromFile(filename);
                         archive.WriteEntry(entry, false);
                         //if file size is not a multiple of 512, round it up to next multiple of 512
@@ -147,29 +190,36 @@ namespace Backend
                     }
                     else
                     { //file is to big to fit in chunk in entirety
-                        long partLength = CHUNK_SIZE - size;
+                        Logger.Debug("StorageThread:processTask inner loop else 1");
+                        int partLength = CHUNK_SIZE - (int)size;
                         //split file into all parts in temp storage
                         //create entry for part of file
                         //add entry to archive
                         //add size to size
                         //somehow record where we left off
                         resumeOffset = partLength;
+                        splitFileToTemp(ref allFiles, filename, tempDir, partLength);
+                        TarEntry entry = TarEntry.CreateEntryFromFile(filename);
+                        archive.WriteEntry(entry, false);
+                        size += s;
                         archive.Close();
                         break;
                     }
                     if (size >= CHUNK_SIZE)
                     {
+                        Logger.Debug("StorageThread:processTask inner loop if 2");
                         resumeOffset = 0;
                         archive.Close();
                         break;
                     }
                 }
-            chunkID++;
+                chunkID++;
             }
         }
 
         private void recursivelyFillFileQueue(ref LinkedList<string> queue, string path)
         {
+            Logger.Debug("StorageThread:recursivelyFillFileQueue");
             string[] names = Directory.GetFiles(path);
             foreach (string filename in names)
             {
@@ -185,6 +235,7 @@ namespace Backend
 
         private void splitFileToTemp(ref LinkedList<String> files, string source, string dest, int firstSize)
         {
+            Logger.Debug("StorageThread:splitFileToTemp");
             LinkedListNode<string> firstFile = files.First;
             byte[] buffer = new byte[COPY_BUFFER_SIZE];
             Stream input = File.OpenRead(source);
@@ -204,7 +255,7 @@ namespace Backend
                     fileSize -= bytesRead;
                 }
                 output.Close();
-                files.AddBefore(firstFile, firstFile);
+                files.AddBefore(firstFile, outputFilename);
                 firstSize = CHUNK_SIZE;
             }
             input.Close();

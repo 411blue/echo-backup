@@ -38,6 +38,7 @@ namespace Backend
         object _lock;
         public ClientThread(TcpClient c, bool isClient, Guid guid)
         {
+            _lock = new Object();
             this.guid = guid;
             tcpClient = c;
             this.isClient = isClient;
