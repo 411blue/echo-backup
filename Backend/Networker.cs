@@ -283,35 +283,26 @@ namespace Backend
                     
                     //If node is new, then add record with heartbreat attributes and set other attritbutes to default
                     //If node is existing, then just add heartbeat attributes
-                    //the below code is heavily broken and prevents build. commented-out. James 2012-12-07 15:24PM
-                    /*if(nd.PrimaryKeyCheck(Guid.Parse(attributes[0]), nd.ConnectToDatabase(@"C:\nodes.db")))
+                    if(nd.PrimaryKeyCheck(Guid.Parse(attributes[0]), nd.ConnectToDatabase(@"C:\nodes.db")))
                     {
-                        Backend.Database.Node existingNode = new Backend.Database.Node(
-
-                        nd.UpdateNodeBackupData(
+                        Backend.Database.Node existingNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
+                            IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
+                            long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
+                            -1, -1, Convert.ToInt32(attributes[9]), -1, -1, "");
+                        nd.ReplaceNodeRecord(existingNode, nd.ConnectToDatabase(@"C:\nodes.db"));
                     }
-                        else
-                        {
-                            Backend.Database.Node newNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
+                    else
+                    {
+                        Backend.Database.Node newNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
                             long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
                             CalculateReliablity(0,0), GetHops(), Convert.ToInt32(attributes[9]), 0, 0, "yes");
-                            nd.InsertNodeRecord(newNode, nd.ConnectToDatabase(@"C:\nodes.db"));
-                        }
-
-            public Guid uniqueId; 
-            public string name;
-            public IPAddress ip;
-            public string mac;
-            public int maxBackupCapacity;
-            public long backupData, nonBackupData, freeSpace, totalCapacity;
-            public int reliablityMetric, hops, smart, backupsFailed, backupsPassed;
-            public string trusted;*/
-                    
+                        nd.InsertNodeRecord(newNode, nd.ConnectToDatabase(@"C:\nodes.db"));
+                    }
                 }
             }
         }
-        
+
         //Starts transmitter
         public void startTransmitter()
         {

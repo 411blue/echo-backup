@@ -84,7 +84,7 @@ namespace Backend.Database
                 + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
                 + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
                 + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
-                + " @pTotalCapaciy, @pReliablityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
+                + " @pTotalCapaciy, @pSmart)";
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
             cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
@@ -96,12 +96,7 @@ namespace Backend.Database
             cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", n1.nonBackupData));
             cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", n1.freeSpace));
             cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", n1.totalCapacity));
-            cmd.Parameters.Add(new SQLiteParameter("@pReliabityMetric", n1.reliablityMetric));
-            cmd.Parameters.Add(new SQLiteParameter("@pHops", n1.hops));
             cmd.Parameters.Add(new SQLiteParameter("@pSmart", n1.smart));
-            cmd.Parameters.Add(new SQLiteParameter("@pBackkupsFailed", n1.backupsFailed));
-            cmd.Parameters.Add(new SQLiteParameter("@pBackupsPassed", n1.backupsPassed));
-            cmd.Parameters.Add(new SQLiteParameter("@pTrusted", n1.trusted));
 
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -645,24 +640,25 @@ namespace Backend.Database
             public int reliablityMetric, hops, smart, backupsFailed, backupsPassed;
             public string trusted;
 
-            public Node(Guid g1, string s1, IPAddress ip1, string s2, int i1, long l1, long l2, long l3, long l4, int i2, int i3, int i4, 
-            int i5, int i6, string s3)
+            public Node(Guid uniqueId, string name, IPAddress ip, string mac, int maxBackupCapacity, long backupData, 
+                long nonBackupData, long freeSpace, long totalCapacity, int reliabilityMetric, int hops, int smart, 
+                int backupsFailed, int backupsPassed, string trusted)
             {
-                uniqueId = g1;
-                name = s1;
-                ip = ip1;
-                mac = s2;
-                maxBackupCapacity = i1;
-                backupData = l1;
-                nonBackupData = l2;
-                freeSpace = l3;
-                totalCapacity = l4;
-                reliablityMetric = i2;
-                hops = i3;
-                smart = i4;
-                backupsFailed = i5;
-                backupsPassed = i6;
-                trusted = s3;
+                this.uniqueId = uniqueId;
+                this.name = name;
+                this.ip = ip;
+                this.mac = mac;
+                this.maxBackupCapacity = maxBackupCapacity;
+                this.backupData = backupData;
+                this.nonBackupData = nonBackupData;
+                this.freeSpace = freeSpace;
+                this.totalCapacity = totalCapacity;
+                this.reliablityMetric = reliabilityMetric;
+                this.hops = hops;
+                this.smart = smart;
+                this.backupsFailed = backupsFailed;
+                this.backupsPassed = backupsPassed;
+                this.trusted = trusted;
             }
         }
 }
