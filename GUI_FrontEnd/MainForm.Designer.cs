@@ -48,7 +48,6 @@
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.numUpDownMaxBackupCapacity = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
-            this.btnSaveNodePreferences = new System.Windows.Forms.Button();
             this.lblRedundancy = new System.Windows.Forms.Label();
             this.numUpDwnRedundancy = new System.Windows.Forms.NumericUpDown();
             this.NodeGrid = new System.Windows.Forms.Panel();
@@ -300,7 +299,6 @@
             this.pnlNodeSetsBottom.BackColor = System.Drawing.SystemColors.Control;
             this.pnlNodeSetsBottom.Controls.Add(this.numUpDownMaxBackupCapacity);
             this.pnlNodeSetsBottom.Controls.Add(this.label9);
-            this.pnlNodeSetsBottom.Controls.Add(this.btnSaveNodePreferences);
             this.pnlNodeSetsBottom.Controls.Add(this.lblRedundancy);
             this.pnlNodeSetsBottom.Controls.Add(this.numUpDwnRedundancy);
             this.pnlNodeSetsBottom.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -311,7 +309,7 @@
             // 
             // numUpDownMaxBackupCapacity
             // 
-            this.numUpDownMaxBackupCapacity.Location = new System.Drawing.Point(405, 10);
+            this.numUpDownMaxBackupCapacity.Location = new System.Drawing.Point(414, 10);
             this.numUpDownMaxBackupCapacity.Name = "numUpDownMaxBackupCapacity";
             this.numUpDownMaxBackupCapacity.Size = new System.Drawing.Size(60, 20);
             this.numUpDownMaxBackupCapacity.TabIndex = 14;
@@ -320,26 +318,16 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(259, 12);
+            this.label9.Location = new System.Drawing.Point(268, 17);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(140, 13);
             this.label9.TabIndex = 13;
             this.label9.Text = "Max Backup Capacity (GBs)";
             // 
-            // btnSaveNodePreferences
-            // 
-            this.btnSaveNodePreferences.Location = new System.Drawing.Point(9, 36);
-            this.btnSaveNodePreferences.Name = "btnSaveNodePreferences";
-            this.btnSaveNodePreferences.Size = new System.Drawing.Size(157, 23);
-            this.btnSaveNodePreferences.TabIndex = 11;
-            this.btnSaveNodePreferences.Text = "Save Node Preferences";
-            this.btnSaveNodePreferences.UseVisualStyleBackColor = true;
-            this.btnSaveNodePreferences.Click += new System.EventHandler(this.btnSaveNodePreferences_Click);
-            // 
             // lblRedundancy
             // 
             this.lblRedundancy.AutoSize = true;
-            this.lblRedundancy.Location = new System.Drawing.Point(6, 12);
+            this.lblRedundancy.Location = new System.Drawing.Point(6, 17);
             this.lblRedundancy.Name = "lblRedundancy";
             this.lblRedundancy.Size = new System.Drawing.Size(160, 13);
             this.lblRedundancy.TabIndex = 9;
@@ -347,7 +335,7 @@
             // 
             // numUpDwnRedundancy
             // 
-            this.numUpDwnRedundancy.Location = new System.Drawing.Point(182, 10);
+            this.numUpDwnRedundancy.Location = new System.Drawing.Point(172, 10);
             this.numUpDwnRedundancy.Name = "numUpDwnRedundancy";
             this.numUpDwnRedundancy.Size = new System.Drawing.Size(60, 20);
             this.numUpDwnRedundancy.TabIndex = 8;
@@ -1005,7 +993,7 @@
             // exitEchoBackupToolStripMenuItem
             // 
             this.exitEchoBackupToolStripMenuItem.Name = "exitEchoBackupToolStripMenuItem";
-            this.exitEchoBackupToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
+            this.exitEchoBackupToolStripMenuItem.Size = new System.Drawing.Size(163, 22);
             this.exitEchoBackupToolStripMenuItem.Text = "Exit Echo Backup";
             // 
             // menuStrip1
@@ -1088,7 +1076,6 @@
         private System.Windows.Forms.Button btnRefreshList;
         private System.Windows.Forms.Label lblListTitle;
         private System.Windows.Forms.DataGridView dataGridViewNodeSets;
-        private System.Windows.Forms.Button btnSaveNodePreferences;
         private System.Windows.Forms.Label lblRedundancy;
         private System.Windows.Forms.NumericUpDown numUpDwnRedundancy;
         private System.Windows.Forms.Label gb4;

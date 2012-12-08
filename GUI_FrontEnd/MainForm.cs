@@ -27,26 +27,12 @@ namespace GUI_FrontEnd
         #region DiskReportTabStuff
         private void InitializeDiskReportTab()
         {
-            if (dataGridViewNodeSets.RowCount > 1)
-            {
-                for (int i = 0; i < dataGridViewNodeSets.Rows.Count - 1; ++i)
-                {
-                    DiskList.Items.Add(dataGridViewNodeSets.Rows[i].Cells[1].Value);
-                }
-            }
+
         }
 
         public void lookUpBytes(string h)
         {
-            for (int i = 0; i < dataGridViewNodeSets.Rows.Count - 1; ++i)
-            {
-                if (h == Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[1].Value))
-                {
-                    draw(long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[6].Value)), long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[7].Value)),
-                        long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[8].Value)), long.Parse(Convert.ToString(dataGridViewNodeSets.Rows[i].Cells[9].Value)));
-                    break;
-                }
-            }
+
         }
 
         public void draw(long backupData, long nonBackupData, long free, long capacity)
@@ -64,7 +50,6 @@ namespace GUI_FrontEnd
             Brush b3 = new SolidBrush(Color.Orange);
 
             Graphics g = CreateGraphics();
-            //g.Clear(DiskReport.DefaultBackColor);
             g.Clear(SystemColors.Control);
             g.DrawPie(p, rec, 0, deg1);
             g.FillPie(b1, rec, 0, deg1);
