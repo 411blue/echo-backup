@@ -236,6 +236,7 @@
             this.dataGridViewNodeSets.Name = "dataGridViewNodeSets";
             this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 377);
             this.dataGridViewNodeSets.TabIndex = 1;
+            this.dataGridViewNodeSets.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewNodeSets_CellValueChanged);
             // 
             // pnlNodeSetsBottom
             // 

@@ -15,8 +15,7 @@ namespace GUI_FrontEnd
     public partial class MainForm : Form
     {
 
-        NodeDatabase db;
-        SQLiteConnection cnn;
+        
 
         public MainForm()
         {
@@ -238,23 +237,6 @@ namespace GUI_FrontEnd
             }
         }
 
-        private void btnSaveNodePreferences_Click(object sender, EventArgs e)
-        {
-            string sqliteDBFile = @"C:\Users\Tom\Desktop\nodes.db";
-            cnn = db.ConnectToDatabase(sqliteDBFile);
-
-            Properties.Settings.Default.redundantBackups = numUpDwnRedundancy.Value;
-            Properties.Settings.Default.maxBackupCapacity = numUpDownMaxBackupCapacity.Value;
-            for (int i = 0; i < dataGridViewNodeSets.Rows.Count; i++)
-            {
-                Guid id = new Guid(dataGridViewNodeSets.Rows[i].Cells[0].Value.ToString());
-                db.UpdateNodeTrusted(id, dataGridViewNodeSets.Rows[i].Cells[9].Value.ToString(), cnn);
-                db.UpdateNodeMaxBackupCapacity(id, (int)numUpDownMaxBackupCapacity.Value, cnn);
-            }
-
-            MessageBox.Show("Node Preferences Saved.");
-        }
-
         private void btnRecoveryFileBrowser_Click(object sender, EventArgs e)
         {
             DialogResult result = openRecoveryFileDialog.ShowDialog();
@@ -352,5 +334,15 @@ namespace GUI_FrontEnd
 
             string recoveryDestination = txtRecoveryDestination.Text;
         }
+
+        //Updates status of a node in the database
+        private void dataGridViewNodeSets_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            db.UpdateNodeTrusted(Guid.Parse(Convert.ToString(dataGridViewNodeSets.CurrentRow.Cells[0].Value)),
+                Convert.ToString(dataGridViewNodeSets.CurrentCell.Value), db.ConnectToDatabase(@"C:/nodes.db"));
+        }
+
+        private NodeDatabase db;
+        private SQLiteConnection cnn;
     }
 }
