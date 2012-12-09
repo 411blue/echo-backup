@@ -80,13 +80,6 @@ namespace Backend
     /// </summary>
     public class PushRequest : NetworkRequest
     {
-        
-        //these constructors is needed to compile!..Shane
-        /*public PushRequest(TcpClient tcpClient)
-            : base(tcpClient)
-        {
-        }*/
-
         public PushRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
             : base(ipAddress, macAddress, guid, sequenceNumber)
         {
@@ -115,6 +108,14 @@ namespace Backend
             get { return myFileSize; }
             set { myFileSize = value; }
         }
+
+        // The path to the backup file on the requesting node
+        private string path;
+        public string Path
+        {
+            get { return path; }
+            set { path = value; }
+        }
     }
 
     /// <summary>
@@ -137,12 +138,22 @@ namespace Backend
             get { return myChunkNumber; }
             set { myChunkNumber = value; }
         }
-        
-        //these constructors is needed to compile!..Shane
-        /*public PullRequest(TcpClient tcpClient)
-            : base(tcpClient)
+
+        // The size of the backup file
+        private long myFileSize;
+        public long FileSize
         {
-        }*/
+            get { return myFileSize; }
+            set { myFileSize = value; }
+        }
+
+        // The path where the backup file should be restored to on the requesting node.
+        private string path;
+        public string Path
+        {
+            get { return path; }
+            set { path = value; }
+        }
 
         public PullRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
             : base(ipAddress, macAddress, guid, sequenceNumber)

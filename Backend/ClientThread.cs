@@ -33,6 +33,7 @@ namespace Backend
         // if true, the thread is working on something. if false, the thread is idle (waiting for work). Only applies to isClient=false instances
         private bool working;
         private bool doWork = true;
+        private bool stop = false;
         //the path that file should be written to/from when accepting a Push/PullRequest
         private string path;
         object _lock;
@@ -61,6 +62,7 @@ namespace Backend
 
         private void mainLoop()
         {
+            //James should draw up a network state machine diagram to model this mainLoop() function
             while (true)
             {
                 if (isClient)
@@ -68,8 +70,14 @@ namespace Backend
                     lock (_lock)
                     {
                         working = true;
+                        if (stop)
+                        {
+                            working = false;
+                            return;
+                        }
                     }
-                    NetworkRequest request = receiveMessage(tcpClient);
+                    //here we assume that if we are in this state we can only possibly be receiving a network request
+                    NetworkRequest request = (NetworkRequest)receiveMessage(tcpClient);
                     //Die if we failed to receive a message
                     if (request == null)
                     {
@@ -82,17 +90,17 @@ namespace Backend
                     lock (_lock)
                     {
                         eventQueue.Enqueue(request);
-                        //spin while waiting to be told what to do with this request
                         doWork = true;
                     }
                 }
                 while (doWork | !isClient)
                 {
                     bool sleep = false;
-                    NetworkRequest request;
+                    NetworkRequest request = null;
                     lock (_lock)
                     {
                         working = false;
+                        if (stop) return;
                         if (workQueue.Count() > 0)
                         {
                             working = true;
@@ -109,9 +117,8 @@ namespace Backend
                         Thread.Sleep(100);
                         continue;
                     }
-                    //todo: handle work
-                    //if sourceguid=this.guid: make a network request and go from there
-                    //if sourceguid!=this.guid: receive or send the file requested
+                    handleWork(request);
+                    doWork = false;
                 }
             }
         }
@@ -121,6 +128,14 @@ namespace Backend
             lock (_lock)
             {
                 return working;
+            }
+        }
+
+        public void RequestStop()
+        {
+            lock (_lock)
+            {
+                stop = true;
             }
         }
 
@@ -145,6 +160,39 @@ namespace Backend
                 }
                 return null;
             }
+        }
+
+        private void handleWork(NetworkRequest request)
+        {
+            if (this.guid.Equals(request.SourceGuid))
+            { //if sourceguid=this.guid: make a network request and go from there
+                int ret = sendMessage(tcpClient, request);
+                NetworkResponse response = (NetworkResponse)receiveMessage(tcpClient);
+                if (response.Type == Backend.ResponseType.Yes)
+                {
+                    if (request is PushRequest)
+                    {
+                        ret = writeFileToNetwork(((PushRequest)request).Path);
+                        //add result to event queue
+                    }
+                    else if (request is PullRequest)
+                    {
+                        ret = readFileToDisk(((PullRequest)request).FileSize, ((PullRequest)request).Path);
+                        //add result to event queue
+                    }
+                    else
+                    { //request is QueryRequest
+                        //add response to eventQueue
+                    }
+                }
+                else
+                {
+                    //other node said willnot, cannot, or notimplemented
+                    //add result to event queue
+                }
+                return;
+            }
+            //if sourceguid!=this.guid: receive or send the file requested
         }
 
         /// <summary>
@@ -218,7 +266,7 @@ namespace Backend
         /// </summary>
         /// <param name="tcpClient">The socket that is expected to receive a message</param>
         /// <returns>The TcpNetworkEvent received from the other end. Returns null if there was a problem.</returns>
-        private NetworkRequest receiveMessage(TcpClient tcpClient)
+        private NetworkEvent receiveMessage(TcpClient tcpClient)
         {
             byte[] sizeBytes = new byte[MESSAGE_SIZE_SIZE];
             int num = readBytes(tcpClient, ref sizeBytes, MESSAGE_SIZE_SIZE);
@@ -236,7 +284,7 @@ namespace Backend
                 return null;
             }
             MemoryStream mem = new MemoryStream(messageBytes);
-            return (NetworkRequest)binaryFormatter.Deserialize(mem);
+            return (NetworkEvent)binaryFormatter.Deserialize(mem);
         }
 
         /// <summary>

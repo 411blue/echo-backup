@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Tar;
+using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.BZip2;
 
 namespace Backend.Storage
@@ -158,12 +159,9 @@ namespace Backend.Storage
             while (true)
             { //while need more chunks
                 Logger.Debug("StorageThread:processTask outer loop");
-                //setup
                 if (allFiles.Count() == 0) break;
-                string oFilename = task.tempPath + '\\' + guid + '_' + task.backupID + '_' + chunkID + ".tbz2";
-                Stream oStream = File.Create(oFilename);
-                Stream bz2Stream = new BZip2OutputStream(oStream);
-                TarOutputStream tarOutputStream = new TarOutputStream(bz2Stream);
+                string oFilename = task.tempPath + '\\' + guid + '_' + task.backupID + '_' + chunkID + ".tgz";
+                TarOutputStream tarOutputStream = newTarOutputStream(oFilename);
                 Chunk chunk = new Chunk(task.backupID, chunkID, task.path, oFilename);
                 long size = 0;
                 string relPath, fullPath;
@@ -181,7 +179,9 @@ namespace Backend.Storage
                     if (Directory.Exists(fullPath))
                     {
                         Logger.Debug("StorageThread:processTask inner loop if 1");
-                        TarEntry entry2 = TarEntry.CreateEntryFromFile(relPath);
+                        TarEntry entry2 = TarEntry.CreateTarEntry(relPath);
+                        //entry2.Name = relPath;
+                        entry2.TarHeader.TypeFlag = TarHeader.LF_DIR;
                         tarOutputStream.PutNextEntry(entry2);
                         chunk.AddLast(fileInChunk);
                         size += 512;
@@ -260,10 +260,8 @@ namespace Backend.Storage
                                     backupResults.Enqueue(chunk);
                                 }
                                 chunkID++;
-                                oFilename = task.tempPath + '\\' + guid + '_' + task.backupID + '_' + chunkID + ".tbz2";
-                                oStream = File.Create(oFilename);
-                                bz2Stream = new BZip2OutputStream(oStream);
-                                tarOutputStream = new TarOutputStream(bz2Stream);
+                                oFilename = task.tempPath + '\\' + guid + '_' + task.backupID + '_' + chunkID + ".tgz";
+                                tarOutputStream = newTarOutputStream(oFilename);
                                 chunk = new Chunk(task.backupID, chunkID, task.path, oFilename);
                                 entry.Size = Math.Min(CHUNK_SIZE - 512, s - totalFileRead);
                                 tarOutputStream.PutNextEntry(entry);
@@ -289,6 +287,15 @@ namespace Backend.Storage
                 }
                 chunkID++;
             }
+        }
+
+        private TarOutputStream newTarOutputStream(string filename)
+        {
+            Stream oStream = File.Create(filename);
+            //gzipStream = new BZip2OutputStream(oStream);
+            GZipOutputStream gzipStream = new GZipOutputStream(oStream);
+            gzipStream.SetLevel(3);
+            return new TarOutputStream(gzipStream);
         }
 
         /// <summary>

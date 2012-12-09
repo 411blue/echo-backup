@@ -1,0 +1,17 @@
+Alienware is an i7 920 (2.67GHz).
+
+Windows Resource Monitor does not ever indicate HDD bottleneck during performance tests.
+
+mostly uncompressable data (encoded video):
+	about 28 seconds for 135MB->131MB GZip(3) on Alienware
+	about 35 seconds for 135MB->131MB GZip(9) on Alienware
+	about 148 seconds for 135MB->130MB BZip2 on Alienware
+
+cs 410 folder (word documents, text files, spreadsheets, images, powerpoints, etc.):
+	about 16 seconds for 60.6MB->51.6MB GZip(3) on Alienware
+	about 21 seconds for 60.6MB->51.4MB GZip(9) on Alienware
+	about 126 seconds for 60.6MB->50.0MB BZip2 on Alienware
+
+Clearly, BZip2 is giving us very little for its ridiculous increase in time. In fact, we can shave a further 20% off compression time if we use GZip(3) instead of GZip(9) and we lose virtually nothing in compressed size.
+
+Of course, this is absolutely not an exhaustive test, but I think the CS410 directory is a nice example of real-world data.
