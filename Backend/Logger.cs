@@ -15,6 +15,8 @@ namespace Backend {
         private static String filename;
         //this should be changed to include the date and time and shoulb be initialized in init()
         private static String defaultFileName = Environment.CurrentDirectory + "\\" + "log.log";
+        //true when init has been calld. used to prevent multiple inits
+        private static bool inited = false;
         
         /*public Logger(string path) {
             writer = new StreamWriter(path + "\\" + filename, true);
@@ -33,6 +35,7 @@ namespace Backend {
         /// <param name="path"></param>
         public static void init(string path)
         {
+            if (inited) return;
             filename = path;
             privateInit();
         }
@@ -42,6 +45,7 @@ namespace Backend {
         /// </summary>
         public static void init()
         {
+            if (inited) return;
             filename = defaultFileName;
             privateInit();
         }
@@ -49,6 +53,7 @@ namespace Backend {
         private static void privateInit()
         {
             writer = new StreamWriter(filename, true);
+            inited = true;
             Logger.Log("Opened log file: " + filename);
         }
 

@@ -117,7 +117,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="StorageThread.cs" />
+    <Compile Include="Storage\Chunk.cs" />
+    <Compile Include="Storage\StorageThread.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="EchoBackupService.resx">

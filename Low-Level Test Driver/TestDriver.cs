@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using Backend;
+using Backend.Storage;
 using System.Threading;
 
 namespace Low_Level_Test_Driver
@@ -13,7 +14,7 @@ namespace Low_Level_Test_Driver
     /// 
     /// Each test should be written in its own method(s) and Main() should be modified to call only one test's entry method.
     /// </summary>
-    class Program
+    class TestDriver
     {
         /// <summary>
         /// tests the basic Tar and BZip2 functionality.
@@ -21,19 +22,23 @@ namespace Low_Level_Test_Driver
         static void testTarBzip2()
         {
             Console.WriteLine("starting testTarBzip2");
-            Guid guid = new Guid();
-            StorageThread st = new StorageThread(".\\", guid);
+            byte[] b = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+            Guid guid = new Guid(b);
+            string tempPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch";
+            StorageThread st = new StorageThread(tempPath, guid);
             BackupTask task = new BackupTask();
             task.backupID = 123;
             task.level = 0;
-            task.path = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\scratch";
+            task.path = tempPath;
             task.status = 0;
-            task.tempPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\scratch2";
+            task.tempPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2";
             st.EnqueueBackupTask(task);
             Console.WriteLine("queued task");
+            int x = 0;
             while (st.IsWorking())
             {
-                Console.WriteLine("waiting for thread to finish.");
+                x++;
+                Console.WriteLine("waiting for thread to finish." + x);
                 Thread.Sleep(1000);
             }
             Console.WriteLine("thread finished.");
@@ -41,15 +46,25 @@ namespace Low_Level_Test_Driver
             Console.WriteLine("requested thread terminate.");
             while (st.IsAlive())
             {
-                Console.WriteLine("waiting for thread to die.");
+                x++;
+                Console.WriteLine("waiting for thread to die. " + x);
                 Thread.Sleep(1000);
             }
             Console.WriteLine("thread is dead.");
+            Console.WriteLine("number of chunks: " + st.NumChunks());
+            while (st.NumChunks() > 0)
+            {
+                Chunk c = st.DequeueChunk();
+                Console.WriteLine(c);
+            }
+
+            Console.WriteLine("press a key to continue");
+            Console.ReadKey();
         }
 
         static void Main(string[] args)
         {
-            Logger.init();
+            Logger.init(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\log.log");
             testTarBzip2();
         }
     }
