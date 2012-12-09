@@ -14,6 +14,7 @@ namespace GUI_FrontEnd
 {
     public partial class MainForm : Form
     {
+
         NodeDatabase db;
         SQLiteConnection cnn;
 
@@ -21,7 +22,13 @@ namespace GUI_FrontEnd
         {
             InitializeComponent();
             numUpDownMaxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
-            db = new NodeDatabase();   
+            db = new NodeDatabase();
+
+            /*Dummy data for manual
+            dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC1", "192.168.1.1", "00-21-70-FE-23-EF", "1", "51", "89", "0", "100", "yes");
+            dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC2", "192.168.1.2", "00-21-69-FE-23-AB", "32", "50", "88", "25", "75", "no");
+            dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC2", "192.168.1.2", "00-21-69-FE-23-AB", "PC3", "62", "49", "87", "50", "50", "no");
+             */ 
         }
 
         #region DiskReportTabStuff

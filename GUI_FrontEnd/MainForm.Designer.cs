@@ -123,6 +123,7 @@
             this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.RecoveryDestinationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openRecoveryFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.StatisticsGroup = new System.Windows.Forms.GroupBox();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -148,6 +149,7 @@
             this.pnlDataRecoveryTop.SuspendLayout();
             this.tabScheduler.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.StatisticsGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -374,25 +376,9 @@
             // tabDiskReport
             // 
             this.tabDiskReport.BackColor = System.Drawing.SystemColors.Control;
-            this.tabDiskReport.Controls.Add(this.gb4);
-            this.tabDiskReport.Controls.Add(this.gb2);
-            this.tabDiskReport.Controls.Add(this.gb3);
-            this.tabDiskReport.Controls.Add(this.gb1);
-            this.tabDiskReport.Controls.Add(this.bytes4);
-            this.tabDiskReport.Controls.Add(this.bytes2);
-            this.tabDiskReport.Controls.Add(this.bytes3);
-            this.tabDiskReport.Controls.Add(this.bytes1);
+            this.tabDiskReport.Controls.Add(this.StatisticsGroup);
             this.tabDiskReport.Controls.Add(this.label7);
-            this.tabDiskReport.Controls.Add(this.label1);
             this.tabDiskReport.Controls.Add(this.DiskList);
-            this.tabDiskReport.Controls.Add(this.label6);
-            this.tabDiskReport.Controls.Add(this.label5);
-            this.tabDiskReport.Controls.Add(this.label4);
-            this.tabDiskReport.Controls.Add(this.label3);
-            this.tabDiskReport.Controls.Add(this.label2);
-            this.tabDiskReport.Controls.Add(this.pictureBox5);
-            this.tabDiskReport.Controls.Add(this.pictureBox4);
-            this.tabDiskReport.Controls.Add(this.pictureBox3);
             this.tabDiskReport.Location = new System.Drawing.Point(4, 22);
             this.tabDiskReport.Name = "tabDiskReport";
             this.tabDiskReport.Padding = new System.Windows.Forms.Padding(3);
@@ -403,7 +389,7 @@
             // gb4
             // 
             this.gb4.AutoSize = true;
-            this.gb4.Location = new System.Drawing.Point(272, 266);
+            this.gb4.Location = new System.Drawing.Point(236, 101);
             this.gb4.Name = "gb4";
             this.gb4.Size = new System.Drawing.Size(25, 13);
             this.gb4.TabIndex = 92;
@@ -412,7 +398,7 @@
             // gb2
             // 
             this.gb2.AutoSize = true;
-            this.gb2.Location = new System.Drawing.Point(272, 225);
+            this.gb2.Location = new System.Drawing.Point(236, 60);
             this.gb2.Name = "gb2";
             this.gb2.Size = new System.Drawing.Size(25, 13);
             this.gb2.TabIndex = 91;
@@ -421,7 +407,7 @@
             // gb3
             // 
             this.gb3.AutoSize = true;
-            this.gb3.Location = new System.Drawing.Point(272, 244);
+            this.gb3.Location = new System.Drawing.Point(236, 79);
             this.gb3.Name = "gb3";
             this.gb3.Size = new System.Drawing.Size(25, 13);
             this.gb3.TabIndex = 90;
@@ -430,7 +416,7 @@
             // gb1
             // 
             this.gb1.AutoSize = true;
-            this.gb1.Location = new System.Drawing.Point(272, 203);
+            this.gb1.Location = new System.Drawing.Point(236, 38);
             this.gb1.Name = "gb1";
             this.gb1.Size = new System.Drawing.Size(25, 13);
             this.gb1.TabIndex = 89;
@@ -439,7 +425,7 @@
             // bytes4
             // 
             this.bytes4.AutoSize = true;
-            this.bytes4.Location = new System.Drawing.Point(166, 266);
+            this.bytes4.Location = new System.Drawing.Point(130, 101);
             this.bytes4.Name = "bytes4";
             this.bytes4.Size = new System.Drawing.Size(38, 13);
             this.bytes4.TabIndex = 88;
@@ -448,7 +434,7 @@
             // bytes2
             // 
             this.bytes2.AutoSize = true;
-            this.bytes2.Location = new System.Drawing.Point(166, 225);
+            this.bytes2.Location = new System.Drawing.Point(130, 60);
             this.bytes2.Name = "bytes2";
             this.bytes2.Size = new System.Drawing.Size(38, 13);
             this.bytes2.TabIndex = 87;
@@ -457,7 +443,7 @@
             // bytes3
             // 
             this.bytes3.AutoSize = true;
-            this.bytes3.Location = new System.Drawing.Point(166, 244);
+            this.bytes3.Location = new System.Drawing.Point(130, 79);
             this.bytes3.Name = "bytes3";
             this.bytes3.Size = new System.Drawing.Size(38, 13);
             this.bytes3.TabIndex = 86;
@@ -466,7 +452,7 @@
             // bytes1
             // 
             this.bytes1.AutoSize = true;
-            this.bytes1.Location = new System.Drawing.Point(166, 203);
+            this.bytes1.Location = new System.Drawing.Point(130, 38);
             this.bytes1.Name = "bytes1";
             this.bytes1.Size = new System.Drawing.Size(38, 13);
             this.bytes1.TabIndex = 85;
@@ -484,7 +470,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(171, 181);
+            this.label1.Location = new System.Drawing.Point(135, 16);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(33, 13);
             this.label1.TabIndex = 83;
@@ -504,7 +490,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(63, 266);
+            this.label6.Location = new System.Drawing.Point(27, 101);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(70, 13);
             this.label6.TabIndex = 81;
@@ -513,7 +499,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(272, 181);
+            this.label5.Location = new System.Drawing.Point(236, 16);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(22, 13);
             this.label5.TabIndex = 80;
@@ -522,7 +508,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(71, 225);
+            this.label4.Location = new System.Drawing.Point(35, 60);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(62, 13);
             this.label4.TabIndex = 79;
@@ -531,7 +517,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(41, 244);
+            this.label3.Location = new System.Drawing.Point(5, 79);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(92, 13);
             this.label3.TabIndex = 78;
@@ -540,7 +526,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(58, 203);
+            this.label2.Location = new System.Drawing.Point(22, 38);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(75, 13);
             this.label2.TabIndex = 77;
@@ -549,7 +535,7 @@
             // pictureBox5
             // 
             this.pictureBox5.BackColor = System.Drawing.Color.Orange;
-            this.pictureBox5.Location = new System.Drawing.Point(148, 266);
+            this.pictureBox5.Location = new System.Drawing.Point(112, 101);
             this.pictureBox5.Name = "pictureBox5";
             this.pictureBox5.Size = new System.Drawing.Size(12, 13);
             this.pictureBox5.TabIndex = 76;
@@ -558,7 +544,7 @@
             // pictureBox4
             // 
             this.pictureBox4.BackColor = System.Drawing.Color.Blue;
-            this.pictureBox4.Location = new System.Drawing.Point(148, 225);
+            this.pictureBox4.Location = new System.Drawing.Point(112, 60);
             this.pictureBox4.Name = "pictureBox4";
             this.pictureBox4.Size = new System.Drawing.Size(12, 13);
             this.pictureBox4.TabIndex = 75;
@@ -567,7 +553,7 @@
             // pictureBox3
             // 
             this.pictureBox3.BackColor = System.Drawing.Color.Red;
-            this.pictureBox3.Location = new System.Drawing.Point(148, 244);
+            this.pictureBox3.Location = new System.Drawing.Point(112, 79);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(12, 13);
             this.pictureBox3.TabIndex = 74;
@@ -1010,6 +996,32 @@
             // 
             this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
             // 
+            // StatisticsGroup
+            // 
+            this.StatisticsGroup.Controls.Add(this.label1);
+            this.StatisticsGroup.Controls.Add(this.gb4);
+            this.StatisticsGroup.Controls.Add(this.pictureBox3);
+            this.StatisticsGroup.Controls.Add(this.gb2);
+            this.StatisticsGroup.Controls.Add(this.pictureBox4);
+            this.StatisticsGroup.Controls.Add(this.gb3);
+            this.StatisticsGroup.Controls.Add(this.pictureBox5);
+            this.StatisticsGroup.Controls.Add(this.gb1);
+            this.StatisticsGroup.Controls.Add(this.label2);
+            this.StatisticsGroup.Controls.Add(this.bytes4);
+            this.StatisticsGroup.Controls.Add(this.label3);
+            this.StatisticsGroup.Controls.Add(this.bytes2);
+            this.StatisticsGroup.Controls.Add(this.label4);
+            this.StatisticsGroup.Controls.Add(this.bytes3);
+            this.StatisticsGroup.Controls.Add(this.label5);
+            this.StatisticsGroup.Controls.Add(this.bytes1);
+            this.StatisticsGroup.Controls.Add(this.label6);
+            this.StatisticsGroup.Location = new System.Drawing.Point(8, 266);
+            this.StatisticsGroup.Name = "StatisticsGroup";
+            this.StatisticsGroup.Size = new System.Drawing.Size(280, 130);
+            this.StatisticsGroup.TabIndex = 93;
+            this.StatisticsGroup.TabStop = false;
+            this.StatisticsGroup.Text = "Statistics";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1057,6 +1069,8 @@
             this.tabScheduler.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.StatisticsGroup.ResumeLayout(false);
+            this.StatisticsGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1159,5 +1173,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsPassed;
         private System.Windows.Forms.DataGridViewTextBoxColumn trusted;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFilepath;
+        private System.Windows.Forms.GroupBox StatisticsGroup;
     }
 }
