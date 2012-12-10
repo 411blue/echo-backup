@@ -14,9 +14,6 @@ namespace GUI_FrontEnd
 {
     public partial class MainForm : Form
     {
-
-        
-
         public MainForm()
         {
             InitializeComponent();
@@ -339,7 +336,7 @@ namespace GUI_FrontEnd
         private void dataGridViewNodeSets_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             db.UpdateNodeTrusted(Guid.Parse(Convert.ToString(dataGridViewNodeSets.CurrentRow.Cells[0].Value)),
-                Convert.ToString(dataGridViewNodeSets.CurrentCell.Value), db.ConnectToDatabase(@"C:/nodes.db"));
+                Convert.ToString(dataGridViewNodeSets.CurrentCell.Value), db.ConnectToDatabase(@"C:\nodes.db"));
         }
 
         private NodeDatabase db;

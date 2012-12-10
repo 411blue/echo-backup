@@ -14,7 +14,6 @@ namespace Backend.Database
     {
         public NodeDatabase()
         {
-            value = null;
         }
 
         /// Returns a connection to an existing. If it does not exist, it will be created on an open attempted.
@@ -608,6 +607,7 @@ namespace Backend.Database
         //Return true if primary key was found and false if not
         public bool PrimaryKeyCheck(Guid UniqueId, SQLiteConnection conn)
         {
+            object value = new object();
             string sql = "SELECT UniqueId FROM nodes WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
             cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
@@ -625,7 +625,26 @@ namespace Backend.Database
                 return false;
             }
         }
-        private object value;
+
+        //Get the Names from the node database
+        public string[] GetNodeNames(SQLiteConnection conn)
+        {
+            string sql = "SELECT Name  FROM nodes";
+            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+
+            conn.Open();
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Load(reader);
+
+            string[] Names = new string[dt.Rows.Count];
+            for (int i = 0; i < dt.Rows.Count; i++)
+            {
+                DataRow row = dt.Rows[i];                
+                Names[i] = Convert.ToString(row["Name"]);                           
+            }
+            return Names;
+        }
     }
 
         //Defines a node and provides constructor
