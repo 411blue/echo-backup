@@ -30,12 +30,7 @@ namespace GUI_FrontEnd
         #region DiskReportTabStuff
         private void InitializeDiskReportTab()
         {
-
-        }
-
-        public void lookUpBytes(string h)
-        {
-
+            DiskList.Items.AddRange(db.GetNodeNames(db.ConnectToDatabase(@"C\nodes.db"));
         }
 
         public void draw(long backupData, long nonBackupData, long free, long capacity)
@@ -73,7 +68,7 @@ namespace GUI_FrontEnd
 
         private void hostList_TextChanged(object sender, EventArgs e)
         {
-            lookUpBytes(DiskList.Text);
+            draw(1, 1, 1, 1);
         }
 
         #endregion

@@ -44,25 +44,26 @@
             this.btnRefreshList = new System.Windows.Forms.Button();
             this.lblListTitle = new System.Windows.Forms.Label();
             this.tabDiskReport = new System.Windows.Forms.TabPage();
-            this.gb4 = new System.Windows.Forms.Label();
-            this.gb2 = new System.Windows.Forms.Label();
-            this.gb3 = new System.Windows.Forms.Label();
-            this.gb1 = new System.Windows.Forms.Label();
-            this.bytes4 = new System.Windows.Forms.Label();
-            this.bytes2 = new System.Windows.Forms.Label();
-            this.bytes3 = new System.Windows.Forms.Label();
-            this.bytes1 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.StatisticsGroup = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.DiskList = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.pictureBox5 = new System.Windows.Forms.PictureBox();
-            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.gb4 = new System.Windows.Forms.Label();
             this.pictureBox3 = new System.Windows.Forms.PictureBox();
+            this.gb2 = new System.Windows.Forms.Label();
+            this.pictureBox4 = new System.Windows.Forms.PictureBox();
+            this.gb3 = new System.Windows.Forms.Label();
+            this.pictureBox5 = new System.Windows.Forms.PictureBox();
+            this.gb1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.bytes4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.bytes2 = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.bytes3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.bytes1 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.DiskList = new System.Windows.Forms.ComboBox();
             this.tabBackupStatus = new System.Windows.Forms.TabPage();
             this.pnlBackupStatusFill = new System.Windows.Forms.Panel();
             this.btnAddBackupFile = new System.Windows.Forms.Button();
@@ -113,12 +114,11 @@
             this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.RecoveryDestinationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openRecoveryFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.StatisticsGroup = new System.Windows.Forms.GroupBox();
             this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reliablity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.reliability = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -135,9 +135,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.numUpDwnRedundancy)).BeginInit();
             this.NodeGrid.SuspendLayout();
             this.tabDiskReport.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            this.StatisticsGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
             this.tabBackupStatus.SuspendLayout();
             this.pnlBackupStatusFill.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackupFiles)).BeginInit();
@@ -149,7 +150,6 @@
             this.pnlDataRecoveryTop.SuspendLayout();
             this.tabScheduler.SuspendLayout();
             this.menuStrip1.SuspendLayout();
-            this.StatisticsGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -225,7 +225,7 @@
             this.name,
             this.ip,
             this.mac,
-            this.reliablity,
+            this.reliability,
             this.hopScore,
             this.smartScore,
             this.backupsFailed,
@@ -327,6 +327,41 @@
             this.tabDiskReport.TabIndex = 1;
             this.tabDiskReport.Text = "Disk Report";
             // 
+            // StatisticsGroup
+            // 
+            this.StatisticsGroup.Controls.Add(this.label1);
+            this.StatisticsGroup.Controls.Add(this.gb4);
+            this.StatisticsGroup.Controls.Add(this.pictureBox3);
+            this.StatisticsGroup.Controls.Add(this.gb2);
+            this.StatisticsGroup.Controls.Add(this.pictureBox4);
+            this.StatisticsGroup.Controls.Add(this.gb3);
+            this.StatisticsGroup.Controls.Add(this.pictureBox5);
+            this.StatisticsGroup.Controls.Add(this.gb1);
+            this.StatisticsGroup.Controls.Add(this.label2);
+            this.StatisticsGroup.Controls.Add(this.bytes4);
+            this.StatisticsGroup.Controls.Add(this.label3);
+            this.StatisticsGroup.Controls.Add(this.bytes2);
+            this.StatisticsGroup.Controls.Add(this.label4);
+            this.StatisticsGroup.Controls.Add(this.bytes3);
+            this.StatisticsGroup.Controls.Add(this.label5);
+            this.StatisticsGroup.Controls.Add(this.bytes1);
+            this.StatisticsGroup.Controls.Add(this.label6);
+            this.StatisticsGroup.Location = new System.Drawing.Point(8, 266);
+            this.StatisticsGroup.Name = "StatisticsGroup";
+            this.StatisticsGroup.Size = new System.Drawing.Size(280, 130);
+            this.StatisticsGroup.TabIndex = 93;
+            this.StatisticsGroup.TabStop = false;
+            this.StatisticsGroup.Text = "Statistics";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(135, 16);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(33, 13);
+            this.label1.TabIndex = 83;
+            this.label1.Text = "Bytes";
+            // 
             // gb4
             // 
             this.gb4.AutoSize = true;
@@ -335,6 +370,15 @@
             this.gb4.Size = new System.Drawing.Size(25, 13);
             this.gb4.TabIndex = 92;
             this.gb4.Text = "gb4";
+            // 
+            // pictureBox3
+            // 
+            this.pictureBox3.BackColor = System.Drawing.Color.Red;
+            this.pictureBox3.Location = new System.Drawing.Point(112, 79);
+            this.pictureBox3.Name = "pictureBox3";
+            this.pictureBox3.Size = new System.Drawing.Size(12, 13);
+            this.pictureBox3.TabIndex = 74;
+            this.pictureBox3.TabStop = false;
             // 
             // gb2
             // 
@@ -345,6 +389,15 @@
             this.gb2.TabIndex = 91;
             this.gb2.Text = "gb2";
             // 
+            // pictureBox4
+            // 
+            this.pictureBox4.BackColor = System.Drawing.Color.Blue;
+            this.pictureBox4.Location = new System.Drawing.Point(112, 60);
+            this.pictureBox4.Name = "pictureBox4";
+            this.pictureBox4.Size = new System.Drawing.Size(12, 13);
+            this.pictureBox4.TabIndex = 75;
+            this.pictureBox4.TabStop = false;
+            // 
             // gb3
             // 
             this.gb3.AutoSize = true;
@@ -353,6 +406,15 @@
             this.gb3.Size = new System.Drawing.Size(25, 13);
             this.gb3.TabIndex = 90;
             this.gb3.Text = "gb3";
+            // 
+            // pictureBox5
+            // 
+            this.pictureBox5.BackColor = System.Drawing.Color.Orange;
+            this.pictureBox5.Location = new System.Drawing.Point(112, 101);
+            this.pictureBox5.Name = "pictureBox5";
+            this.pictureBox5.Size = new System.Drawing.Size(12, 13);
+            this.pictureBox5.TabIndex = 76;
+            this.pictureBox5.TabStop = false;
             // 
             // gb1
             // 
@@ -363,6 +425,15 @@
             this.gb1.TabIndex = 89;
             this.gb1.Text = "gb1";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(22, 38);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(75, 13);
+            this.label2.TabIndex = 77;
+            this.label2.Text = "Total Capacity";
+            // 
             // bytes4
             // 
             this.bytes4.AutoSize = true;
@@ -371,6 +442,15 @@
             this.bytes4.Size = new System.Drawing.Size(38, 13);
             this.bytes4.TabIndex = 88;
             this.bytes4.Text = "bytes4";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(5, 79);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(92, 13);
+            this.label3.TabIndex = 78;
+            this.label3.Text = "Non-backup Data";
             // 
             // bytes2
             // 
@@ -381,6 +461,15 @@
             this.bytes2.TabIndex = 87;
             this.bytes2.Text = "bytes2";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(35, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(62, 13);
+            this.label4.TabIndex = 79;
+            this.label4.Text = "Free Space";
+            // 
             // bytes3
             // 
             this.bytes3.AutoSize = true;
@@ -389,6 +478,15 @@
             this.bytes3.Size = new System.Drawing.Size(38, 13);
             this.bytes3.TabIndex = 86;
             this.bytes3.Text = "bytes3";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(236, 16);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(22, 13);
+            this.label5.TabIndex = 80;
+            this.label5.Text = "GB";
             // 
             // bytes1
             // 
@@ -399,6 +497,15 @@
             this.bytes1.TabIndex = 85;
             this.bytes1.Text = "bytes1";
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(27, 101);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(70, 13);
+            this.label6.TabIndex = 81;
+            this.label6.Text = "Backup Data";
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -407,15 +514,6 @@
             this.label7.Size = new System.Drawing.Size(34, 13);
             this.label7.TabIndex = 84;
             this.label7.Text = "Hosts";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(135, 16);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(33, 13);
-            this.label1.TabIndex = 83;
-            this.label1.Text = "Bytes";
             // 
             // DiskList
             // 
@@ -427,78 +525,6 @@
             this.DiskList.TabIndex = 82;
             this.DiskList.TabStop = false;
             this.DiskList.TextChanged += new System.EventHandler(this.hostList_TextChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(27, 101);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(70, 13);
-            this.label6.TabIndex = 81;
-            this.label6.Text = "Backup Data";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(236, 16);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(22, 13);
-            this.label5.TabIndex = 80;
-            this.label5.Text = "GB";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(35, 60);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(62, 13);
-            this.label4.TabIndex = 79;
-            this.label4.Text = "Free Space";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 79);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(92, 13);
-            this.label3.TabIndex = 78;
-            this.label3.Text = "Non-backup Data";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(22, 38);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(75, 13);
-            this.label2.TabIndex = 77;
-            this.label2.Text = "Total Capacity";
-            // 
-            // pictureBox5
-            // 
-            this.pictureBox5.BackColor = System.Drawing.Color.Orange;
-            this.pictureBox5.Location = new System.Drawing.Point(112, 101);
-            this.pictureBox5.Name = "pictureBox5";
-            this.pictureBox5.Size = new System.Drawing.Size(12, 13);
-            this.pictureBox5.TabIndex = 76;
-            this.pictureBox5.TabStop = false;
-            // 
-            // pictureBox4
-            // 
-            this.pictureBox4.BackColor = System.Drawing.Color.Blue;
-            this.pictureBox4.Location = new System.Drawing.Point(112, 60);
-            this.pictureBox4.Name = "pictureBox4";
-            this.pictureBox4.Size = new System.Drawing.Size(12, 13);
-            this.pictureBox4.TabIndex = 75;
-            this.pictureBox4.TabStop = false;
-            // 
-            // pictureBox3
-            // 
-            this.pictureBox3.BackColor = System.Drawing.Color.Red;
-            this.pictureBox3.Location = new System.Drawing.Point(112, 79);
-            this.pictureBox3.Name = "pictureBox3";
-            this.pictureBox3.Size = new System.Drawing.Size(12, 13);
-            this.pictureBox3.TabIndex = 74;
-            this.pictureBox3.TabStop = false;
             // 
             // tabBackupStatus
             // 
@@ -937,32 +963,6 @@
             // 
             this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
             // 
-            // StatisticsGroup
-            // 
-            this.StatisticsGroup.Controls.Add(this.label1);
-            this.StatisticsGroup.Controls.Add(this.gb4);
-            this.StatisticsGroup.Controls.Add(this.pictureBox3);
-            this.StatisticsGroup.Controls.Add(this.gb2);
-            this.StatisticsGroup.Controls.Add(this.pictureBox4);
-            this.StatisticsGroup.Controls.Add(this.gb3);
-            this.StatisticsGroup.Controls.Add(this.pictureBox5);
-            this.StatisticsGroup.Controls.Add(this.gb1);
-            this.StatisticsGroup.Controls.Add(this.label2);
-            this.StatisticsGroup.Controls.Add(this.bytes4);
-            this.StatisticsGroup.Controls.Add(this.label3);
-            this.StatisticsGroup.Controls.Add(this.bytes2);
-            this.StatisticsGroup.Controls.Add(this.label4);
-            this.StatisticsGroup.Controls.Add(this.bytes3);
-            this.StatisticsGroup.Controls.Add(this.label5);
-            this.StatisticsGroup.Controls.Add(this.bytes1);
-            this.StatisticsGroup.Controls.Add(this.label6);
-            this.StatisticsGroup.Location = new System.Drawing.Point(8, 266);
-            this.StatisticsGroup.Name = "StatisticsGroup";
-            this.StatisticsGroup.Size = new System.Drawing.Size(280, 130);
-            this.StatisticsGroup.TabIndex = 93;
-            this.StatisticsGroup.TabStop = false;
-            this.StatisticsGroup.Text = "Statistics";
-            // 
             // guid
             // 
             this.guid.HeaderText = "GUID";
@@ -986,11 +986,11 @@
             this.mac.Name = "mac";
             this.mac.ReadOnly = true;
             // 
-            // reliablity
+            // reliability
             // 
-            this.reliablity.HeaderText = "Reliablity Metric";
-            this.reliablity.Name = "reliablity";
-            this.reliablity.ReadOnly = true;
+            this.reliability.HeaderText = "Reliability Metric";
+            this.reliability.Name = "reliability";
+            this.reliability.ReadOnly = true;
             // 
             // hopScore
             // 
@@ -1053,9 +1053,11 @@
             this.NodeGrid.PerformLayout();
             this.tabDiskReport.ResumeLayout(false);
             this.tabDiskReport.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            this.StatisticsGroup.ResumeLayout(false);
+            this.StatisticsGroup.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
             this.tabBackupStatus.ResumeLayout(false);
             this.pnlBackupStatusFill.ResumeLayout(false);
             this.pnlBackupStatusFill.PerformLayout();
@@ -1073,8 +1075,6 @@
             this.tabScheduler.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.StatisticsGroup.ResumeLayout(false);
-            this.StatisticsGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1172,7 +1172,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn name;
         private System.Windows.Forms.DataGridViewTextBoxColumn ip;
         private System.Windows.Forms.DataGridViewTextBoxColumn mac;
-        private System.Windows.Forms.DataGridViewTextBoxColumn reliablity;
+        private System.Windows.Forms.DataGridViewTextBoxColumn reliability;
         private System.Windows.Forms.DataGridViewTextBoxColumn hopScore;
         private System.Windows.Forms.DataGridViewTextBoxColumn smartScore;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsFailed;
