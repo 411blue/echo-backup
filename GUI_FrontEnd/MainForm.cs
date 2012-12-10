@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Data.SQLite;
 using Backend.Database;
+using Backend.Properties;
 
 namespace GUI_FrontEnd
 {
@@ -17,7 +18,7 @@ namespace GUI_FrontEnd
         public MainForm()
         {
             InitializeComponent();
-            numUpDownMaxBackupCapacity.Value = Properties.Settings.Default.maxBackupCapacity;
+            numUpDownMaxBackupCapacity.Value = Settings.Default.maxBackupCapacity;
             db = new NodeDatabase();
             
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC1", "192.168.1.1", "00-21-70-FE-23-EF", "1", "51", "89", "0", "100","yes");
@@ -79,7 +80,7 @@ namespace GUI_FrontEnd
 
         private void maxBackupSupport_ValueChanged(object sender, EventArgs e)
         {
-            Properties.Settings.Default.maxBackupCapacity = numUpDownMaxBackupCapacity.Value;
+            Settings.Default.maxBackupCapacity = numUpDownMaxBackupCapacity.Value;
         }    
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
@@ -184,7 +185,7 @@ namespace GUI_FrontEnd
 
         private void btnSetBackupDirectory_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.localBackupPath = txtBackupDirectory.Text;
+            Settings.Default.localBackupPath = txtBackupDirectory.Text;
             MessageBox.Show("Local Backup Directory Saved.");
         }
 

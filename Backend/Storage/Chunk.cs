@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Backend.Properties;
 
 namespace Backend.Storage
 {
@@ -14,6 +15,20 @@ namespace Backend.Storage
         private LinkedList<FileInChunk> files;
         //path to the file of this chunk
         private string path;
+
+        public static string PathToChunk(Guid sourceGuid, long backupID, long chunkID)
+        {
+            // "<backup file storage dir>\<source host>\<backup id>\<sourceGuid>_<backupID>_<chunkID>.tgz"
+            return Settings.Default.localBackupPath + '\\' + sourceGuid + '\\' + backupID + '\\' + sourceGuid + '_' + backupID + '_' + chunkID + ".tgz";
+        }
+        public static string PathToChunk(PushRequest request)
+        {
+            return PathToChunk(request.SourceGuid, request.BackupNumber, request.ChunkNumber);
+        }
+        public static string PathToChunk(PullRequest request)
+        {
+            return PathToChunk(request.SourceGuid, request.BackupNumber, request.ChunkNumber);
+        }
 
         public Chunk(long backupID, int chunkID, string basePath, string path)
         {

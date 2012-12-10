@@ -8,6 +8,8 @@ using System.Net.Sockets;
 using System.Net.NetworkInformation;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using Backend.Properties;
+using Backend.Storage;
 
 namespace Backend
 {
@@ -24,7 +26,7 @@ namespace Backend
         private Thread thread;
         private TcpClient tcpClient;
         //a queue of requests received from the remote node
-        private Queue<NetworkRequest> eventQueue;
+        private Queue<NetworkEvent> eventQueue;
         //a queue of requests this node should send to another node
         private Queue<NetworkRequest> workQueue;
         private BinaryFormatter binaryFormatter;
@@ -44,7 +46,7 @@ namespace Backend
             tcpClient = c;
             this.isClient = isClient;
             binaryFormatter = new BinaryFormatter();
-            eventQueue = new Queue<NetworkRequest>();
+            eventQueue = new Queue<NetworkEvent>();
             workQueue = new Queue<NetworkRequest>();
             thread = new Thread(new ParameterizedThreadStart(RunClientThread));
             thread.Start(tcpClient);
@@ -150,7 +152,7 @@ namespace Backend
             }
         }
 
-        public NetworkRequest dequeueEvent()
+        public NetworkEvent dequeueEvent()
         {
             lock (_lock)
             {
@@ -164,35 +166,52 @@ namespace Backend
 
         private void handleWork(NetworkRequest request)
         {
+            Logger.Debug("ClientThread:handleWork");
             if (this.guid.Equals(request.SourceGuid))
             { //if sourceguid=this.guid: make a network request and go from there
-                int ret = sendMessage(tcpClient, request);
-                NetworkResponse response = (NetworkResponse)receiveMessage(tcpClient);
-                if (response.Type == Backend.ResponseType.Yes)
+                if (request is PushRequest)
                 {
-                    if (request is PushRequest)
-                    {
-                        ret = writeFileToNetwork(((PushRequest)request).Path);
-                        //add result to event queue
-                    }
-                    else if (request is PullRequest)
-                    {
-                        ret = readFileToDisk(((PullRequest)request).FileSize, ((PullRequest)request).Path);
-                        //add result to event queue
-                    }
-                    else
-                    { //request is QueryRequest
-                        //add response to eventQueue
-                    }
+                    processMyPushRequest((PushRequest)request);
+                }
+                else if (request is PullRequest)
+                {
+                    processMyPullRequest((PullRequest)request);
+                }
+                else if (request is QueryRequest)
+                {
+                    processMyQueryRequest((QueryRequest)request);
+
                 }
                 else
-                {
-                    //other node said willnot, cannot, or notimplemented
-                    //add result to event queue
+                { //what kind of request is this?
+                    Logger.Warn("ClientThread:handleWork my request is not a known request instance");
                 }
                 return;
             }
-            //if sourceguid!=this.guid: receive or send the file requested
+            else
+            {//if sourceguid!=this.guid: receive or send the file requested
+                if (request is PushRequest)
+                {
+                    PushRequest pr = (PushRequest)request;
+                    sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, request.SequenceNumber));
+                    readFileToDisk(pr.FileSize, Chunk.PathToChunk(pr));
+                }
+                else if (request is PullRequest)
+                {
+                    PullRequest pr = (PullRequest) request;
+                    sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, request.SequenceNumber));
+                    writeFileToNetwork(Chunk.PathToChunk(pr));
+                }
+                else if (request is QueryRequest)
+                {
+                    QueryRequest qr = (QueryRequest)request;
+                    processRemoteQueryRequest(qr);
+                }
+                else
+                { //what kind of request is this?
+                    Logger.Warn("ClientThread:handleWork request is not a known request instance");
+                }
+            }
         }
 
         /// <summary>
@@ -448,12 +467,68 @@ namespace Backend
             //this function should be called when this thread has received a message and that message has been dequeued.
             //if this function is called while this thread is in the wrong state, it will not do anything until a message is received or the socket closes.
             doWork = true;
-            sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, request.SequenceNumber));
             this.path = path;
             lock (_lock)
             {
                 workQueue.Enqueue(request);
             }
+        }
+
+        private void processMyPushRequest(PushRequest request)
+        {
+            int ret = sendMessage(tcpClient, request);
+            NetworkResponse response = (NetworkResponse)receiveMessage(tcpClient);
+            if (response.Type == Backend.ResponseType.Yes)
+            {
+                ret = writeFileToNetwork(((PushRequest)request).Path);
+                //todo: add result to event queue
+            }
+            else
+            {
+                //other node said willnot, cannot, or notimplemented
+                //add result to event queue
+                lock (_lock)
+                {
+                    eventQueue.Enqueue(response);
+                }
+            }
+        }
+
+        private void processMyPullRequest(PullRequest request)
+        {
+            int ret = sendMessage(tcpClient, request);
+            NetworkResponse response = (NetworkResponse)receiveMessage(tcpClient);
+            if (response.Type == Backend.ResponseType.Yes)
+            {
+                ret = readFileToDisk(((PullRequest)request).FileSize, ((PullRequest)request).Path);
+                //todo: add result to event queue
+            }
+            else
+            {
+                //other node said willnot, cannot, or notimplemented
+                //add result to event queue
+                lock (_lock)
+                {
+                    eventQueue.Enqueue(response);
+                }
+            }
+        }
+
+        private void processMyQueryRequest(QueryRequest request)
+        {
+            int ret = sendMessage(tcpClient, request);
+            NetworkResponse response = (NetworkResponse)receiveMessage(tcpClient);
+            //add response to eventQueue
+            lock (_lock)
+            {
+                eventQueue.Enqueue(response);
+            }
+        }
+
+        private void processRemoteQueryRequest(QueryRequest request)
+        {
+            //todo: process queries by responding with values from Node staitc methods
+            //each query's reason string should have the name of the Backend.QueryType enum
         }
     }
 }

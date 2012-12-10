@@ -28,10 +28,6 @@ namespace Backend
                 SetSmart(0, 89);
             }
 
-            internetAddress = "";
-            mac = "";
-            freeSpace = 0;
-            totalSize = 0;
             nonBackupData = 0;
             backupData = 0;
             backupLimit = 0;
@@ -61,103 +57,7 @@ namespace Backend
             return uniqueId;
         }
 
-        //Get name of local node
-        public string GetHostName()
-        {
-            return System.Net.Dns.GetHostName();
-        }
-
-        //Get Internet Protocol Address Version 4 of local node
-        public string GetInternetAddress()
-        {
-            IPHostEntry ipEntry = Dns.GetHostEntry(GetHostName());
-            IPAddress[] addr = ipEntry.AddressList;
-            for (int i = 0; i < addr.Length; ++i)
-            {
-                //todo: this needs to be rewritten to not use a deprecated property
-                if (addr[i].AddressFamily == AddressFamily.InterNetwork && addr[i].Address != 16777343)
-                {
-                    byte[] octets = addr[i].GetAddressBytes();
-                    internetAddress = string.Concat(Convert.ToString(octets[0]) + '.' + Convert.ToString(octets[1]) + '.' +
-                        Convert.ToString(octets[2]) + '.' + Convert.ToString(octets[3]));
-                    break;
-                }
-            }
-            return internetAddress;
-        }
-
-        //Get Media Access Control of local node and reformats to match ipconfig printout
-        public string GetMAC()
-        {
-            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
-            foreach (NetworkInterface adapter in nics)
-            {
-                OperationalStatus ostate = adapter.OperationalStatus;
-                NetworkInterfaceType netType = adapter.NetworkInterfaceType;
-                if (ostate == OperationalStatus.Up && netType == NetworkInterfaceType.Ethernet || ostate == OperationalStatus.Up && netType == NetworkInterfaceType.Wireless80211)
-                {
-                    mac = adapter.GetPhysicalAddress().ToString();
-
-                    StringBuilder sb = new StringBuilder();
-                    for (int i = 0; i < mac.Length; i++)
-                    {
-                        if (i != 0 && i % 2 == 0)
-                        {
-                            sb.Append('-');
-                        }
-                        sb.Append(mac[i]);
-                    }
-                    mac = sb.ToString();
-                    break;
-                }
-            }
-            return mac;
-        }
-
-        //Get free disk space of drive C on the local node
-        public long GetFreeSpace()
-        {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-
-            foreach (DriveInfo drive in allDrives)
-            {
-                if (drive.Name == "C:\\")
-                {
-                    freeSpace = drive.AvailableFreeSpace;
-                }
-            }
-            return freeSpace;
-        }
-
-        //Get total disk space of drive C on the local node
-        public long GetTotalSize()
-        {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-
-            foreach (DriveInfo drive in allDrives)
-            {
-                if (drive.Name == "C:\\")
-                {
-                    totalSize = drive.TotalSize;
-                    break;
-                }
-            }
-            return totalSize;
-        }
-
-        //Get disk space of drive C on the local node used for nonbackup data
-        public long GetNonBackupSpace()
-        {
-            nonBackupData = GetTotalSize() - GetDirectorySize(GetBackupDirectory()) - GetFreeSpace();
-            return nonBackupData;
-        }
-
-        //Get disk space of drive C on the local node used for backup data
-        public long GetBackupSpace()
-        {
-            backupData = GetDirectorySize(GetBackupDirectory());
-            return backupData;
-        }
+        
 
         //Get the max backup support of the local node
         public int GetMaxBackupSpace()
@@ -165,24 +65,7 @@ namespace Backend
             return backupLimit;
         }
 
-        //Get the size of directory and all subdirectories
-        public long GetDirectorySize(string path)
-        {
-            DirectoryInfo di = new DirectoryInfo(path);
-            FileInfo[] fi = di.GetFiles();
-
-            foreach (FileInfo file in fi)
-            {
-                directorySize = directorySize + file.Length;
-            }
-
-            DirectoryInfo[] subDir = di.GetDirectories();
-            foreach (DirectoryInfo dri in subDir)
-            {
-                GetDirectorySize(Convert.ToString(dri.FullName));
-            }
-            return directorySize;
-        }
+        
 
         //Get the backup directory
         public string GetBackupDirectory()
@@ -263,9 +146,9 @@ namespace Backend
         //Get update message
         public string GetHeartbeat()
         {
-            heartbeat = string.Concat(GetUniqueId() + "/" + GetHostName() + "/" + GetInternetAddress() + "/" + GetMAC() 
-            + "/" + GetMaxBackupSpace() + "/" + GetBackupSpace() + "/" + GetNonBackupSpace() + "/" + GetFreeSpace()
-            + "/" + GetTotalSize() + "/" + GetSmart());
+            heartbeat = string.Concat(GetUniqueId() + "/" + Node.GetHostName() + "/" + Node.GetInternetAddress() + "/" + Node.GetMAC() 
+            + "/" + GetMaxBackupSpace() + "/" + Node.GetBackupSpace() + "/" + Node.GetNonBackupSpace() + "/" + Node.GetFreeSpace()
+            + "/" + Node.GetTotalSize() + "/" + GetSmart());
             return heartbeat;
         }
 
@@ -349,10 +232,6 @@ namespace Backend
         }    
 
         private Guid uniqueId;
-        private string internetAddress;
-        private string mac;
-        private long freeSpace;
-        private long totalSize;
         private long backupData;
         private long nonBackupData;
         private int backupLimit;

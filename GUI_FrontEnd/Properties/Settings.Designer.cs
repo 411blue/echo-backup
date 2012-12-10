@@ -22,53 +22,5 @@ namespace GUI_FrontEnd.Properties {
                 return defaultInstance;
             }
         }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string LogFilePath {
-            get {
-                return ((string)(this["LogFilePath"]));
-            }
-            set {
-                this["LogFilePath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal maxBackupCapacity {
-            get {
-                return ((decimal)(this["maxBackupCapacity"]));
-            }
-            set {
-                this["maxBackupCapacity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string localBackupPath {
-            get {
-                return ((string)(this["localBackupPath"]));
-            }
-            set {
-                this["localBackupPath"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal redundantBackups {
-            get {
-                return ((decimal)(this["redundantBackups"]));
-            }
-            set {
-                this["redundantBackups"] = value;
-            }
-        }
     }
 }

@@ -7,6 +7,11 @@ namespace Backend
 {
     public enum NetworkEventType {Hello, Push, Pull, Query};
     public enum ResponseType { Yes, CanNot, WillNot, NotImplemented };
+    public enum QueryType
+    {
+        IPAddress, Hostname, MACAddress, FreeSpace,
+        TotalSpace, BackupSpace, NonBackupSpace
+    };
 
     /// <summary>
     /// An abstract representation of a network event. Used to provide a base for the definition of push, pull and query requests.

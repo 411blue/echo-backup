@@ -9,7 +9,7 @@ namespace Backend {
     /// A class with a few static methods to facilitate logging.
     /// </summary>
     public static class Logger {
-        public enum LogLevel { CRIT, ERROR, WARN, NOTICE, INFO, DEBUG };
+        public enum LogLevel { CRIT, ERROR, WARN, NOTICE, INFO, DEBUG, DEBUG2 };
         private static LogLevel defaultLogLevel = LogLevel.INFO;
         private static StreamWriter writer;
         private static String filename;
@@ -94,6 +94,10 @@ namespace Backend {
         public static void Debug(String s)
         {
             Logger.Log(s, LogLevel.DEBUG);
+        }
+        public static void Debug2(String s)
+        {
+            Logger.Log(s, LogLevel.DEBUG2);
         }
 
         /// <summary>
