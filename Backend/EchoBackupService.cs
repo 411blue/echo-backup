@@ -25,14 +25,18 @@ namespace Backend
             Logger.Log("Started Service");
 
             net = new Backend.Networker();
+            indexdi = new Backend.IndexDistribution();
+            indexdi.SetDistribute(true);
             messageThread = new Thread(new ThreadStart(net.processMessages));
             rxThread = new Thread(new ThreadStart(net.runReceiver));
             txThread = new Thread(new ThreadStart(net.runTransmitter));
+            distributionThread = new Thread(new ThreadStart(indexdi.BeginIndexDistribution));
             net.startTransmitter();
             txThread.Start();
             net.startReciever();
             messageThread.Start();
             rxThread.Start();
+            distributionThread.Start();
 
             MainLoop();
         }
@@ -41,9 +45,11 @@ namespace Backend
         {
             net.setReceiverAlive(false);
             net.setTransmitterAlive(false);
+            indexdi.SetDistribute(false);
             messageThread.Abort();
             rxThread.Abort();
             txThread.Abort();
+            distributionThread.Abort();
             net.stopReciever();
             net.stopTransmitter();
 
@@ -68,6 +74,8 @@ namespace Backend
         private Thread messageThread;
         private Thread rxThread;
         private Thread txThread;
-        private Backend.Networker net; 
+        private Thread distributionThread;
+        private Backend.Networker net;
+        private Backend.IndexDistribution indexdi;
     }
 }

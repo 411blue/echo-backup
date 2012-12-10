@@ -107,7 +107,7 @@ namespace Backend.Database
             //sqlite statements for creating each table
             string backupIndexSql = "CREATE TABLE IF NOT EXISTS Backup_Indexes (id INTEGER, source_guid TEXT, source_path TEXT, first_block_offset INTEGER, size INTEGER, date_of_backup DATETIME, backup_level INTEGER, PRIMARY KEY (id, source_guid))";
             string blockStorageSql = "CREATE TABLE IF NOT EXISTS Block_Storage (id INTEGER, source_guid TEXT, storage_guid TEXT, storage_path TEXT, size INTEGER, date_created DATETIME, PRIMARY KEY (id, source_guid))";
-            string indexToBlockSql = "CREATE TABLE IF NOT EXISTS Index_to_Block (index_foreign_id INTEGER, index_foreign_guid TEXT, block_foreign_id INTEGER, block_foreign_guid TEXT, FOREIGN KEY (index_foreign_id, index_foreign_guid) REFERENCES Backup_Indexes(id, source_guid), FOREIGN KEY (block_foreign_id, block_foreign_guid) REFERENCES Block_Storage(id, source_guid))";
+            string indexToBlockSql = "CREATE TABLE IF NOT EXISTS Index_to_Block (index_foreign_id INTEGER, index_foreign_guid TEXT, block_foreign_id INTEGER, block_foreign_guid TEXT, FOREIGN KEY (index_foreign_id, index_foreign_guid) REFERENCES Backup_Indexes(id, source_guid), FOREIGN KEY (block_foreign_id, block_foreign_guid) REFERENCES Block_Storage(id, source_guid), PRIMARY KEY (block_foreign_id, block_foreign_guid))";
             
             //create tables
             SQLiteCommand backupIndexCmd = new SQLiteCommand(backupIndexSql, conn);
@@ -133,6 +133,49 @@ namespace Backend.Database
                 {
                     conn.Close();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Returns true if tables are empty, false if they are not empty.
+        /// </summary>
+        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
+        public bool TablesEmpty(SQLiteConnection conn)
+        {
+            long indexCount = 0;
+
+            //sqlite statements for creating each table
+            string tableQuery = "SELECT COUNT(*) FROM Backup_Indexes";
+
+            //create tables
+            SQLiteCommand tableCmd = new SQLiteCommand(tableQuery, conn);
+
+            try
+            {
+                conn.Open();
+                indexCount = Convert.ToInt64(tableCmd.ExecuteScalar());
+                conn.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //if anything is wrong with the sql statement or the database,
+                //a SQLiteException will show information about it.
+                Debug.Print(ex.Message);
+
+                //always make sure the database connection is closed.
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+
+            if (indexCount == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -268,6 +311,9 @@ namespace Backend.Database
                     }
                 }
             }
+
+            IndexDistribution indi = new IndexDistribution();
+            indi.sendIndexes();
         }
 
         /// <summary>
@@ -756,6 +802,47 @@ namespace Backend.Database
 
                 //Remove entries from Block_Storage table
                 RemoveBlocks(blockKeys, conn);
+            }
+        }
+
+        /// <summary>
+        /// Given a file path for an index database, merges that database file (from another node) with the native database 
+        /// file
+        /// </summary>
+        /// <param name="filePath">A string containing the path for an index database file.</param>
+        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
+        public void MergeIndexFiles(string filePath, SQLiteConnection conn)
+        {
+            string attachQuery = "ATTACH '" + filePath + "' AS TOMERGE";
+            string mergeBIQuery = "INSERT OR IGNORE INTO Backup_Indexes SELECT * FROM TOMERGE.Backup_Indexes";
+            string mergeBSQuery = "INSERT OR IGNORE INTO Block_Storage SELECT * FROM TOMERGE.Block_Storage";
+            string mergeITBQuery = "INSERT OR IGNORE INTO Index_to_Block SELECT * FROM TOMERGE.Index_to_Block";
+            
+            SQLiteCommand attachCmd = new SQLiteCommand(attachQuery, conn);
+            SQLiteCommand mergeBICmd = new SQLiteCommand(mergeBIQuery, conn);
+            SQLiteCommand mergeBSCmd = new SQLiteCommand(mergeBSQuery, conn);
+            SQLiteCommand mergeITBCmd = new SQLiteCommand(mergeITBQuery, conn);
+
+            try
+            {
+                conn.Open();
+                attachCmd.ExecuteNonQuery();
+                mergeBICmd.ExecuteNonQuery();
+                mergeBSCmd.ExecuteNonQuery();
+                mergeITBCmd.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //if anything is wrong with the sql statement or the database,
+                //a SQLiteException will show information about it.
+                Debug.Print(ex.Message);
+
+                //always make sure the database connection is closed.
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
             }
         }
     }

@@ -28,7 +28,7 @@ namespace Backend.Database
         {
             string sql = "CREATE TABLE nodes (UniqueId TEXT PRIMARY KEY, Name TEXT, Ip TEXT, Mac TEXT,"
             + " MaxBackupCapacity INTEGER, BackupData INTEGER, NonBackupData INTEGER, FreeSpace INTEGER, TotalCapacity INTEGER,"
-            + " RelialibyMetric INTEGER, Hops INTEGER, Smart INTEGER, BackupsFailed INTEGER, BackupsPassed INTEGER, Trusted TEXT)";
+            + " ReliabilityMetric INTEGER, Hops INTEGER, Smart INTEGER, BackupsFailed INTEGER, BackupsPassed INTEGER, Trusted TEXT)";
             
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
@@ -44,9 +44,9 @@ namespace Backend.Database
             {
                 string sql = "INSERT INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
                     + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
-                    + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
+                    + " ReliabilityMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
                     + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
-                    + " @pTotalCapaciy, @pReliablityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
+                    + " @pTotalCapaciy, @pReliabilityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
 
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
                 cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
@@ -58,7 +58,7 @@ namespace Backend.Database
                 cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", n1.nonBackupData));
                 cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", n1.freeSpace));
                 cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", n1.totalCapacity));
-                cmd.Parameters.Add(new SQLiteParameter("@pReliabityMetric", n1.reliablityMetric));
+                cmd.Parameters.Add(new SQLiteParameter("@pReliabilityMetric", n1.reliablityMetric));
                 cmd.Parameters.Add(new SQLiteParameter("@pHops", n1.hops));
                 cmd.Parameters.Add(new SQLiteParameter("@pSmart", n1.smart));
                 cmd.Parameters.Add(new SQLiteParameter("@pBackkupsFailed", n1.backupsFailed));
@@ -742,6 +742,46 @@ namespace Backend.Database
             DataTable dt = new DataTable();
             dt.Load(reader);
             return dt;
+        }
+
+        public List<string> SelectTrustedGUID(SQLiteConnection conn)
+        {
+            List<string> guidList = new List<string>();
+            string Trusted = "yes";
+
+            string query = "SELECT UniqueID FROM nodes WHERE Trusted = @pTrusted";
+            SQLiteCommand cmd = new SQLiteCommand(query, conn);
+            cmd.Parameters.Add(new SQLiteParameter("@pTrusted", Trusted));
+
+            try
+            {
+                conn.Open();
+
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string currentGUID = reader.GetString(0);
+                        guidList.Add(currentGUID);
+                    }
+                }
+
+                conn.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //if anything is wrong with the sql statement or the database,
+                //a SQLiteException will show information about it.
+                Debug.Print(ex.Message);
+
+                //always make sure the database connection is closed.
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+
+            return guidList;
         }
     }
 
