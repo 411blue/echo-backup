@@ -91,7 +91,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientThread.cs" />
+    <Compile Include="Database\DistributionDatabase.cs" />
     <Compile Include="Database\NodeDatabase.cs" />
+    <Compile Include="IndexDistribution.cs" />
     <Compile Include="NetworkEvents.cs" />
     <Compile Include="CommandServer.cs" />
     <Compile Include="Database\IndexDatabase.cs" />

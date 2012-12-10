@@ -743,6 +743,46 @@ namespace Backend.Database
             dt.Load(reader);
             return dt;
         }
+
+        public List<string> SelectTrustedGUID(SQLiteConnection conn)
+        {
+            List<string> guidList = new List<string>();
+            string Trusted = "yes";
+
+            string query = "SELECT UniqueID FROM nodes WHERE Trusted = @pTrusted";
+            SQLiteCommand cmd = new SQLiteCommand(query, conn);
+            cmd.Parameters.Add(new SQLiteParameter("@pTrusted", Trusted));
+
+            try
+            {
+                conn.Open();
+
+                using (SQLiteDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        string currentGUID = reader.GetString(0);
+                        guidList.Add(currentGUID);
+                    }
+                }
+
+                conn.Close();
+            }
+            catch (SQLiteException ex)
+            {
+                //if anything is wrong with the sql statement or the database,
+                //a SQLiteException will show information about it.
+                Debug.Print(ex.Message);
+
+                //always make sure the database connection is closed.
+                if (conn.State == ConnectionState.Open)
+                {
+                    conn.Close();
+                }
+            }
+
+            return guidList;
+        }
     }
 
         //Defines a node and provides constructor
