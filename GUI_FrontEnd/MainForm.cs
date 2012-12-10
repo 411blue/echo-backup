@@ -333,13 +333,6 @@ namespace GUI_FrontEnd
             string recoveryDestination = txtRecoveryDestination.Text;
         }
 
-        //Updates status of a node in the database
-        private void dataGridViewNodeSets_CellValueChanged(object sender, DataGridViewCellEventArgs e)
-        {
-            db.UpdateNodeTrusted(Guid.Parse(Convert.ToString(dataGridViewNodeSets.CurrentRow.Cells[0].Value)),
-                Convert.ToString(dataGridViewNodeSets.CurrentCell.Value), db.ConnectToDatabase(@"C:\nodes.db"));
-        }
-
         private NodeDatabase db;
         private SQLiteConnection cnn;
     }
