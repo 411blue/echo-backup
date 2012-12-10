@@ -275,6 +275,28 @@ namespace Backend.Database
             }
         }
 
+
+        //Select the BackupData in a record by Name. If Name is not present, 0 is returned.
+        public long SelectNodeBackupData(String Name, SQLiteConnection conn)
+        {
+            try
+            {
+                string sql = "SELECT BackupData FROM nodes WHERE Name = @pName";
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                cmd.Parameters.Add(new SQLiteParameter("@pName", Name));
+
+                conn.Open();
+                long BackupData = (long)cmd.ExecuteScalar();
+                conn.Close();
+
+                return BackupData;
+            }
+            catch (NullReferenceException)
+            {
+                return 0;
+            }
+        }
+
         //Update the BackupData in a record.If UniqueId is not present, table is unchanged.
         public void UpdateNodeBackupData(Guid UniqueId, long BackupData, SQLiteConnection conn)
         {
@@ -297,6 +319,27 @@ namespace Backend.Database
                 string sql = "SELECT NonBackupData FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
                 cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+
+                conn.Open();
+                long NonBackupData = (long)cmd.ExecuteScalar();
+                conn.Close();
+
+                return NonBackupData;
+            }
+            catch (NullReferenceException)
+            {
+                return 0;
+            }
+        }
+
+        //Select the NonBackupData in a record by Name. If Name is not present, 0 is returned.
+        public long SelectNodeNonBackupData(String Name, SQLiteConnection conn)
+        {
+            try
+            {
+                string sql = "SELECT NonBackupData FROM nodes WHERE Name = @pName";
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                cmd.Parameters.Add(new SQLiteParameter("@pName", Name));
 
                 conn.Open();
                 long NonBackupData = (long)cmd.ExecuteScalar();
@@ -345,6 +388,27 @@ namespace Backend.Database
             }
         }
 
+        //Select the FreeSpace in a record by Name. If Name is not present, 0 is returned.
+        public long SelectFreeSpace(string Name, SQLiteConnection conn)
+        {
+            try
+            {
+                string sql = "SELECT FreeSpace FROM nodes WHERE Name = @pName";
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                cmd.Parameters.Add(new SQLiteParameter("@pName", Name));
+
+                conn.Open();
+                long NonBackupData = (long)cmd.ExecuteScalar();
+                conn.Close();
+
+                return NonBackupData;
+            }
+            catch (NullReferenceException)
+            {
+                return 0;
+            }
+        }
+
         //Update the FreeSpace in a record.If UniqueId is not present, table is unchanged.
         public void UpdateNodeFreeSpace(Guid UniqueId, long FreeSpace, SQLiteConnection conn)
         {
@@ -380,6 +444,28 @@ namespace Backend.Database
             }
         }
 
+
+        //Select the TotalCapacity in a record by Name. If Name is not present, 0 is returned.
+        public long SelectTotalCapacity(string Name, SQLiteConnection conn)
+        {
+            try
+            {
+                string sql = "SELECT TotalCapacity FROM nodes WHERE Name = @pName";
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                cmd.Parameters.Add(new SQLiteParameter("@pName", Name));
+
+                conn.Open();
+                long NonBackupData = (long)cmd.ExecuteScalar();
+                conn.Close();
+
+                return NonBackupData;
+            }
+            catch (NullReferenceException)
+            {
+                return 0;
+            }
+        }
+
         //Update the TotalCapacity in a record.If UniqueId is not present, table is unchanged.
         public void UpdateNodeTotalCapacity(Guid UniqueId, long TotalCapacity, SQLiteConnection conn)
         {
@@ -395,7 +481,7 @@ namespace Backend.Database
         }
 
         //Select the ReliablityMetric in a record. If UniqueId is not present, 0 is returned.
-        public int SelectNodeRelialibyMetric(Guid UniqueId, SQLiteConnection conn)
+        public int SelectNodeReliablityMetric(Guid UniqueId, SQLiteConnection conn)
         {
             try
             {
@@ -644,6 +730,18 @@ namespace Backend.Database
                 Names[i] = Convert.ToString(row["Name"]);                           
             }
             return Names;
+        }
+
+        //Get database
+        public DataTable GetNodes(SQLiteConnection conn)
+        {
+            string sql = "Select * from nodes";
+            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+            conn.Open();
+            SQLiteDataReader reader = cmd.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Load(reader);
+            return dt;
         }
     }
 
