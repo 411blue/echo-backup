@@ -26,12 +26,12 @@ namespace Backend
             set { mySourceIPAddress = value; }
         }
 
-        protected PhysicalAddress mySourceMacAddress;
+        /*protected PhysicalAddress mySourceMacAddress;
         public PhysicalAddress SourceMacAddress
         {
             get { return mySourceMacAddress; }
             set { mySourceMacAddress = value; }
-        }
+        }*/
 
         //The GUID of the sending node to uniquely identify it
         protected Guid mySourceGuid;
@@ -57,6 +57,7 @@ namespace Backend
     /// <summary>
     /// Abstract class with base code for network requests.
     /// </summary>
+    [Serializable()]
     public abstract class NetworkRequest : NetworkEvent
     {
         /*private TcpClient myTcpClient;
@@ -66,10 +67,10 @@ namespace Backend
             set { myTcpClient = value; }
         }*/
         
-        public NetworkRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
+        public NetworkRequest(IPAddress ipAddress, /*PhysicalAddress macAddress,*/ Guid guid, int sequenceNumber)
         {
             mySourceIPAddress = ipAddress;
-            mySourceMacAddress = macAddress;
+            /*mySourceMacAddress = macAddress;*/
             mySourceGuid = guid;
             mySequenceNumber = sequenceNumber;
         }
@@ -83,10 +84,11 @@ namespace Backend
     /// <summary>
     /// Represents a push request to store a backup file.
     /// </summary>
+    [Serializable()]
     public class PushRequest : NetworkRequest
     {
-        public PushRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
-            : base(ipAddress, macAddress, guid, sequenceNumber)
+        public PushRequest(IPAddress ipAddress, /*PhysicalAddress macAddress,*/ Guid guid, int sequenceNumber)
+            : base(ipAddress, /*macAddress,*/ guid, sequenceNumber)
         {
         }
 
@@ -126,6 +128,7 @@ namespace Backend
     /// <summary>
     /// Represents a pull request to recover a backup file or download some other file from the remote computer.
     /// </summary>
+    [Serializable()]
     public class PullRequest : NetworkRequest
     {
         // The id of the backup this file is a part of
@@ -160,8 +163,8 @@ namespace Backend
             set { path = value; }
         }
 
-        public PullRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
-            : base(ipAddress, macAddress, guid, sequenceNumber)
+        public PullRequest(IPAddress ipAddress, /*PhysicalAddress macAddress,*/ Guid guid, int sequenceNumber)
+            : base(ipAddress, /*macAddress,*/ guid, sequenceNumber)
         {
         }
     }
@@ -169,18 +172,19 @@ namespace Backend
     /// <summary>
     /// Represents a request to get information from another node.
     /// </summary>
+    [Serializable()]
     public class QueryRequest : NetworkRequest
     {
         // The name of the data we want, e.g. "CPU usage." The names need to be stadardized somewhere, however.
-        private string field;
-        public string Field
+        private QueryType queryType;
+        public QueryType QueryType
         {
-            get { return field; }
-            set { field = value; }
+            get { return queryType; }
+            set { queryType = value; }
         }
 
-        public QueryRequest(IPAddress ipAddress, PhysicalAddress macAddress, Guid guid, int sequenceNumber)
-            : base(ipAddress, macAddress, guid, sequenceNumber)
+        public QueryRequest(IPAddress ipAddress, /*PhysicalAddress macAddress,*/ Guid guid, int sequenceNumber)
+            : base(ipAddress, /*macAddress,*/ guid, sequenceNumber)
         {
         }
     }
@@ -188,6 +192,7 @@ namespace Backend
     /// <summary>
     /// Class which represents a response to a network response. Includes a response type and a reason string.
     /// </summary>
+    [Serializable()]
     public class NetworkResponse : NetworkEvent
     {
         private ResponseType type;

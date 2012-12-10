@@ -39,7 +39,6 @@ namespace Backend {
             filename = path;
             privateInit();
         }
-
         /// <summary>
         /// Initializes the logger with the default path.
         /// </summary>

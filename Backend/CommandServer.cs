@@ -14,13 +14,13 @@ namespace Backend
     /// <summary>
     /// A thread that listens for commands from the test harness. Someone must ask for events from a CommandServer.
     /// </summary>
-    class CommandServer
+    public class CommandServer
     {
         //arbitrary unprivileged port
         private const int SERVER_PORT = 7890;
         private Guid guid;
         //flag to continue listening
-        private bool keepGoing = true;
+        private volatile bool keepGoing = true;
         //queue of threads from incoming clients. obviates eventQueue
         private Queue<ClientThread> clientThreads;
         private Thread serverThread;
@@ -43,11 +43,19 @@ namespace Backend
             tcpListener.Start();
             while (keepGoing)
             {
-                TcpClient tcpClient = tcpListener.AcceptTcpClient();
-                ClientThread clientThread = new ClientThread(tcpClient, true, guid);
-                lock (clientThreads)
+                try
                 {
-                    clientThreads.Enqueue(clientThread);
+                    TcpClient tcpClient = tcpListener.AcceptTcpClient();
+                    ClientThread clientThread = new ClientThread(tcpClient, true, guid);
+                    lock (clientThreads)
+                    {
+                        clientThreads.Enqueue(clientThread);
+                    }
+                }
+                catch
+                {
+                    Logger.Error("CommandServer:RunServerThread Error when accepting TcpClient.");
+                    break;
                 }
             }
         }
@@ -68,6 +76,14 @@ namespace Backend
             }
         }
 
+        public int ClientThreadCount()
+        {
+            lock (clientThreads)
+            {
+                return clientThreads.Count;
+            }
+        }
+
         /// <summary>
         /// Returns the number of ClientThreads in the queue.
         /// </summary>
@@ -78,6 +94,12 @@ namespace Backend
             {
                 return clientThreads.Count();
             }
+        }
+
+        public void Stop()
+        {
+            keepGoing = false;
+            tcpListener.Stop();
         }
     }
 }

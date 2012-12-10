@@ -16,7 +16,7 @@ namespace Backend
     /// <summary>
     /// A class that has a thread to perform communication with a specific remote node. Work is added to the workQueue and received unsolicited communication is added to the eventQueue.
     /// </summary>
-    class ClientThread
+    public class ClientThread
     {
         //size of message prefix that specifies size of message
         const int MESSAGE_SIZE_SIZE = 2;
@@ -60,6 +60,8 @@ namespace Backend
         {
             TcpClient tcpClient = (TcpClient)client;
             mainLoop();
+            tcpClient.Close();
+            working = false;
         }
 
         private void mainLoop()
@@ -74,7 +76,6 @@ namespace Backend
                         working = true;
                         if (stop)
                         {
-                            working = false;
                             return;
                         }
                     }
@@ -102,7 +103,10 @@ namespace Backend
                     lock (_lock)
                     {
                         working = false;
-                        if (stop) return;
+                        if (stop)
+                        {
+                            return;
+                        }
                         if (workQueue.Count() > 0)
                         {
                             working = true;
@@ -125,12 +129,17 @@ namespace Backend
             }
         }
 
-        public bool isWorking()
+        public bool IsWorking()
         {
             lock (_lock)
             {
                 return working;
             }
+        }
+
+        public bool IsAlive()
+        {
+            return thread.IsAlive;
         }
 
         public void RequestStop()
@@ -141,7 +150,7 @@ namespace Backend
             }
         }
 
-        public void enqueueWork(NetworkRequest request)
+        public void EnqueueWork(NetworkRequest request)
         {
             lock (_lock)
             {
@@ -152,15 +161,24 @@ namespace Backend
             }
         }
 
-        public NetworkEvent dequeueEvent()
+        public NetworkEvent DequeueEvent()
         {
             lock (_lock)
             {
                 if (eventQueue.Count() > 0)
                 {
+                    Logger.Debug2("ClientThread:DequeueEvent Returning NetworkEvent.");
                     return eventQueue.Dequeue();
                 }
                 return null;
+            }
+        }
+
+        public int EventCount()
+        {
+            lock (_lock)
+            {
+                return eventQueue.Count();
             }
         }
 
@@ -180,7 +198,6 @@ namespace Backend
                 else if (request is QueryRequest)
                 {
                     processMyQueryRequest((QueryRequest)request);
-
                 }
                 else
                 { //what kind of request is this?
@@ -287,11 +304,12 @@ namespace Backend
         /// <returns>The TcpNetworkEvent received from the other end. Returns null if there was a problem.</returns>
         private NetworkEvent receiveMessage(TcpClient tcpClient)
         {
+            Logger.Debug("ClientThread:receiveMessage");
             byte[] sizeBytes = new byte[MESSAGE_SIZE_SIZE];
             int num = readBytes(tcpClient, ref sizeBytes, MESSAGE_SIZE_SIZE);
             if (num != 2)
             {
-                //we did not get two bytes of size information from the client
+                Logger.Debug2("ClientThread:receiveMessage we did not get two bytes of size information.");
                 return null;
             }
             int size = BitConverter.ToUInt16(sizeBytes, 0);
@@ -299,7 +317,7 @@ namespace Backend
             num = readBytes(tcpClient, ref messageBytes, size);
             if (num != size)
             {
-                //we did not receive the entire message as defined by the first two bytes that specify the size
+                Logger.Debug2("ClientThread:receiveMessage we did not receive the entire message as defined by the first two bytes.");
                 return null;
             }
             MemoryStream mem = new MemoryStream(messageBytes);
@@ -429,13 +447,13 @@ namespace Backend
             return 0;
         }
 
-        /// <summary>
-        /// Responds to a QueryRequest from a remote node by sending a NetworkResponse object
+        /*/// <summary>
+        /// Responds to a QueryRequest from a remote node by sending a NetworkResponse object. This method blocks until the response is sent.
         /// </summary>
         /// <param name="request">The NetworkRequest that we are responding to</param>
         /// <param name="response">The response code to be sent to the remote node</param>
         /// <param name="details">The details of or reason for the response</param>
-        public void respondToQuery(QueryRequest request, ResponseType response, string details)
+        public void RespondToQuery(QueryRequest request, ResponseType response, string details)
         {
             NetworkResponse networkResponse = new NetworkResponse(response, details, guid, request.SequenceNumber);
             int ret = sendMessage(tcpClient, networkResponse);
@@ -446,6 +464,14 @@ namespace Backend
             else
             {
                 Logger.Info("ClientThread:respondToQuery successfully responded to a node. Response: " + response + " sequenceNumber: " + request.SequenceNumber + " Details: " + details);
+            }
+        }*/
+        public void RespondToQuery(QueryRequest request)
+        {
+            lock (_lock)
+            {
+                working = true;
+                workQueue.Enqueue(request);
             }
         }
 
@@ -528,7 +554,38 @@ namespace Backend
         private void processRemoteQueryRequest(QueryRequest request)
         {
             //todo: process queries by responding with values from Node staitc methods
-            //each query's reason string should have the name of the Backend.QueryType enum
+            //each query's Field string should have the name of the Backend.QueryType enum
+            QueryType qt = request.QueryType;
+            string reason = "";
+            ResponseType rt = ResponseType.Yes;
+            switch (qt)
+            {
+                case QueryType.BackupSpace:
+                    reason = Node.GetBackupSpace().ToString();
+                    break;
+                case QueryType.FreeSpace:
+                    reason = Node.GetFreeSpace().ToString();
+                    break;
+                case QueryType.Hostname:
+                    reason = Node.GetHostName();
+                    break;
+                case QueryType.IPAddress:
+                    reason = Node.GetInternetAddress();
+                    break;
+                case QueryType.MACAddress:
+                    reason = Node.GetMAC();
+                    break;
+                case QueryType.NonBackupSpace:
+                    reason = Node.GetNonBackupSpace().ToString();
+                    break;
+                case QueryType.TotalSpace:
+                    reason = Node.GetTotalSize().ToString();
+                    break;
+                default:
+                    rt = ResponseType.NotImplemented;
+                    break;
+            }
+            sendMessage(tcpClient, new NetworkResponse(rt, reason, this.guid, request.SequenceNumber));
         }
     }
 }

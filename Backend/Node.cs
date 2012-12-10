@@ -10,7 +10,7 @@ using Backend.Properties;
 
 namespace Backend
 {
-    class Node
+    public class Node
     {
         //Get Internet Protocol Address Version 4 of local node
         public static string GetInternetAddress()

@@ -145,7 +145,8 @@ namespace Backend.Storage
         {
             lock (_lock)
             {
-                return backupResults.Dequeue();
+                if (backupResults.Count != 0) return backupResults.Dequeue();
+                return null;
             }
         }
 
