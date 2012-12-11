@@ -188,47 +188,8 @@ namespace GUI_FrontEnd
 
         private void btnRefreshList_Click(object sender, EventArgs e)
         {
-            string sql = "select * from Nodes";
-            cnn = db.ConnectToNodeDatabase();
-            try
-            {
-                
-                cnn.Open();
-                
-                SQLiteCommand myCommand = new SQLiteCommand(sql, cnn);
-                SQLiteDataReader reader = myCommand.ExecuteReader();
-
-                DataTable dt = new DataTable();
-                dt.Load(reader);
-
-                string text = "";
-                foreach (DataRow row in dt.Rows)
-                {
-                    for (int i = 0; i < 15; i++)
-                    {
-                        text += row[i] + ", ";
-                    }
-                    text += "\n";
-
-                    string[] rowArray = new string[] {row[0].ToString(), row[1].ToString(), row[2].ToString(), row[3].ToString(), row[9].ToString(), row[10].ToString(), 
-                                                        row[11].ToString(), row[12].ToString(), row[13].ToString(), row[14].ToString()};
-                    dataGridViewNodeSets.Rows.Add(rowArray[0]);
-
-                    numUpDownMaxBackupCapacity.Value = decimal.Parse(row[4].ToString());
-                }
-                Console.WriteLine(text);
-            }
-            catch (Exception error)
-            {
-                Console.WriteLine("Caught exception: " + error.Message);
-            }
-            finally
-            {
-                if (cnn != null)
-                {
-                    cnn.Close();
-                }
-            }
+            DataTable dt = db.GetNodes();
+            dataGridViewNodeSets.Rows.Clear();
         }
 
         private void btnRecoveryFileBrowser_Click(object sender, EventArgs e)
