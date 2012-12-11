@@ -121,6 +121,7 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Storage\Chunk.cs" />
+    <Compile Include="Storage\StorageTask.cs" />
     <Compile Include="Storage\StorageThread.cs" />
   </ItemGroup>
   <ItemGroup>

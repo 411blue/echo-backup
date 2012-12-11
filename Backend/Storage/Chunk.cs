@@ -6,6 +6,19 @@ using Backend.Properties;
 
 namespace Backend.Storage
 {
+    public struct FileInChunk
+    {
+        public string path;
+        //the first byte of the file in the chunk
+        //nonzero iff this is not the first part of the file in the chunk
+        public long fileStart;
+        public FileInChunk(string path, long fileStart)
+        {
+            this.path = path;
+            this.fileStart = fileStart;
+        }
+    }
+
     public class Chunk
     {
         private int chunkID;

@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Collections;
 using System.Collections.Generic;
 using ICSharpCode.SharpZipLib.Tar;
 using ICSharpCode.SharpZipLib.GZip;
@@ -10,33 +11,6 @@ using ICSharpCode.SharpZipLib.BZip2;
 
 namespace Backend.Storage
 {
-    public struct BackupTask
-    {
-        //the path (file or directory) that should be backed up
-        public string path;
-        //the path to a directory where I should store temporary files (including trailing backslash)
-        public string tempPath;
-        //the id of the backup
-        public long backupID;
-        //the level of the backup. 0=full, 1=1st incr, 2=2nd incr, etc.
-        public int level;
-        //a number representing the successfulness of the backup
-        public int status;
-    }
-
-    public struct FileInChunk
-    {
-        public string path;
-        //the first byte of the file in the chunk
-        //nonzero iff this is not the first part of the file in the chunk
-        public long fileStart;
-        public FileInChunk(string path, long fileStart)
-        {
-            this.path = path;
-            this.fileStart = fileStart;
-        }
-    }
-
     /// <summary>
     /// A class that runs a thread to do compression, chunking and combination without blocking the main thread
     /// </summary>
@@ -49,7 +23,7 @@ namespace Backend.Storage
         private bool working = true, stop = false;
         private object _lock;
         private string tempDir;
-        private Queue<BackupTask> backupTasks;
+        private Queue<StorageTask> storageTasks;
         private Queue<Chunk> backupResults;
 
         /// <summary>
@@ -62,7 +36,7 @@ namespace Backend.Storage
             _lock = new Object();
             this.guid = guid;
             this.tempDir = tempDir;
-            backupTasks = new Queue<BackupTask>();
+            storageTasks = new Queue<StorageTask>();
             backupResults = new Queue<Chunk>();
             thread = new Thread(new ThreadStart(RunStorageThread));
             thread.Start();
@@ -74,15 +48,15 @@ namespace Backend.Storage
             {
                 bool sleep = false;
                 //bug prevents the processTask(task) line below from compiling because it thinks task is aunassigned if we leave the RHS of the assignment off.
-                BackupTask task = new BackupTask();
+                StorageTask task = null;
                 lock (_lock)
                 {
                     if (stop) return;
-                    if (backupTasks.Count() > 0)
+                    if (storageTasks.Count() > 0)
                     {
                         sleep = false;
                         working = true;
-                        task = backupTasks.Dequeue();
+                        task = storageTasks.Dequeue();
                     }
                     else
                     {
@@ -107,7 +81,7 @@ namespace Backend.Storage
         {
             lock (_lock)
             {
-                backupTasks.Enqueue(task);
+                storageTasks.Enqueue(task);
                 working = true;
             }
         }
@@ -150,20 +124,36 @@ namespace Backend.Storage
             }
         }
 
+        private void processTask(StorageTask task)
+        {
+            if (task is BackupTask)
+            {
+                processTask((BackupTask)task);
+            }
+            else if (task is RestoreTask)
+            {
+                processTask((RestoreTask)task);
+            }
+            else
+            {
+                Logger.Error("StorageThread:processTask:StorageTask What kind of StorageTask is this?");
+            }
+        }
+
         private void processTask(BackupTask task)
         {
-            Logger.Debug("StorageThread:processTask");
+            Logger.Debug("StorageThread:processTask:BackupTask");
             //generate list of files
             LinkedList<FileInChunk> allFiles = new LinkedList<FileInChunk>();
-            recursivelyFillFileQueue(ref allFiles, task.path, "");
+            recursivelyFillFileQueue(ref allFiles, task.Path, "");
             int chunkID = 0;
             while (true)
             { //while need more chunks
                 Logger.Debug("StorageThread:processTask outer loop");
                 if (allFiles.Count() == 0) break;
-                string oFilename = task.tempPath + '\\' + guid + '_' + task.backupID + '_' + chunkID + ".tgz";
+                string oFilename = task.TempPath + '\\' + guid + '_' + task.BackupID + '_' + chunkID + ".tgz";
                 TarOutputStream tarOutputStream = newTarOutputStream(oFilename);
-                Chunk chunk = new Chunk(task.backupID, chunkID, task.path, oFilename);
+                Chunk chunk = new Chunk(task.BackupID, chunkID, task.Path, oFilename);
                 long size = 0;
                 string relPath, fullPath;
                 while (true)
@@ -176,7 +166,7 @@ namespace Backend.Storage
                     }
                     FileInChunk fileInChunk = allFiles.First();
                     relPath = fileInChunk.path;
-                    fullPath = task.path + '\\' + relPath;
+                    fullPath = task.Path + '\\' + relPath;
                     if (Directory.Exists(fullPath))
                     {
                         Logger.Debug("StorageThread:processTask inner loop if 1");
@@ -261,9 +251,9 @@ namespace Backend.Storage
                                     backupResults.Enqueue(chunk);
                                 }
                                 chunkID++;
-                                oFilename = task.tempPath + '\\' + guid + '_' + task.backupID + '_' + chunkID + ".tgz";
+                                oFilename = task.TempPath + '\\' + guid + '_' + task.BackupID + '_' + chunkID + ".tgz";
                                 tarOutputStream = newTarOutputStream(oFilename);
-                                chunk = new Chunk(task.backupID, chunkID, task.path, oFilename);
+                                chunk = new Chunk(task.BackupID, chunkID, task.Path, oFilename);
                                 entry.Size = Math.Min(CHUNK_SIZE - 512, s - totalFileRead);
                                 tarOutputStream.PutNextEntry(entry);
                                 size = 512;
@@ -344,35 +334,30 @@ namespace Backend.Storage
             }
         }
 
-        private void splitFileToTemp(ref LinkedList<FileInChunk> files, string source, string dest, int firstSize)
+        private void processTask(RestoreTask task)
         {
-            Logger.Debug("StorageThread:splitFileToTemp");
-            LinkedListNode<FileInChunk> firstFile = files.First;
-            byte[] buffer = new byte[COPY_BUFFER_SIZE];
-            Stream input = File.OpenRead(source);
-            //input.Seek(offset, SeekOrigin.Begin);
-            int id = 0;
-            long pos = 0;
-            long fileSize = new FileInfo(source).Length;
-            while (fileSize > 0)
-            { //while we need to make another partial file
-                string outputFilename = dest + Path.GetFileName(source) + '.' + id + ".ebpart";
-                Stream output = File.OpenWrite(outputFilename);
-                int bytesRead = 1;
-                while (firstSize > 0 && bytesRead > 0 && fileSize > 0)
+            Logger.Debug("StorageThread:processTask:RestoreTask");
+            Stream inStream = File.OpenRead(task.ArchivePath);
+            Stream gzipStream = new GZipInputStream(inStream);
+            TarInputStream tarStream = new TarInputStream(gzipStream);
+            TarEntry entry;
+            List<string> list = task.RelativeFilenames();
+            while ((entry = tarStream.GetNextEntry()) != null)
+            {
+                if (entry.IsDirectory) continue;
+                if (list.IndexOf(entry.Name) != -1)
                 {
-                    bytesRead = input.Read(buffer, 0, (int)Math.Min(Math.Min(firstSize, COPY_BUFFER_SIZE),fileSize));
-                    output.Write(buffer, 0, bytesRead);
-                    firstSize -= bytesRead;
-                    fileSize -= bytesRead;
-                    pos += bytesRead;
+                    string name = entry.Name.Replace('/', Path.DirectorySeparatorChar);
+                    name = Path.Combine(task.OutputDir, name);
+                    Directory.CreateDirectory(Path.GetDirectoryName(name));
+                    FileStream outStream = new FileStream(name, FileMode.CreateNew);
+                    tarStream.CopyEntryContents(outStream);
+                    outStream.Close();
+                    DateTime myDt = DateTime.SpecifyKind(entry.ModTime, DateTimeKind.Utc);
+                    File.SetLastWriteTime(name, myDt);
                 }
-                output.Close();
-                files.AddBefore(firstFile, new FileInChunk(outputFilename, pos - firstSize));
-                firstSize = CHUNK_SIZE;
-                id++;
             }
-            input.Close();
+            tarStream.Close();
         }
     }
 }
