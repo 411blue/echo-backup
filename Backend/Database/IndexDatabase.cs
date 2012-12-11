@@ -76,33 +76,40 @@ namespace Backend.Database
 
     public class IndexDatabase
     {
-        /// <summary>
-        /// Connects to the index database. Creates the database file and initial tables if they do not exist already.
-        /// </summary>
-        /// <returns>A SQLiteConnection object representing
-        /// a connection to the index database.</returns>
-        public SQLiteConnection ConnectToIndexDatabase()
+        public IndexDatabase()
         {
-            //Connect to index database.
-            SQLiteConnection conn = new SQLiteConnection("Data Source=" + @"indexes.s3db");
+            pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\indexes.s3db";
+            conn = new SQLiteConnection("Data Source=" + pathAndFileName);
 
-            if (!System.IO.File.Exists(@"indexes.s3db"))
+            if (!System.IO.File.Exists(pathAndFileName))
             {
                 //Create the file if it does not exist.
                 conn.Open();
                 conn.Close();
                 //Initialize tables
-                CreateIndexTables(conn);
-            }            
+                CreateIndexTables();
+            }
+        }
 
+        /// <summary>
+        /// Connects to the index database.
+        /// </summary>
+        /// <returns>A SQLiteConnection object representing
+        /// a connection to the index database.</returns>
+        public SQLiteConnection ConnectToIndexDatabase()
+        {
             return conn;
+        }
+
+        public string GetPathFileName()
+        {
+            return pathAndFileName;
         }
 
         /// <summary>
         /// Creates Index tables: Backup Indexes, Index-to-Block, and Block Storage.
         /// </summary>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
-        private void CreateIndexTables(SQLiteConnection conn)
+        private void CreateIndexTables()
         {
             //sqlite statements for creating each table
             string backupIndexSql = "CREATE TABLE IF NOT EXISTS Backup_Indexes (id INTEGER, source_guid TEXT, source_path TEXT, first_block_offset INTEGER, size INTEGER, date_of_backup DATETIME, backup_level INTEGER, PRIMARY KEY (id, source_guid))";
@@ -139,8 +146,7 @@ namespace Backend.Database
         /// <summary>
         /// Returns true if tables are empty, false if they are not empty.
         /// </summary>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
-        public bool TablesEmpty(SQLiteConnection conn)
+        public bool TablesEmpty()
         {
             long indexCount = 0;
 
@@ -184,8 +190,7 @@ namespace Backend.Database
         /// </summary>
         /// <param name="index">A BackupIndex object to be added to the Backup_Indexes table.</param>
         /// <param name="blocks">A list of Block objects to be added to the Block_Storage table</param>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
-        public void InsertIndex(BackupIndex index, List<Block> blocks, SQLiteConnection conn)
+        public void InsertIndex(BackupIndex index, List<Block> blocks)
         {
             long indexID = 0;
             long indexIDCount = 0;
@@ -229,7 +234,6 @@ namespace Backend.Database
                 }
                 backupIndexCmd.Parameters.Add(new SQLiteParameter("@pID", indexID));
                 backupIndexCmd.ExecuteNonQuery();
-                conn.Close();
             }
             catch (SQLiteException ex)
             {
@@ -281,7 +285,11 @@ namespace Backend.Database
                 //open the connection, exectute the query, and close the connection.
                 try
                 {
-                    conn.Open();
+                    if (conn.State == ConnectionState.Closed)
+                    {
+                        conn.Open();
+                    }
+
                     blockIDCount = Convert.ToInt64(blockInitialIDCmd.ExecuteScalar());
                     if (blockIDCount == 0) // If there are no entries for given guid, then this is the first row
                     {
@@ -292,11 +300,10 @@ namespace Backend.Database
                         blockID = Convert.ToInt64(blockPreviousIDCmd.ExecuteScalar());
                         blockID++;
                     }
-                    blockStorageCmd.Parameters.Add(new SQLiteParameter("@pID", blockID));
-                    blockStorageCmd.ExecuteNonQuery();
                     indexToBlockCmd.Parameters.Add(new SQLiteParameter("@pBlockForeignID", blockID));
                     indexToBlockCmd.ExecuteNonQuery();
-                    conn.Close();
+                    blockStorageCmd.Parameters.Add(new SQLiteParameter("@pID", blockID));
+                    blockStorageCmd.ExecuteNonQuery();
                 }
                 catch (SQLiteException ex)
                 {
@@ -312,6 +319,11 @@ namespace Backend.Database
                 }
             }
 
+            if (conn.State == ConnectionState.Open)
+            {
+                conn.Close();
+            }
+
             IndexDistribution indi = new IndexDistribution();
             indi.sendIndexes();
         }
@@ -321,9 +333,8 @@ namespace Backend.Database
         /// by the source host (identified by the given GUID)
         /// </summary>
         /// <param name="sourceGUID">A unique string that identifies a specific source host.</param>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
         /// <returns>A list of dates/times.</returns>
-        public List<string> GetIndexList(string sourceGUID, SQLiteConnection conn)
+        public List<string> GetIndexList(string sourceGUID)
         {
             List<string> indexList = new List<string>();
 
@@ -376,9 +387,8 @@ namespace Backend.Database
         /// <param name="sourceGUID">A unique string that identifies a specific source host.</param>
         /// <param name="dateTimeOfBackup">The date/time of the desired backup; also the value in the date_of_backup field of the
         /// Backup_Indexes database table</param>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
         /// <returns>A BackupIndex from the Backup_Indexes database table</returns>
-        public BackupIndex GetBackupIndex(string sourceGUID, string dateTimeOfBackup, SQLiteConnection conn)
+        public BackupIndex GetBackupIndex(string sourceGUID, string dateTimeOfBackup)
         {
             string sourcePath = "";
             long firstBlockOffset = 0;
@@ -445,9 +455,8 @@ namespace Backend.Database
         /// Block_Storage table that correspond to that index
         /// </summary>
         /// <param name="index">The index from the Backup_Indexes table</param>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
         /// <returns>A list of Block objects; each object corresponds to an entry in the Block_Storage database table</returns>
-        public List<Block> GetBlockList(BackupIndex index, SQLiteConnection conn)
+        public List<Block> GetBlockList(BackupIndex index)
         {
             List<Block> blockList = new List<Block>();
             //Get a list of block foreign keys from the Index_to_Block table
@@ -560,7 +569,7 @@ namespace Backend.Database
             return blockList;
         }
 
-        private key RemoveBackupIndex(string sourceGUID, string dateTimeOfBackup, SQLiteConnection conn)
+        private key RemoveBackupIndex(string sourceGUID, string dateTimeOfBackup)
         {
             key indexPrimaryKey = new key(0, sourceGUID);
 
@@ -601,7 +610,7 @@ namespace Backend.Database
             return indexPrimaryKey;
         }
 
-        private List<key> RemoveIndexToBlocks(key indexForeignKey, SQLiteConnection conn)
+        private List<key> RemoveIndexToBlocks(key indexForeignKey)
         {
             List<key> blockKeys = new List<key>();
 
@@ -653,7 +662,7 @@ namespace Backend.Database
             return blockKeys;
         }
 
-        private void RemoveBlocks(List<key> blockKeys, SQLiteConnection conn)
+        private void RemoveBlocks(List<key> blockKeys)
         {
             foreach (key currentBlockKey in blockKeys)
             {
@@ -697,12 +706,11 @@ namespace Backend.Database
         /// </summary>
         /// <param name="guid">A unique string that identifies a specific source host.</param>
         /// <param name="indexLifeTime">The lifetime of an index in months</param>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
-        public void CleanIndexes(string guid, int indexLifeTime, SQLiteConnection conn)
+        public void CleanIndexes(string guid, int indexLifeTime)
         {
 
             //Get a list of date/times for backups initiated by the node with the given guid
-            List<String> indexList = new List<String>(GetIndexList(guid, conn));
+            List<String> indexList = new List<String>(GetIndexList(guid));
             List<dateTimeLevel> cleanList = new List<dateTimeLevel>();
 
             //Compile a list of backup indexes to be cleaned, identified by date/time and backup level
@@ -795,13 +803,13 @@ namespace Backend.Database
                 string dateTimeOfBackup = currentIndex.dateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
                 //Remove entries from Backup_Indexes table
-                key indexPrimaryKey = RemoveBackupIndex(guid, dateTimeOfBackup, conn);
+                key indexPrimaryKey = RemoveBackupIndex(guid, dateTimeOfBackup);
 
                 //Remove entries from Index_to_Block table
-                blockKeys = RemoveIndexToBlocks(indexPrimaryKey, conn);
+                blockKeys = RemoveIndexToBlocks(indexPrimaryKey);
 
                 //Remove entries from Block_Storage table
-                RemoveBlocks(blockKeys, conn);
+                RemoveBlocks(blockKeys);
             }
         }
 
@@ -810,8 +818,7 @@ namespace Backend.Database
         /// file
         /// </summary>
         /// <param name="filePath">A string containing the path for an index database file.</param>
-        /// <param name="conn">A SQLiteConnection object for connection to index database.</param>
-        public void MergeIndexFiles(string filePath, SQLiteConnection conn)
+        public void MergeIndexFiles(string filePath)
         {
             string attachQuery = "ATTACH '" + filePath + "' AS TOMERGE";
             string mergeBIQuery = "INSERT OR IGNORE INTO Backup_Indexes SELECT * FROM TOMERGE.Backup_Indexes";
@@ -845,5 +852,8 @@ namespace Backend.Database
                 }
             }
         }
+
+        private string pathAndFileName;
+        private SQLiteConnection conn;
     }
 }
