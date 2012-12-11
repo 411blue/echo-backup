@@ -37,7 +37,7 @@ namespace Backend
 
             while (distribute)
             {
-                guidList = ndb.SelectTrustedGUID(ndb.ConnectToDatabase(@"C:\nodes.db"));
+                guidList = ndb.SelectTrustedGUID();
 
                 foreach (string currentGUID in guidList)
                 {
@@ -47,7 +47,7 @@ namespace Backend
                     int timeout = 100;
                     try
                     {
-                        IPAddress ip = ndb.SelectNodeIp(Guid.Parse(currentGUID), ndb.ConnectToDatabase(@"C:\nodes.db"));
+                        IPAddress ip = ndb.SelectNodeIp(Guid.Parse(currentGUID));
                         PingReply reply = pingSender.Send(ip, timeout);
 
                         if (reply.Status == IPStatus.Success)
@@ -109,7 +109,7 @@ namespace Backend
                     }
                 }
 
-                guidList = ndb.SelectTrustedGUID(ndb.ConnectToDatabase(@"C:\nodes.db"));
+                guidList = ndb.SelectTrustedGUID();
 
                 foreach (string currentGUID in guidList)
                 {

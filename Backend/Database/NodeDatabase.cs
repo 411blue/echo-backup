@@ -14,6 +14,8 @@ namespace Backend.Database
     {
         public NodeDatabase()
         {
+            pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\nodes.db";
+            conn = new SQLiteConnection(pathAndFileName);
         }
 
         /// Returns a connection to an existing. If it does not exist, it will be created on an open attempted.
@@ -24,7 +26,7 @@ namespace Backend.Database
         }
 
         //Create a node table with UniqueId as the primary key
-        public void CreateNodeTable(SQLiteConnection conn)
+        public void CreateNodeTable()
         {
             string sql = "CREATE TABLE nodes (UniqueId TEXT PRIMARY KEY, Name TEXT, Ip TEXT, Mac TEXT,"
             + " MaxBackupCapacity INTEGER, BackupData INTEGER, NonBackupData INTEGER, FreeSpace INTEGER, TotalCapacity INTEGER,"
@@ -38,7 +40,7 @@ namespace Backend.Database
         }
 
         //Insert a new record. Primary key must not be in table already.
-        public void InsertNodeRecord(Node n1, SQLiteConnection conn)
+        public void InsertNodeRecord(Node n1)
         {
             try
             {
@@ -77,7 +79,7 @@ namespace Backend.Database
         }
 
         //Replace a record. Table unchanged if UniqueId is not present, table unchanged. 
-        public void ReplaceNodeRecord(Node n1, SQLiteConnection conn)
+        public void ReplaceNodeRecord(Node n1)
         {
             string sql = "REPLACE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
                 + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
@@ -103,7 +105,7 @@ namespace Backend.Database
         }
 
         //Delete a record. If UniqueId is not present, table is unchanged.
-        public void DeleteNodeRecord(Guid UniqueId, SQLiteConnection conn)
+        public void DeleteNodeRecord(Guid UniqueId)
         {
             string sql = "DELETE FROM nodes where UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -114,7 +116,7 @@ namespace Backend.Database
         }
 
         //Select the Name in a record. If UniqueId is not present, null is returned.
-        public string SelectNodeName(Guid UniqueId, SQLiteConnection conn)
+        public string SelectNodeName(Guid UniqueId)
         {
             try
             {
@@ -135,7 +137,7 @@ namespace Backend.Database
         }
 
         //Update the Name in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeName(Guid UniqueId, string name, SQLiteConnection conn)
+        public void UpdateNodeName(Guid UniqueId, string name)
         {
             string sql = "UPDATE nodes Set Name = @pName WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -149,7 +151,7 @@ namespace Backend.Database
         }
 
         //Select the Ip in a record. If UniqueId is not present, 0.0.0.0 is returned.
-        public IPAddress SelectNodeIp(Guid UniqueId, SQLiteConnection conn)
+        public IPAddress SelectNodeIp(Guid UniqueId)
         {
             try
             {
@@ -171,7 +173,7 @@ namespace Backend.Database
         }
 
         //Update the Ip in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeIp(Guid UniqueId, IPAddress ip, SQLiteConnection conn)
+        public void UpdateNodeIp(Guid UniqueId, IPAddress ip)
         {
             string sql = "UPDATE nodes Set Ip = @pIp WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -185,7 +187,7 @@ namespace Backend.Database
         }
 
         //Select the Name in a record. If UniqueId is not present, null is returned.
-        public string SelectNodeMac(Guid UniqueId, SQLiteConnection conn)
+        public string SelectNodeMac(Guid UniqueId)
         {
             try
             {
@@ -206,7 +208,7 @@ namespace Backend.Database
         }
 
         //Update the Mac in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeMac(Guid UniqueId, string mac, SQLiteConnection conn)
+        public void UpdateNodeMac(Guid UniqueId, string mac)
         {
             string sql = "UPDATE nodes Set Mac = @pMac WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -220,7 +222,7 @@ namespace Backend.Database
         }
 
         //Select the MaxBackupCapacity in a record. If UniqueId is not present, 0 is returned.
-        public int SelectNodeMaxBackupCapacity(Guid UniqueId, SQLiteConnection conn)
+        public int SelectNodeMaxBackupCapacity(Guid UniqueId)
         {
             try
             {
@@ -241,7 +243,7 @@ namespace Backend.Database
         }
 
         //Update the MaxBackupCapacity in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeMaxBackupCapacity(Guid UniqueId, int MaxBackupCapacity, SQLiteConnection conn)
+        public void UpdateNodeMaxBackupCapacity(Guid UniqueId, int MaxBackupCapacity)
         {
             string sql = "UPDATE nodes Set MaxBackupCapacity = @pMaxBackupCapacity WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -255,7 +257,7 @@ namespace Backend.Database
         }
 
         //Select the BackupData in a record. If UniqueId is not present, 0 is returned.
-        public long SelectNodeBackupData(Guid UniqueId, SQLiteConnection conn)
+        public long SelectNodeBackupData(Guid UniqueId)
         {
             try
             {
@@ -277,7 +279,7 @@ namespace Backend.Database
 
 
         //Select the BackupData in a record by Name. If Name is not present, 0 is returned.
-        public long SelectNodeBackupData(String Name, SQLiteConnection conn)
+        public long SelectNodeBackupData(String Name)
         {
             try
             {
@@ -298,7 +300,7 @@ namespace Backend.Database
         }
 
         //Update the BackupData in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeBackupData(Guid UniqueId, long BackupData, SQLiteConnection conn)
+        public void UpdateNodeBackupData(Guid UniqueId, long BackupData)
         {
             string sql = "UPDATE nodes Set BackupData = @pBacupData WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -312,7 +314,7 @@ namespace Backend.Database
         }
 
         //Select the NonBackupData in a record. If UniqueId is not present, 0 is returned.
-        public long SelectNodeNonBackupData(Guid UniqueId, SQLiteConnection conn)
+        public long SelectNodeNonBackupData(Guid UniqueId)
         {
             try
             {
@@ -333,7 +335,7 @@ namespace Backend.Database
         }
 
         //Select the NonBackupData in a record by Name. If Name is not present, 0 is returned.
-        public long SelectNodeNonBackupData(String Name, SQLiteConnection conn)
+        public long SelectNodeNonBackupData(String Name)
         {
             try
             {
@@ -354,7 +356,7 @@ namespace Backend.Database
         }
 
         //Update the NonBackupData in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeNonBackupData(Guid UniqueId, long NonBackupData, SQLiteConnection conn)
+        public void UpdateNodeNonBackupData(Guid UniqueId, long NonBackupData)
         {
             string sql = "UPDATE nodes Set NonBackupData = @pNonBacupData WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -368,7 +370,7 @@ namespace Backend.Database
         }
 
         //Select the FreeSpace in a record. If UniqueId is not present, 0 is returned.
-        public long SelectFreeSpace(Guid UniqueId, SQLiteConnection conn)
+        public long SelectFreeSpace(Guid UniqueId)
         {
             try
             {
@@ -389,7 +391,7 @@ namespace Backend.Database
         }
 
         //Select the FreeSpace in a record by Name. If Name is not present, 0 is returned.
-        public long SelectFreeSpace(string Name, SQLiteConnection conn)
+        public long SelectFreeSpace(string Name)
         {
             try
             {
@@ -410,7 +412,7 @@ namespace Backend.Database
         }
 
         //Update the FreeSpace in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeFreeSpace(Guid UniqueId, long FreeSpace, SQLiteConnection conn)
+        public void UpdateNodeFreeSpace(Guid UniqueId, long FreeSpace)
         {
             string sql = "UPDATE nodes Set FreeSpace = @pFreeSpace WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -424,7 +426,7 @@ namespace Backend.Database
         }
 
         //Select the TotalCapacity in a record. If UniqueId is not present, 0 is returned.
-        public long SelectTotalCapacity(Guid UniqueId, SQLiteConnection conn)
+        public long SelectTotalCapacity(Guid UniqueId)
         {
             try
             {
@@ -446,7 +448,7 @@ namespace Backend.Database
 
 
         //Select the TotalCapacity in a record by Name. If Name is not present, 0 is returned.
-        public long SelectTotalCapacity(string Name, SQLiteConnection conn)
+        public long SelectTotalCapacity(string Name)
         {
             try
             {
@@ -467,7 +469,7 @@ namespace Backend.Database
         }
 
         //Update the TotalCapacity in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeTotalCapacity(Guid UniqueId, long TotalCapacity, SQLiteConnection conn)
+        public void UpdateNodeTotalCapacity(Guid UniqueId, long TotalCapacity)
         {
             string sql = "UPDATE nodes Set TotalCapacity = @pTotalCapacity WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -481,7 +483,7 @@ namespace Backend.Database
         }
 
         //Select the ReliablityMetric in a record. If UniqueId is not present, 0 is returned.
-        public int SelectNodeReliablityMetric(Guid UniqueId, SQLiteConnection conn)
+        public int SelectNodeReliablityMetric(Guid UniqueId)
         {
             try
             {
@@ -502,7 +504,7 @@ namespace Backend.Database
         }
 
         //Update the ReliablityMetric in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeReliablityMetric(Guid UniqueId, int ReliablityMetric, SQLiteConnection conn)
+        public void UpdateNodeReliablityMetric(Guid UniqueId, int ReliablityMetric)
         {
             string sql = "UPDATE nodes Set ReliablityMetric = @pRelialibyMetric WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -516,7 +518,7 @@ namespace Backend.Database
         }
 
         //Select the Hops in a record. If UniqueId is not present, 0 is returned.
-        public int SelectNodeHops(Guid UniqueId, SQLiteConnection conn)
+        public int SelectNodeHops(Guid UniqueId)
         {
             try
             {
@@ -537,7 +539,7 @@ namespace Backend.Database
         }
 
         //Update the Hops in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeHops(Guid UniqueId, int Hops, SQLiteConnection conn)
+        public void UpdateNodeHops(Guid UniqueId, int Hops)
         {
             string sql = "UPDATE nodes Set Hops = @pHops WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -551,7 +553,7 @@ namespace Backend.Database
         }
 
         //Select the Smart in a record. If UniqueId is not present, 0 is returned.
-        public int SelectNodeSmart(Guid UniqueId, SQLiteConnection conn)
+        public int SelectNodeSmart(Guid UniqueId)
         {
             try
             {
@@ -572,7 +574,7 @@ namespace Backend.Database
         }
 
         //Update the Smart in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeSmart(Guid UniqueId, int Smart, SQLiteConnection conn)
+        public void UpdateNodeSmart(Guid UniqueId, int Smart)
         {
             string sql = "UPDATE nodes Set Smart = @pSmart WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -586,7 +588,7 @@ namespace Backend.Database
         }
 
         //Select the BackupsFailed in a record. If UniqueId is not present, 0 is returned.
-        public int SelectNodeBackupsFailed(Guid UniqueId, SQLiteConnection conn)
+        public int SelectNodeBackupsFailed(Guid UniqueId)
         {
             try
             {
@@ -607,7 +609,7 @@ namespace Backend.Database
         }
 
         //Update the BackupsFailed in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeBackupsFailed(Guid UniqueId, int BackupsFailed, SQLiteConnection conn)
+        public void UpdateNodeBackupsFailed(Guid UniqueId, int BackupsFailed)
         {
             string sql = "UPDATE nodes Set BackupsFailed = @pBackupsFailed WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -621,7 +623,7 @@ namespace Backend.Database
         }
 
         //Select the BackupsPassed in a record. If UniqueId is not present, 0 is returned.
-        public int SelectNodeBackupsPassed(Guid UniqueId, SQLiteConnection conn)
+        public int SelectNodeBackupsPassed(Guid UniqueId)
         {
             try
             {
@@ -642,7 +644,7 @@ namespace Backend.Database
         }
 
         //Update the BackupsPassed in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeBackupsPassed(Guid UniqueId, int BackupsPassed, SQLiteConnection conn)
+        public void UpdateNodeBackupsPassed(Guid UniqueId, int BackupsPassed)
         {
             string sql = "UPDATE nodes Set BackupsPassed = @pBackupsPassed WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -656,7 +658,7 @@ namespace Backend.Database
         }
 
         //Select the Name in a record. If UniqueId is not present, null is returned.
-        public string SelectNodeTrusted(Guid UniqueId, SQLiteConnection conn)
+        public string SelectNodeTrusted(Guid UniqueId)
         {
             try
             {
@@ -677,7 +679,7 @@ namespace Backend.Database
         }
 
         //Update the Status in a record.If UniqueId is not present, table is unchanged.
-        public void UpdateNodeTrusted(Guid UniqueId, string Status, SQLiteConnection conn)
+        public void UpdateNodeTrusted(Guid UniqueId, string Status)
         {
             string sql = "UPDATE nodes Set Trusted = @pTrusted WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -691,7 +693,7 @@ namespace Backend.Database
         }
 
         //Return true if primary key was found and false if not
-        public bool PrimaryKeyCheck(Guid UniqueId, SQLiteConnection conn)
+        public bool PrimaryKeyCheck(Guid UniqueId)
         {
             object value = new object();
             string sql = "SELECT UniqueId FROM nodes WHERE UniqueId = @pUniqueId";
@@ -713,8 +715,8 @@ namespace Backend.Database
         }
 
         //Get the Names from the node database
-        public string[] GetNodeNames(SQLiteConnection conn)
-        {
+        public string[] GetNodeNames()
+        {       
             string sql = "SELECT Name  FROM nodes";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
@@ -733,7 +735,7 @@ namespace Backend.Database
         }
 
         //Get database
-        public DataTable GetNodes(SQLiteConnection conn)
+        public DataTable GetNodes()
         {
             string sql = "Select * from nodes";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
@@ -744,7 +746,7 @@ namespace Backend.Database
             return dt;
         }
 
-        public List<string> SelectTrustedGUID(SQLiteConnection conn)
+        public List<string> SelectTrustedGUID()
         {
             List<string> guidList = new List<string>();
             string Trusted = "yes";
@@ -783,6 +785,9 @@ namespace Backend.Database
 
             return guidList;
         }
+
+        private string pathAndFileName;
+        private SQLiteConnection conn;
     }
 
         //Defines a node and provides constructor

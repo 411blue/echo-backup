@@ -31,7 +31,7 @@ namespace GUI_FrontEnd
         #region DiskReportTabStuff
         private void InitializeDiskReportTab()
         {
-            DiskList.Items.AddRange(db.GetNodeNames(db.ConnectToDatabase(@"C:\nodes.db")));
+            DiskList.Items.AddRange(db.GetNodeNames());
         }
 
         public void draw(long backupData, long nonBackupData, long free, long capacity)
