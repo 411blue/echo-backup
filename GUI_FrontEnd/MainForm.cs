@@ -21,16 +21,17 @@ namespace GUI_FrontEnd
             numUpDownMaxBackupCapacity.Value = Settings.Default.maxBackupCapacity;
             db = new NodeDatabase();
             
+            /*
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC1", "192.168.1.1", "00-21-70-FE-23-EF", "1", "51", "89", "0", "100","yes");
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC2", "192.168.1.2", "00-21-69-FE-23-AB", "32", "50", "88", "25", "75", "yes");
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822AC", "PC3", "192.168.1.3", "00-21-69-FE-23-AC", "62", "49", "87", "50", "50", "no");
-             
+            */
         }
 
         #region DiskReportTabStuff
         private void InitializeDiskReportTab()
         {
-            DiskList.Items.AddRange(db.GetNodeNames(db.ConnectToDatabase(@"C\nodes.db")));
+            DiskList.Items.AddRange(db.GetNodeNames(db.ConnectToDatabase(@"C:\nodes.db")));
         }
 
         public void draw(long backupData, long nonBackupData, long free, long capacity)
