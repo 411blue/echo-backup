@@ -10,32 +10,40 @@ namespace Backend.Database
 {
     public class DistributionDatabase
     {
-        /// <summary>
-        /// Connects to the distribution database. Creates the database file and initial table if they do not exist already.
-        /// </summary>
-        /// <returns>A SQLiteConnection object representing
-        /// a connection to the distribution database.</returns>
-        public SQLiteConnection ConnectToDistributionDatabase()
+        public DistributionDatabase()
         {
-            SQLiteConnection conn = new SQLiteConnection("Data Source=" + @"distribution.s3db");
+            pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\distribution.s3db";
+            conn = new SQLiteConnection("Data Source=" + pathAndFileName);
 
-            if (!System.IO.File.Exists(@"distribution.s3db"))
+            if (!System.IO.File.Exists(pathAndFileName))
             {
                 //Create the file if it does not exist.
                 conn.Open();
                 conn.Close();
-                //Initialize table
-                CreateDistributionTable(conn);
+                //Initialize tables
+                CreateDistributionTable();
             }
+        }
 
+        /// <summary>
+        /// Connects to the distribution database.
+        /// </summary>
+        /// <returns>A SQLiteConnection object representing
+        /// a connection to the index database.</returns>
+        public SQLiteConnection ConnectToIndexDatabase()
+        {
             return conn;
+        }
+
+        public string GetPathFileName()
+        {
+            return pathAndFileName;
         }
 
         /// <summary>
         /// Creates Distribution table: Node_Status.
         /// </summary>
-        /// <param name="conn">A SQLiteConnection object for connection to distribution database.</param>
-        private void CreateDistributionTable(SQLiteConnection conn)
+        private void CreateDistributionTable()
         {
             string nodeStatusSql = "CREATE TABLE IF NOT EXISTS Node_Status (guid TEXT, status TEXT, PRIMARY KEY (guid))";
 
@@ -67,8 +75,7 @@ namespace Backend.Database
         /// </summary>
         /// <param name="guid">A unique string that identifies a specific node.</param>
         /// <param name="status">A string that = 'online' if the node is online and 'offline' if it is offline</param>
-        /// <param name="conn">A SQLiteConnection object for connection to distribution database.</param>
-        public void InsertNode(string guid, string status, SQLiteConnection conn)
+        public void InsertNode(string guid, string status)
         {
             string nodeStatusSql = "INSERT OR IGNORE INTO Node_Status (guid, status) VALUES (@pGUID, @pStatus)";
 
@@ -103,8 +110,7 @@ namespace Backend.Database
         /// </summary>
         /// <param name="guid">A unique string that identifies a specific node.</param>
         /// <param name="status">A string to update the status field with</param>
-        /// <param name="conn">A SQLiteConnection object for connection to distribution database.</param>
-        public void UpdateStatus(string guid, string status, SQLiteConnection conn)
+        public void UpdateStatus(string guid, string status)
         {
             string nodeStatusSql = "UPDATE Node_Status SET status = @pStatus WHERE guid = @pGUID";
 
@@ -137,8 +143,7 @@ namespace Backend.Database
         /// <summary>
         /// Resets the status field for every entry.
         /// </summary>
-        /// <param name="conn">A SQLiteConnection object for connection to distribution database.</param>
-        public void ResetStatus(SQLiteConnection conn)
+        public void ResetStatus()
         {
             string nodeStatusSql = "UPDATE Node_Status SET status = @pStatus";
 
@@ -171,9 +176,8 @@ namespace Backend.Database
         /// Given a GUID, returns the current status for that node.
         /// </summary>
         /// <param name="guid">A unique string that identifies a specific node.</param>
-        /// <param name="conn">A SQLiteConnection object for connection to distribution database.</param>
         /// <returns>A string with the node status for the given guid</returns>
-        public string GetStatus(string guid, SQLiteConnection conn)
+        public string GetStatus(string guid)
         {
             string status = "";
 
@@ -206,5 +210,8 @@ namespace Backend.Database
 
             return status;
         }
+
+        private string pathAndFileName;
+        private SQLiteConnection conn;
     }
 }

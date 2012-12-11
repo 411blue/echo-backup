@@ -33,7 +33,7 @@ namespace Backend
             string online = "online";
             string offline = "offline";
 
-            ddb.ResetStatus(ddb.ConnectToDistributionDatabase());
+            ddb.ResetStatus();
 
             while (distribute)
             {
@@ -41,7 +41,7 @@ namespace Backend
 
                 foreach (string currentGUID in guidList)
                 {
-                    ddb.InsertNode(currentGUID, offline, ddb.ConnectToDistributionDatabase());
+                    ddb.InsertNode(currentGUID, offline);
 
                     Ping pingSender = new Ping();
                     int timeout = 100;
@@ -52,15 +52,15 @@ namespace Backend
 
                         if (reply.Status == IPStatus.Success)
                         {
-                            if (ddb.GetStatus(currentGUID, ddb.ConnectToDistributionDatabase()) == offline)
+                            if (ddb.GetStatus(currentGUID) == offline)
                             {
                                 sendIndexes(currentGUID);
-                                ddb.UpdateStatus(currentGUID, online, ddb.ConnectToDistributionDatabase());
+                                ddb.UpdateStatus(currentGUID, online);
                             }
                         }
                         else
                         {
-                            ddb.UpdateStatus(currentGUID, offline, ddb.ConnectToDistributionDatabase());
+                            ddb.UpdateStatus(currentGUID, offline);
                         }
                     }
                     catch (Exception ex)
@@ -76,32 +76,20 @@ namespace Backend
         public void sendIndexes()
         {
             IndexDatabase idd = new IndexDatabase();
-            if (!idd.TablesEmpty(idd.ConnectToIndexDatabase())) //if there are indexes to send
+            if (!idd.TablesEmpty()) //if there are indexes to send
             {
                 DistributionDatabase ddb = new DistributionDatabase();
                 List<string> guidList = new List<string>();
                 NodeDatabase ndb = new NodeDatabase();
 
                 string online = "online";
-                string indexDBCopy = @"indexes_" + (Properties.Settings.Default.guid).ToString() + ".s3db";
+                string indexDBCopy = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\indexes_" + (Properties.Settings.Default.guid).ToString() + ".s3db";
 
-                if (System.IO.File.Exists(indexDBCopy))
+                if (System.IO.File.Exists(idd.GetPathFileName()))
                 {
                     try
                     {
-                        System.IO.File.Delete(indexDBCopy);
-                    }
-                    catch (System.IO.IOException e)
-                    {
-                        Debug.Print(e.Message);
-                    }
-                }
-
-                if (System.IO.File.Exists(@"indexes.s3db"))
-                {
-                    try
-                    {
-                        System.IO.File.Copy(@"indexes.s3db", indexDBCopy, true);
+                        System.IO.File.Copy(idd.GetPathFileName(), indexDBCopy, true);
                     }
                     catch (System.IO.IOException e)
                     {
@@ -113,7 +101,7 @@ namespace Backend
 
                 foreach (string currentGUID in guidList)
                 {
-                    if (ddb.GetStatus(currentGUID, ddb.ConnectToDistributionDatabase()) == online)
+                    if (ddb.GetStatus(currentGUID) == online)
                     {
                         // transmit file to 'guid'
                     }
@@ -126,27 +114,15 @@ namespace Backend
         public void sendIndexes(string guid)
         {
             IndexDatabase idd = new IndexDatabase();
-            if (!idd.TablesEmpty(idd.ConnectToIndexDatabase())) //if there are indexes to send
+            if (!idd.TablesEmpty()) //if there are indexes to send
             {
-                string indexDBCopy = @"indexes_" + (Properties.Settings.Default.guid).ToString() + ".s3db";
+                string indexDBCopy = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\indexes_" + (Properties.Settings.Default.guid).ToString() + ".s3db";
 
-                if (System.IO.File.Exists(indexDBCopy))
+                if (System.IO.File.Exists(idd.GetPathFileName()))
                 {
                     try
                     {
-                        System.IO.File.Delete(indexDBCopy);
-                    }
-                    catch (System.IO.IOException e)
-                    {
-                        Debug.Print(e.Message);
-                    }
-                }
-
-                if (System.IO.File.Exists(@"indexes.s3db"))
-                {
-                    try
-                    {
-                        System.IO.File.Copy(@"indexes.s3db", indexDBCopy, true);
+                        System.IO.File.Copy(idd.GetPathFileName(), indexDBCopy, true);
                     }
                     catch (System.IO.IOException e)
                     {
@@ -164,8 +140,8 @@ namespace Backend
         {
             IndexDatabase ind = new IndexDatabase();
 
-            ind.MergeIndexFiles(filePath, new SQLiteConnection(ind.ConnectToIndexDatabase()));
-
+            ind.MergeIndexFiles(filePath);
+            
             if (System.IO.File.Exists(filePath))
             {
                 try
@@ -177,6 +153,7 @@ namespace Backend
                     Debug.Print(e.Message);
                 }
             }
+             
         }
 
         private bool distribute;
