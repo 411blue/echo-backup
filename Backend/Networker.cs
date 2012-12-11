@@ -14,25 +14,20 @@ namespace Backend
     {
         public Networker()
         {
-            uniqueId = Properties.Settings.Default.guid;
-            smart = Properties.Settings.Default.smart;
-            hops = 0;
-
-            if(uniqueId == Guid.Empty)
+            //this section moved to EchoBackupService.cs:EchoBackupService()
+            //uniqueId = Properties.Settings.Default.guid;
+            /*if(uniqueId == Guid.Empty)
             {
                 uniqueId = GenerateUniqueId();
-            }
+            }*/
 
+            smart = Node.GetSmart();
+            hops = Node.GetHops();
             if (smart == 0)
             {
-                SetSmart(0, 89);
+                Node.CalculateAndSetSmart(0, 89);
             }
 
-            nonBackupData = 0;
-            backupData = 0;
-            backupLimit = 0;
-            backupDirectory = "";
-            directorySize = 0;
             reliabilityMetric = 0;
             receiverAlive = false;
             transmitterAlive = false;
@@ -43,78 +38,14 @@ namespace Backend
             txBuffer = new byte[256];
             heartbeat = "";
             heartbeats = new Queue<string>();
-        }
-
-        //Generate UniqeId
-        public Guid GenerateUniqueId()
-        {
-            return Guid.NewGuid();
-        }
-
-        //Get UniqueId
-        public Guid GetUniqueId()
-        {
-            return uniqueId;
-        }
+        }       
 
         
-
-        //Get the max backup support of the local node
-        public int GetMaxBackupSpace()
-        {
-            return backupLimit;
-        }
-
-        
-
-        //Get the backup directory
-        public string GetBackupDirectory()
-        {
-            return backupDirectory;
-        }
-
-        //Get Hop score
-        public int GetHops()
-        {
-            return hops;
-        }
-
-        //Get SMART score
-        public int GetSmart()
-        {
-            return smart;
-        }
-
-        //Set the max backup support of the local node
-        public void SetMaxBackupCapacity(int i1)
-        {
-            backupLimit = i1;
-        }
-
-        //Set the backup directory
-        public void SetBackupDirectory(string s1)
-        {
-            backupDirectory = s1;
-        }
-
-        //Set SMART Data
-        public int SetSmart(int min, int max)
-        {
-            Random rnd = new Random();
-            return rnd.Next(min, max);
-        }
-
-        //Set Hop Data
-        public int SetHop(int min, int max)
-        {
-            Random rnd = new Random();
-            return rnd.Next(min, max);
-        }
 
         //Calculate reliabity metric
         public int CalculateReliablity(int passed, int failed)
         {
-            reliabilityMetric = 255 - GetSmart() - GetHops() - (114 * (failed / (failed + passed)));
+            reliabilityMetric = 255 - Node.GetSmart() - Node.GetHops() - (114 * (failed / (failed + passed)));
             return reliabilityMetric;
         }
 
@@ -146,9 +77,9 @@ namespace Backend
         //Get update message
         public string GetHeartbeat()
         {
-            heartbeat = string.Concat(GetUniqueId() + "/" + Node.GetHostName() + "/" + Node.GetInternetAddress() + "/" + Node.GetMAC() 
-            + "/" + GetMaxBackupSpace() + "/" + Node.GetBackupSpace() + "/" + Node.GetNonBackupSpace() + "/" + Node.GetFreeSpace()
-            + "/" + Node.GetTotalSize() + "/" + GetSmart());
+            heartbeat = string.Concat(Node.GetUniqueID() + "/" + Node.GetHostName() + "/" + Node.GetInternetAddress() + "/" + Node.GetMAC() 
+            + "/" + Node.GetMaxBackupSpace() + "/" + Node.GetBackupSpace() + "/" + Node.GetNonBackupSpace() + "/" + Node.GetFreeSpace()
+            + "/" + Node.GetTotalSize() + "/" + Node.GetSmart());
             return heartbeat;
         }
 
@@ -179,7 +110,7 @@ namespace Backend
                         Backend.Database.Node newNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
                             long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
-                            CalculateReliablity(0,0), GetHops(), Convert.ToInt32(attributes[9]), 0, 0, "yes");
+                            CalculateReliablity(0,0), Node.GetHops(), Convert.ToInt32(attributes[9]), 0, 0, "yes");
                         nd.InsertNodeRecord(newNode);
                     }
                 }
@@ -231,12 +162,6 @@ namespace Backend
             transmitterAlive = b1;
         }    
 
-        private Guid uniqueId;
-        private long backupData;
-        private long nonBackupData;
-        private int backupLimit;
-        private long directorySize;
-        private string backupDirectory;
         private IPAddress ip;
         private Socket receiver;
         private Socket transmitter;

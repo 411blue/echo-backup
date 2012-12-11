@@ -33,14 +33,10 @@ namespace Low_Level_Test_Driver
             byte[] b = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
             Guid guid = new Guid(b);
             string tempPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch";
+            string tempPath2 = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2";
             StorageThread st = new StorageThread(tempPath, guid);
-            BackupTask task = new BackupTask();
-            task.backupID = 123;
-            task.level = 0;
-            task.path = tempPath;
-            task.status = 0;
-            task.tempPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2";
-            st.EnqueueBackupTask(task);
+            BackupTask task = new BackupTask(tempPath, tempPath2, 123, 0);
+            st.EnqueueStorageTask(task);
             Console.WriteLine("queued task");
             int x = 0;
             while (st.IsWorking())
@@ -247,20 +243,53 @@ namespace Low_Level_Test_Driver
             }
         }
 
+        public static void testUnTarGZip()
+        {
+            Logger.init(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\uncompress.log");
+            Guid myGuid = Guid.NewGuid();
+            string archivePath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\01010101-0101-0101-0101-010101010101_123_0.tgz";
+            string outputDir = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2";
+            RestoreTask rt = new RestoreTask(archivePath, outputDir);
+            rt.Add("cs 410 2012-12-09\\echo backup logo v1.png");
+            StorageThread st = new StorageThread("", myGuid);
+            st.EnqueueStorageTask(rt);
+            Print("added task to storagethread");
+            int x=0;
+            while (st.IsWorking())
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting for storagethread to finish working " + x);
+            }
+            Print("storagethread done");
+            st.RequestStop();
+            Print("requested stop of storagethread");
+            while (st.IsAlive())
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting for storagethread to stop " + x);
+            }
+            Print("storagethread stopped");
+            Console.WriteLine("press a key to continue");
+            Console.ReadKey();
+        }
+
         static void Main(string[] args)
         {
             //Logger.init(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\log.log");
             //testTarGZip();
             //testQueryRequests();
             //Print(args[0]);
-            if (args.Length >= 1)
+            /*if (args.Length >= 1)
             {
                 testSendReceive(args[0]);
             }
             else
             {
                 testSendReceive("");
-            }
+            }*/
+            testUnTarGZip();
         }
     }
 }

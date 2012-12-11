@@ -74,9 +74,9 @@ namespace Backend.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public decimal maxBackupCapacity {
+        public long maxBackupCapacity {
             get {
-                return ((decimal)(this["maxBackupCapacity"]));
+                return ((long)(this["maxBackupCapacity"]));
             }
             set {
                 this["maxBackupCapacity"] = value;

@@ -77,7 +77,7 @@ namespace GUI_FrontEnd
 
         private void maxBackupSupport_ValueChanged(object sender, EventArgs e)
         {
-            Settings.Default.maxBackupCapacity = numUpDownMaxBackupCapacity.Value;
+            Settings.Default.maxBackupCapacity = (long)numUpDownMaxBackupCapacity.Value;
         }    
 
         private void tabControl_SelectedIndexChanged(object sender, EventArgs e)

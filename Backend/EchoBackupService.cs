@@ -13,17 +13,31 @@ namespace Backend
 {
     public partial class EchoBackupService : ServiceBase 
     {
+        private CommandServer commandServer;
+        //this value should not change as long as the service running.
+        //in fact, it should never change after it has been initialized with Guid.NewGuid()
+        private Guid guid;
         public EchoBackupService() 
         {
+            //setup guid
+            guid = Node.GetGuid();
+            if (guid == Guid.Empty)
+            {
+                guid = Guid.NewGuid();
+                Properties.Settings.Default.guid = guid;
+                Properties.Settings.Default.Save();
+            }
             this.ServiceName = "Echo Backup Service";
             InitializeComponent();
         }
 
         protected override void OnStart(string[] args) 
         {
+            #region logging
             Logger.init();
             Logger.Log("Started Service");
-
+            #endregion
+            #region heartbeats
             net = new Backend.Networker();
             indexdi = new Backend.IndexDistribution();
             indexdi.SetDistribute(true);
@@ -37,6 +51,12 @@ namespace Backend
             messageThread.Start();
             rxThread.Start();
             distributionThread.Start();
+            #endregion
+            #region networking
+            commandServer = new CommandServer(guid);
+            #endregion
+            #region storage
+            #endregion
 
             MainLoop();
         }

@@ -12,6 +12,68 @@ namespace Backend
 {
     public class Node
     {
+        //get globally-unique ID of this node
+        public static Guid GetUniqueID()
+        {
+            return GetGuid();
+        }
+        public static Guid GetGuid()
+        {
+            return Properties.Settings.Default.guid;
+        }
+
+        //Get the max backup support of the local node
+        public static long GetMaxBackupSpace()
+        {
+            return Properties.Settings.Default.maxBackupCapacity;
+        }
+        //Set the max backup support of the local node
+        public static void SetMaxBackupCapacity(long l)
+        {
+            Properties.Settings.Default.maxBackupCapacity = l;
+            Properties.Settings.Default.Save();
+        }
+
+        //Get SMART score
+        public static int GetSmart()
+        {
+            return Properties.Settings.Default.smart;
+        }
+        //Set SMART Data
+        public static int CalculateAndSetSmart(int min, int max)
+        {
+            Random rnd = new Random();
+            int x = rnd.Next(min, max);
+            Properties.Settings.Default.smart = x;
+            Properties.Settings.Default.Save();
+            return x;
+        }
+
+        //Get Hop score
+        public static int GetHops()
+        {
+            return Properties.Settings.Default.hops;
+        }
+        //Set Hop Data
+        public static void SetHop(int min, int max)
+        {
+            Random rnd = new Random();
+            Properties.Settings.Default.hops = rnd.Next(min, max);
+            Properties.Settings.Default.Save();
+        }
+
+        //Get the backup directory
+        public static string GetBackupDirectory()
+        {
+            return Properties.Settings.Default.localBackupPath;
+        }
+        //Set the backup directory
+        public static void SetBackupDirectory(string s1)
+        {
+            Properties.Settings.Default.localBackupPath = s1;
+            Properties.Settings.Default.Save();
+        }
+
         //Get Internet Protocol Address Version 4 of local node
         public static string GetInternetAddress()
         {
@@ -129,11 +191,6 @@ namespace Backend
         {
             long backupData = GetDirectorySize(GetBackupDirectory());
             return backupData;
-        }
-
-        public static string GetBackupDirectory()
-        {
-            return Settings.Default.localBackupPath;
         }
     }
 }

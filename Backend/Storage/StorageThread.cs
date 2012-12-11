@@ -77,7 +77,7 @@ namespace Backend.Storage
         /// Adds a BackupTask to the end of the task queue. Blocks if the queue is locked by another thread.
         /// </summary>
         /// <param name="task">The BackupTask that should be processed</param>
-        public void EnqueueBackupTask(BackupTask task)
+        public void EnqueueStorageTask(StorageTask task)
         {
             lock (_lock)
             {
