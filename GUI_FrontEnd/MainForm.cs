@@ -188,8 +188,7 @@ namespace GUI_FrontEnd
         private void btnRefreshList_Click(object sender, EventArgs e)
         {
             string sql = "select * from Nodes";
-            string sqliteDBFile = @"C:\Users\Tom\Desktop\nodes.db";
-            cnn = db.ConnectToDatabase(sqliteDBFile);
+            cnn = db.ConnectToNodeDatabase();
             try
             {
                 
@@ -242,7 +241,7 @@ namespace GUI_FrontEnd
                     txtRecoveryFileBrowser.Text = recoveryFilePath;
 
                     string sqliteDBFile = @"C:\Users\Tom\Desktop\index.db";
-                    cnn = db.ConnectToDatabase(sqliteDBFile);
+                    //cnn = db.ConnectToDatabase(sqliteDBFile);
                     
                     string query = "SELECT date_of_backup, size FROM Backup_Indexes WHERE source_path = @pSourcePath";
                     SQLiteCommand cmd = new SQLiteCommand(query, cnn);

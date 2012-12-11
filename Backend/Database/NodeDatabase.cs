@@ -14,14 +14,13 @@ namespace Backend.Database
     {
         public NodeDatabase()
         {
-            pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + "\nodes.db";
-            conn = new SQLiteConnection(pathAndFileName);
+            pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\nodes.db";
+            conn = new SQLiteConnection("Data Source=" + pathAndFileName);
         }
 
         /// Returns a connection to an existing. If it does not exist, it will be created on an open attempted.
-        public SQLiteConnection ConnectToDatabase(string pathAndFileName)
+        public SQLiteConnection ConnectToNodeDatabase()
         {
-            SQLiteConnection conn = new SQLiteConnection("Data Source=" + pathAndFileName);
             return conn;
         }
 
