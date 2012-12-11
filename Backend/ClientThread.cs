@@ -73,7 +73,7 @@ namespace Backend
                 {
                     lock (_lock)
                     {
-                        working = true;
+                        working = false;
                         if (stop)
                         {
                             return;
@@ -102,7 +102,6 @@ namespace Backend
                     NetworkRequest request = null;
                     lock (_lock)
                     {
-                        working = false;
                         if (stop)
                         {
                             return;
@@ -115,6 +114,7 @@ namespace Backend
                         }
                         else
                         {
+                            working = false;
                             sleep = true;
                         }
                     }
@@ -156,6 +156,7 @@ namespace Backend
             {
                 if (!isClient)
                 {
+                    working = true;
                     workQueue.Enqueue(request);
                 }
             }
@@ -211,7 +212,8 @@ namespace Backend
                 {
                     PushRequest pr = (PushRequest)request;
                     sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, request.SequenceNumber));
-                    readFileToDisk(pr.FileSize, Chunk.PathToChunk(pr));
+                    //readFileToDisk(pr.FileSize, Chunk.PathToChunk(pr));
+                    readFileToDisk(pr.FileSize, this.path);
                 }
                 else if (request is PullRequest)
                 {
@@ -240,6 +242,7 @@ namespace Backend
         /// <returns>The number of bytes read.</returns>
         private int readBytes(TcpClient tcpClient, ref byte[] bytes, int num)
         {
+            Logger.Debug("ClientThread:readBytes");
             NetworkStream clientStream = tcpClient.GetStream();
             byte[] b = new byte[num];
             int bytesRead;
@@ -285,6 +288,7 @@ namespace Backend
         /// <returns>The number of bytes written or a -1 if an error occurred.</returns>
         private int writeBytes(TcpClient tcpClient, byte[] bytes, int num)
         {
+            Logger.Debug("ClientThread:writeBytes");
             NetworkStream clientStream = tcpClient.GetStream();
             try
             {
@@ -332,6 +336,7 @@ namespace Backend
         /// <returns>The number of bytes written to the remote node or -1 if an error occurred.</returns>
         private int sendMessage(TcpClient tcpClient, NetworkEvent message)
         {
+            Logger.Debug("ClientThread:sendMessage");
             MemoryStream mem = new MemoryStream();
             binaryFormatter.Serialize(mem, message);
             byte[] bytes = mem.ToArray();
@@ -340,12 +345,12 @@ namespace Backend
             int ret = writeBytes(tcpClient, numBytes, MESSAGE_SIZE_SIZE);
             if (ret == -1)
             {
-                Logger.Log("ClientThread:sendMessage failed to send message size");
+                Logger.Error("ClientThread:sendMessage failed to send message size");
             }
             ret = writeBytes(tcpClient, bytes, num);
             if (ret == -1)
             {
-                Logger.Log("ClientThread:sendMessage failed to send a message");
+                Logger.Error("ClientThread:sendMessage failed to send a message");
             }
             return ret;
         }
@@ -382,6 +387,7 @@ namespace Backend
                 if (ret != n)
                 {
                     Logger.Log("ClientThread:readFileToDisk failed to read all bytes from the client");
+                    fileStream.Close();
                     return 2;
                 }
 
@@ -399,7 +405,7 @@ namespace Backend
 
                 bytesRemaining -= BYTES_PER_READ;
             }
-
+            fileStream.Close();
             return 0;
         }
 
@@ -477,6 +483,7 @@ namespace Backend
 
         public void AcceptFileTransfer(PushRequest request, string path)
         {
+            Logger.Debug("ClientThread:AcceptFileTransfer:PushRequest");
             acceptFileTransfer(request, path);
         }
 
@@ -493,6 +500,7 @@ namespace Backend
             //this function should be called when this thread has received a message and that message has been dequeued.
             //if this function is called while this thread is in the wrong state, it will not do anything until a message is received or the socket closes.
             doWork = true;
+            working = true;
             this.path = path;
             lock (_lock)
             {
