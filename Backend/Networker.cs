@@ -166,7 +166,7 @@ namespace Backend
                     
                     //If node is new, then add record with heartbreat attributes and set other attritbutes to default
                     //If node is existing, then just add heartbeat attributes
-                    if(nd.PrimaryKeyCheck(Guid.Parse(attributes[0])))
+                    if(nd.NodePrimaryKeyCheck(Guid.Parse(attributes[0])))
                     {
                         Backend.Database.Node existingNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),

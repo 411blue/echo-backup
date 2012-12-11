@@ -369,7 +369,7 @@ namespace Backend.Database
         }
 
         //Select the FreeSpace in a record. If UniqueId is not present, 0 is returned.
-        public long SelectFreeSpace(Guid UniqueId)
+        public long SelectNodeFreeSpace(Guid UniqueId)
         {
             try
             {
@@ -390,7 +390,7 @@ namespace Backend.Database
         }
 
         //Select the FreeSpace in a record by Name. If Name is not present, 0 is returned.
-        public long SelectFreeSpace(string Name)
+        public long SelectNodeFreeSpace(string Name)
         {
             try
             {
@@ -425,7 +425,7 @@ namespace Backend.Database
         }
 
         //Select the TotalCapacity in a record. If UniqueId is not present, 0 is returned.
-        public long SelectTotalCapacity(Guid UniqueId)
+        public long SelectNodeTotalCapacity(Guid UniqueId)
         {
             try
             {
@@ -447,7 +447,7 @@ namespace Backend.Database
 
 
         //Select the TotalCapacity in a record by Name. If Name is not present, 0 is returned.
-        public long SelectTotalCapacity(string Name)
+        public long SelectNodeTotalCapacity(string Name)
         {
             try
             {
@@ -692,7 +692,7 @@ namespace Backend.Database
         }
 
         //Return true if primary key was found and false if not
-        public bool PrimaryKeyCheck(Guid UniqueId)
+        public bool NodePrimaryKeyCheck(Guid UniqueId)
         {
             object value = new object();
             string sql = "SELECT UniqueId FROM nodes WHERE UniqueId = @pUniqueId";
@@ -723,6 +723,7 @@ namespace Backend.Database
             SQLiteDataReader reader = cmd.ExecuteReader();
             DataTable dt = new DataTable();
             dt.Load(reader);
+            conn.Close();
 
             string[] Names = new string[dt.Rows.Count];
             for (int i = 0; i < dt.Rows.Count; i++)

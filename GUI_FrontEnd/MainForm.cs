@@ -69,7 +69,8 @@ namespace GUI_FrontEnd
 
         private void hostList_TextChanged(object sender, EventArgs e)
         {
-            draw(1, 1, 1, 1);
+            draw(db.SelectNodeBackupData(DiskList.Text), db.SelectNodeNonBackupData(DiskList.Text), 
+                db.SelectNodeFreeSpace(DiskList.Text), db.SelectNodeTotalCapacity(DiskList.Text));
         }
 
         #endregion
