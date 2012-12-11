@@ -108,14 +108,15 @@ namespace Low_Level_Test_Driver
             Console.WriteLine("press a key to continue");
             Console.ReadKey();
         }
-
         //tests sending a QueryRequest and receiving a response
         static void testQueryRequestClient()
         {
             Guid myGuid = Guid.NewGuid();
-            TcpClient tcpClient = new TcpClient("localhost", 7890);
+            TcpClient tcpClient = new TcpClient("172.18.9.11", 7890);
             ClientThread ct = new ClientThread(tcpClient, false, myGuid);
-            ct.EnqueueWork(new QueryRequest(IPAddress.Parse(Node.GetInternetAddress()), myGuid, 777));
+            QueryRequest qr = new QueryRequest(IPAddress.Parse(Node.GetInternetAddress()), myGuid, 777);
+            qr.QueryType = QueryType.Hostname;
+            ct.EnqueueWork(qr);
             int x = 0;
             while (ct.EventCount() == 0)
             {
@@ -137,7 +138,6 @@ namespace Low_Level_Test_Driver
             Console.WriteLine("press a key to continue");
             Console.ReadKey();
         }
-
         //tests QueryRequests and responses. behaves as client or server depending on arg
         static void testQueryRequests()
         {
@@ -155,11 +155,112 @@ namespace Low_Level_Test_Driver
             }
         }
 
+        //test sending/receiving files
+        public static void testReceiveBackup()
+        {
+            Guid myGuid = Guid.NewGuid();
+            CommandServer cs = new CommandServer(myGuid);
+            int x = 0;
+            while (cs.ClientThreadCount() == 0)
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting for message. " + x);
+            }
+            ClientThread ct = cs.getClientThread();
+            Print("got client thread.");
+            while (ct.EventCount() == 0)
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting to receive request." + x);
+            }
+            Print("received request.");
+            PushRequest pr = (PushRequest)ct.DequeueEvent();
+            Print("request: " + pr.FileSize + ' ' + Path.GetFileName(pr.Path));
+            ct.AcceptFileTransfer(pr, "C:\\Users\\411blue\\desktop\\temp\\scratch 2\\" + Path.GetFileName(pr.Path));
+            Print("responded to PushRequest.");
+            while (ct.IsWorking())
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting for ClientThread to finish working." + x);
+            }
+            ct.RequestStop();
+            Print("requested clientthread stop");
+            cs.Stop();
+            Print("stopped CommandServer.");
+            Console.WriteLine("press a key to continue");
+            Console.ReadKey();
+        }
+        public static void testSendBackup()
+        {
+            string path = "C:\\Users\\James\\Desktop\\temp\\scratch 2\\How I Met Your Mother Season 06 Episode 24 - Challange Accepted.avi";
+            Guid myGuid = Guid.NewGuid();
+            TcpClient tcpClient = new TcpClient("172.18.9.11", 7890);
+            ClientThread ct = new ClientThread(tcpClient, false, myGuid);
+            PushRequest pr = new PushRequest(IPAddress.Parse(Node.GetInternetAddress()), myGuid, 777);
+            pr.BackupNumber = 4;
+            pr.ChunkNumber = 5;
+            pr.Path = path;
+            pr.FileSize = new FileInfo(path).Length;
+            ct.EnqueueWork(pr);
+            int x = 0;
+            /*while (ct.EventCount() == 0)
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting for response. " + x);
+            }
+            NetworkResponse response = (NetworkResponse)ct.DequeueEvent();
+            Print("response: " + response.Type + " reason: " + response.Reason);*/
+            while (ct.IsWorking())
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting for thread to finish working. " + x);
+            }
+            Print("thread finished working. " + x);
+            ct.RequestStop();
+            Print("requested stop");
+            while (ct.IsAlive())
+            {
+                x++;
+                Thread.Sleep(1000);
+                Print("waiting for thread to die. " + x);
+            }
+            Print("thread dead.");
+            Console.WriteLine("press a key to continue");
+            Console.ReadKey();
+        }
+        public static void testSendReceive(string s)
+        {
+            if (s == "server")
+            {
+                Logger.init(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\server.log");
+                testReceiveBackup();
+            }
+            else
+            {
+                Logger.init(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\client.log");
+                testSendBackup();
+            }
+        }
+
         static void Main(string[] args)
         {
             //Logger.init(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\log.log");
             //testTarGZip();
-            testQueryRequests();
+            //testQueryRequests();
+            //Print(args[0]);
+            if (args.Length >= 1)
+            {
+                testSendReceive(args[0]);
+            }
+            else
+            {
+                testSendReceive("");
+            }
         }
     }
 }
