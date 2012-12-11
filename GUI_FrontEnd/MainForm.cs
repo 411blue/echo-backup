@@ -21,16 +21,17 @@ namespace GUI_FrontEnd
             numUpDownMaxBackupCapacity.Value = Settings.Default.maxBackupCapacity;
             db = new NodeDatabase();
             
+            /*
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC1", "192.168.1.1", "00-21-70-FE-23-EF", "1", "51", "89", "0", "100","yes");
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC2", "192.168.1.2", "00-21-69-FE-23-AB", "32", "50", "88", "25", "75", "yes");
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822AC", "PC3", "192.168.1.3", "00-21-69-FE-23-AC", "62", "49", "87", "50", "50", "no");
-             
+            */
         }
 
         #region DiskReportTabStuff
         private void InitializeDiskReportTab()
         {
-            DiskList.Items.AddRange(db.GetNodeNames(db.ConnectToDatabase(@"C\nodes.db")));
+            DiskList.Items.AddRange(db.GetNodeNames());
         }
 
         public void draw(long backupData, long nonBackupData, long free, long capacity)
@@ -68,7 +69,8 @@ namespace GUI_FrontEnd
 
         private void hostList_TextChanged(object sender, EventArgs e)
         {
-            draw(1, 1, 1, 1);
+            draw(db.SelectNodeBackupData(DiskList.Text), db.SelectNodeNonBackupData(DiskList.Text), 
+                db.SelectNodeFreeSpace(DiskList.Text), db.SelectNodeTotalCapacity(DiskList.Text));
         }
 
         #endregion
@@ -187,8 +189,7 @@ namespace GUI_FrontEnd
         private void btnRefreshList_Click(object sender, EventArgs e)
         {
             string sql = "select * from Nodes";
-            string sqliteDBFile = @"C:\Users\Tom\Desktop\nodes.db";
-            cnn = db.ConnectToDatabase(sqliteDBFile);
+            cnn = db.ConnectToNodeDatabase();
             try
             {
                 
@@ -241,7 +242,7 @@ namespace GUI_FrontEnd
                     txtRecoveryFileBrowser.Text = recoveryFilePath;
 
                     string sqliteDBFile = @"C:\Users\Tom\Desktop\index.db";
-                    cnn = db.ConnectToDatabase(sqliteDBFile);
+                    //cnn = db.ConnectToDatabase(sqliteDBFile);
                     
                     string query = "SELECT date_of_backup, size FROM Backup_Indexes WHERE source_path = @pSourcePath";
                     SQLiteCommand cmd = new SQLiteCommand(query, cnn);
