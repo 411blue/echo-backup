@@ -639,19 +639,9 @@ namespace Backend
         private void processRemotePushIndexRequest(PushIndexRequest pir)
         {
             Logger.Debug("ClientThread:processRemotePushIndexRequest");
-            bool b = true;
-            if (b)
-            { //we want to say Yes
-                sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, pir.SequenceNumber));
-                //pir.Path should be modified to be the local path where we want to store the received database
-                readFileToDisk(pir.DBSize, pir.Path);
-            }
-            else
-            { //we want to refuse "WillNot"
-                NetworkResponse response = new NetworkResponse(ResponseType.WillNot, "reason we are refusing to accept the file", guid, pir.SequenceNumber);
-                Logger.Notice("ClientThread:processRemotePushIndexRequest We refuse to store index file: " + response.Type + ' ' + response.Reason);
-                sendMessage(tcpClient, response);
-            }
+            sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, pir.SequenceNumber));
+            //pir.Path should be modified to be the local path where we want to store the received database
+            readFileToDisk(pir.DBSize, pir.Path);
         }
     }
 }
