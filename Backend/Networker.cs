@@ -92,7 +92,9 @@ namespace Backend
                 {
                     string[] attributes = new string[10];
                     string hb = heartbeats.Dequeue();
+
                     attributes = hb.Split('/');
+
                     Backend.Database.NodeDatabase nd = new Backend.Database.NodeDatabase();
                     
                     //If node is new, then add record with heartbreat attributes and set other attritbutes to default

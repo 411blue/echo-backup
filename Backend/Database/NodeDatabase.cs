@@ -16,6 +16,7 @@ namespace Backend.Database
         {
             pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\nodes.db";
             conn = new SQLiteConnection("Data Source=" + pathAndFileName);
+            CreateNodeTable();
         }
 
         /// Returns a connection to an existing. If it does not exist, it will be created on an open attempted.
@@ -27,15 +28,23 @@ namespace Backend.Database
         //Create a node table with UniqueId as the primary key
         public void CreateNodeTable()
         {
-            string sql = "CREATE TABLE nodes (UniqueId TEXT PRIMARY KEY, Name TEXT, Ip TEXT, Mac TEXT,"
-            + " MaxBackupCapacity INTEGER, BackupData INTEGER, NonBackupData INTEGER, FreeSpace INTEGER, TotalCapacity INTEGER,"
-            + " ReliabilityMetric INTEGER, Hops INTEGER, Smart INTEGER, BackupsFailed INTEGER, BackupsPassed INTEGER, Trusted TEXT)";
-            
-            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+            try
+            {
+                string sql = "CREATE TABLE nodes (UniqueId TEXT PRIMARY KEY, Name TEXT, Ip TEXT, Mac TEXT,"
+                + " MaxBackupCapacity INTEGER, BackupData INTEGER, NonBackupData INTEGER, FreeSpace INTEGER, TotalCapacity INTEGER,"
+                + " ReliabilityMetric INTEGER, Hops INTEGER, Smart INTEGER, BackupsFailed INTEGER, BackupsPassed INTEGER, Trusted TEXT)";
 
-            conn.Open();
-            cmd.ExecuteNonQuery();
-            conn.Close();
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+
+
+                conn.Open();
+                cmd.ExecuteNonQuery();
+                conn.Close();
+            }
+            catch (SQLiteException)
+            {
+                Console.WriteLine("Node table already existed.");
+            }
         }
 
         //Insert a new record. Primary key must not be in table already.
@@ -694,20 +703,27 @@ namespace Backend.Database
         //Return true if primary key was found and false if not
         public bool NodePrimaryKeyCheck(Guid UniqueId)
         {
-            object value = new object();
-            string sql = "SELECT UniqueId FROM nodes WHERE UniqueId = @pUniqueId";
-            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
-
-            conn.Open();
-            value = cmd.ExecuteScalar();
-            conn.Close();
-
-            if (value != null)
+            try
             {
-                return true;
+                object value = new object();
+                string sql = "SELECT UniqueId FROM nodes WHERE UniqueId = @pUniqueId";
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+
+                conn.Open();
+                value = cmd.ExecuteScalar();
+                conn.Close();
+
+                if (value != null)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            else
+            catch (Exception)
             {
                 return false;
             }
@@ -781,6 +797,10 @@ namespace Backend.Database
                 {
                     conn.Close();
                 }
+            }
+            catch (InvalidOperationException)
+            {
+
             }
 
             return guidList;
