@@ -642,6 +642,8 @@ namespace Backend
             sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, pir.SequenceNumber));
             //pir.Path should be modified to be the local path where we want to store the received database
             readFileToDisk(pir.DBSize, pir.Path);
+            IndexDistribution idd = new IndexDistribution();
+            idd.processIndexes(pir.Path);
         }
     }
 }

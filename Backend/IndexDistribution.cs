@@ -5,9 +5,12 @@ using System.Text;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.Data;
+using System.IO;
 using System.Net;
-using System.Net.NetworkInformation; 
+using System.Net.Sockets;
+using System.Net.NetworkInformation;
 using Backend.Database;
+using System.Threading;
 
 namespace Backend
 {
@@ -41,6 +44,7 @@ namespace Backend
 
                 foreach (string currentGUID in guidList)
                 {
+                    Thread.Sleep(1000);
                     ddb.InsertNode(currentGUID, offline);
 
                     Ping pingSender = new Ping();
@@ -103,7 +107,21 @@ namespace Backend
                 {
                     if (ddb.GetStatus(currentGUID) == online)
                     {
-                        // transmit file to 'guid'
+                        Guid myGuid = Guid.NewGuid();
+                        TcpClient tcpClient = new TcpClient((ndb.SelectNodeIp(Guid.Parse(currentGUID))).ToString(), 7890);
+                        ClientThread ct = new ClientThread(tcpClient, false, myGuid);
+                        PushIndexRequest pir = new PushIndexRequest(indexDBCopy, new FileInfo(indexDBCopy).Length);
+                        ct.EnqueueWork(pir);
+                        NetworkResponse response = (NetworkResponse)ct.DequeueEvent();
+                        while (ct.IsWorking())
+                        {
+                            Thread.Sleep(1000);
+                        }
+                        ct.RequestStop();
+                        while (ct.IsAlive())
+                        {
+                            Thread.Sleep(1000);
+                        }
                     }
                 }
             }
@@ -113,6 +131,7 @@ namespace Backend
         // Use after a node comes online
         public void sendIndexes(string guid)
         {
+            NodeDatabase ndb = new NodeDatabase();
             IndexDatabase idd = new IndexDatabase();
             if (!idd.TablesEmpty()) //if there are indexes to send
             {
@@ -130,7 +149,21 @@ namespace Backend
                     }
                 }
 
-                // transmit file to 'guid'
+                Guid myGuid = Guid.NewGuid();
+                TcpClient tcpClient = new TcpClient((ndb.SelectNodeIp(Guid.Parse(guid))).ToString(), 7890);
+                ClientThread ct = new ClientThread(tcpClient, false, myGuid);
+                PushIndexRequest pir = new PushIndexRequest(indexDBCopy, new FileInfo(indexDBCopy).Length);
+                ct.EnqueueWork(pir);
+                NetworkResponse response = (NetworkResponse)ct.DequeueEvent();
+                while (ct.IsWorking())
+                {
+                    Thread.Sleep(1000);
+                }
+                ct.RequestStop();
+                while (ct.IsAlive())
+                {
+                    Thread.Sleep(1000);
+                }
             }
         }
 
