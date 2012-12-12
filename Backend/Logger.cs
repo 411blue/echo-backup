@@ -14,7 +14,7 @@ namespace Backend {
         private static StreamWriter writer;
         private static String filename;
         //this should be changed to include the date and time and shoulb be initialized in init()
-        private static String defaultFileName = Environment.CurrentDirectory + "\\" + "log.log";
+        private static String defaultFileName = Path.Combine(Node.ExecutableDir(),"log.log");
         //true when init has been calld. used to prevent multiple inits
         private static bool inited = false;
         

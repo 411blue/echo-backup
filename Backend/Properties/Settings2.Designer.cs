@@ -106,5 +106,17 @@ namespace Backend.Properties {
                 this["redundantBackups"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string temporaryDirectory {
+            get {
+                return ((string)(this["temporaryDirectory"]));
+            }
+            set {
+                this["temporaryDirectory"] = value;
+            }
+        }
     }
 }

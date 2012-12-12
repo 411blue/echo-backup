@@ -22,6 +22,27 @@ namespace Backend
             return Properties.Settings.Default.guid;
         }
 
+        /// <summary>
+        /// Returns the path to the directory this executable is running from.
+        /// </summary>
+        /// <returns></returns>
+        public static string ExecutableDir()
+        {
+            return System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+        }
+
+        // get/set the directory used to store temporary and intermediate files
+        public static string GetTemporaryDirectory()
+        {
+            return Properties.Settings.Default.temporaryDirectory;
+        }
+        public static void SetTemporaryDirectory(string path)
+        {
+            CreateDirectoryIfNotExists(path);
+            Properties.Settings.Default.temporaryDirectory = path;
+            Properties.Settings.Default.Save();
+        }
+
         //Get the max backup support of the local node
         public static long GetMaxBackupSpace()
         {
@@ -68,9 +89,10 @@ namespace Backend
             return Properties.Settings.Default.localBackupPath;
         }
         //Set the backup directory
-        public static void SetBackupDirectory(string s1)
+        public static void SetBackupDirectory(string path)
         {
-            Properties.Settings.Default.localBackupPath = s1;
+            CreateDirectoryIfNotExists(path);
+            Properties.Settings.Default.localBackupPath = path;
             Properties.Settings.Default.Save();
         }
 
@@ -129,37 +151,14 @@ namespace Backend
             return mac;
         }
 
-        //Get free disk space of drive C on the local node
-        public static long GetFreeSpace()
+        public static void CreateDirectoryIfNotExists(string path)
         {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            long freeSpace = 0;
-            foreach (DriveInfo drive in allDrives)
+            if (!Directory.Exists(path))
             {
-                if (drive.Name == "C:\\")
-                {
-                    freeSpace = drive.AvailableFreeSpace;
-                }
+                Logger.Notice("Node:CreateDirectoryIfNotExists Path '" + path + "' does not exist. Creating directory(s).");
+                Directory.CreateDirectory(path);
             }
-            return freeSpace;
         }
-
-        //Get total disk space of drive C on the local node
-        public static long GetTotalSize()
-        {
-            DriveInfo[] allDrives = DriveInfo.GetDrives();
-            long totalSize = 0;
-            foreach (DriveInfo drive in allDrives)
-            {
-                if (drive.Name == "C:\\")
-                {
-                    totalSize = drive.TotalSize;
-                    break;
-                }
-            }
-            return totalSize;
-        }
-
         //Get the size of directory and all subdirectories
         public static long GetDirectorySize(string path)
         {
@@ -185,12 +184,40 @@ namespace Backend
             long nonBackupData = Node.GetTotalSize() - GetDirectorySize(GetBackupDirectory()) - Node.GetFreeSpace();
             return nonBackupData;
         }
-
         //Get disk space of drive C on the local node used for backup data
         public static long GetBackupSpace()
         {
             long backupData = GetDirectorySize(GetBackupDirectory());
             return backupData;
+        }
+        //Get total disk space of drive C on the local node
+        public static long GetTotalSize()
+        {
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            long totalSize = 0;
+            foreach (DriveInfo drive in allDrives)
+            {
+                if (drive.Name == "C:\\")
+                {
+                    totalSize = drive.TotalSize;
+                    break;
+                }
+            }
+            return totalSize;
+        }
+        //Get free disk space of drive C on the local node
+        public static long GetFreeSpace()
+        {
+            DriveInfo[] allDrives = DriveInfo.GetDrives();
+            long freeSpace = 0;
+            foreach (DriveInfo drive in allDrives)
+            {
+                if (drive.Name == "C:\\")
+                {
+                    freeSpace = drive.AvailableFreeSpace;
+                }
+            }
+            return freeSpace;
         }
     }
 }

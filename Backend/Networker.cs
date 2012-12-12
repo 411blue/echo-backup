@@ -92,7 +92,7 @@ namespace Backend
                 {
                     string[] attributes = new string[10];
                     string hb = heartbeats.Dequeue();
-                    attributes = hb.Split();
+                    attributes = hb.Split('/');
                     Backend.Database.NodeDatabase nd = new Backend.Database.NodeDatabase();
                     
                     //If node is new, then add record with heartbreat attributes and set other attritbutes to default
@@ -132,9 +132,10 @@ namespace Backend
         {
             while (transmitterAlive)
             {
-                txBuffer = Encoding.ASCII.GetBytes("Hello");
+                //txBuffer = Encoding.ASCII.GetBytes("Hello");
+                txBuffer = Encoding.ASCII.GetBytes(GetHeartbeat());
                 transmitter.Send(txBuffer, txBuffer.Length, SocketFlags.None);
-                Thread.Sleep(10000);
+                Thread.Sleep(60000);
             }
         }
 

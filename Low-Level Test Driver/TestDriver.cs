@@ -275,6 +275,13 @@ namespace Low_Level_Test_Driver
             Console.ReadKey();
         }
 
+        public static void testService()
+        {
+            EchoBackupService ebs = new EchoBackupService();
+            string[] args = {};
+            ebs.testStart();
+        }
+
         static void Main(string[] args)
         {
             //Logger.init(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch 2\\log.log");
@@ -289,7 +296,8 @@ namespace Low_Level_Test_Driver
             {
                 testSendReceive("");
             }*/
-            testUnTarGZip();
+            //testUnTarGZip();
+            testService();
         }
     }
 }
