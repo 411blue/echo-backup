@@ -47,6 +47,14 @@ namespace Test_Harness
             this.backupReportButton = new System.Windows.Forms.Button();
             this.viewLogsButton = new System.Windows.Forms.Button();
             this.nodeStatusBox = new System.Windows.Forms.GroupBox();
+            this.StatusCodeVersionTextBox = new System.Windows.Forms.TextBox();
+            this.StatusTestDirectoryTextBox = new System.Windows.Forms.TextBox();
+            this.StatusIPAddressTextBox = new System.Windows.Forms.TextBox();
+            this.StatusGUIDTextBox = new System.Windows.Forms.TextBox();
+            this.StatusCurrentTaskTextBox = new System.Windows.Forms.TextBox();
+            this.StatusIndexVersionTextBox = new System.Windows.Forms.TextBox();
+            this.StatusRunningTextBox = new System.Windows.Forms.TextBox();
+            this.statusCodeVersionLabel = new System.Windows.Forms.Label();
             this.statusTestDirLabel = new System.Windows.Forms.Label();
             this.statusGUIDLabel = new System.Windows.Forms.Label();
             this.statusIPAddressLabel = new System.Windows.Forms.Label();
@@ -57,12 +65,20 @@ namespace Test_Harness
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripProgressBar1 = new System.Windows.Forms.ToolStripProgressBar();
             this.nodeConfigBox = new System.Windows.Forms.GroupBox();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.numericUpDown6 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown2 = new System.Windows.Forms.NumericUpDown();
             this.freeSpaceConfigLabel = new System.Windows.Forms.Label();
             this.numericUpDown7 = new System.Windows.Forms.NumericUpDown();
+            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.fileCountConfigLabel = new System.Windows.Forms.Label();
+            this.FullBackupFrequencyConfigLabel2 = new System.Windows.Forms.Label();
+            this.FullBackupFrequencyConfigLabel = new System.Windows.Forms.Label();
+            this.backupFrequencyConfigLabel = new System.Windows.Forms.Label();
+            this.currentDateTimeConfigLabel = new System.Windows.Forms.Label();
             this.diskCapacityConfigLabel = new System.Windows.Forms.Label();
             this.backupSizeConfigLabel = new System.Windows.Forms.Label();
             this.testHarnessConfigBox = new System.Windows.Forms.GroupBox();
@@ -72,23 +88,9 @@ namespace Test_Harness
             this.statusRefreshIntervalConfigLabel = new System.Windows.Forms.Label();
             this.diskUsageButton = new System.Windows.Forms.Button();
             this.pushUpdateButton = new System.Windows.Forms.Button();
-            this.statusCodeVersionLabel = new System.Windows.Forms.Label();
             this.nodeControlBox = new System.Windows.Forms.GroupBox();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
-            this.currentDateTimeConfigLabel = new System.Windows.Forms.Label();
-            this.backupFrequencyConfigLabel = new System.Windows.Forms.Label();
-            this.numericUpDown5 = new System.Windows.Forms.NumericUpDown();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.FullBackupFrequencyConfigLabel = new System.Windows.Forms.Label();
-            this.FullBackupFrequencyConfigLabel2 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
-            this.StatusRunningTextBox = new System.Windows.Forms.TextBox();
-            this.StatusIndexVersionTextBox = new System.Windows.Forms.TextBox();
-            this.StatusCurrentTaskTextBox = new System.Windows.Forms.TextBox();
-            this.StatusIPAddressTextBox = new System.Windows.Forms.TextBox();
-            this.StatusGUIDTextBox = new System.Windows.Forms.TextBox();
-            this.StatusTestDirectoryTextBox = new System.Windows.Forms.TextBox();
-            this.StatusCodeVersionTextBox = new System.Windows.Forms.TextBox();
+            this.grpRunAITests = new System.Windows.Forms.GroupBox();
+            this.cmdRunAITests = new System.Windows.Forms.Button();
             this.nodesBox.SuspendLayout();
             this.nodeStatusBox.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -96,12 +98,13 @@ namespace Test_Harness
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.testHarnessConfigBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).BeginInit();
             this.nodeControlBox.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).BeginInit();
+            this.grpRunAITests.SuspendLayout();
             this.SuspendLayout();
             // 
             // nodesListBox
@@ -246,6 +249,73 @@ namespace Test_Harness
             this.nodeStatusBox.TabStop = false;
             this.nodeStatusBox.Text = "Node Status";
             // 
+            // StatusCodeVersionTextBox
+            // 
+            this.StatusCodeVersionTextBox.Location = new System.Drawing.Point(90, 130);
+            this.StatusCodeVersionTextBox.Name = "StatusCodeVersionTextBox";
+            this.StatusCodeVersionTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusCodeVersionTextBox.TabIndex = 1;
+            this.StatusCodeVersionTextBox.Text = "1.2.3";
+            // 
+            // StatusTestDirectoryTextBox
+            // 
+            this.StatusTestDirectoryTextBox.Location = new System.Drawing.Point(90, 111);
+            this.StatusTestDirectoryTextBox.Name = "StatusTestDirectoryTextBox";
+            this.StatusTestDirectoryTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusTestDirectoryTextBox.TabIndex = 1;
+            this.StatusTestDirectoryTextBox.Text = "C:\\Program  Files\\Echo Backup\\";
+            // 
+            // StatusIPAddressTextBox
+            // 
+            this.StatusIPAddressTextBox.Location = new System.Drawing.Point(90, 73);
+            this.StatusIPAddressTextBox.Name = "StatusIPAddressTextBox";
+            this.StatusIPAddressTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusIPAddressTextBox.TabIndex = 1;
+            this.StatusIPAddressTextBox.Text = "10.0.0.1";
+            // 
+            // StatusGUIDTextBox
+            // 
+            this.StatusGUIDTextBox.Location = new System.Drawing.Point(90, 92);
+            this.StatusGUIDTextBox.Name = "StatusGUIDTextBox";
+            this.StatusGUIDTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusGUIDTextBox.TabIndex = 1;
+            this.StatusGUIDTextBox.Text = "unique1";
+            // 
+            // StatusCurrentTaskTextBox
+            // 
+            this.StatusCurrentTaskTextBox.Location = new System.Drawing.Point(90, 54);
+            this.StatusCurrentTaskTextBox.Name = "StatusCurrentTaskTextBox";
+            this.StatusCurrentTaskTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusCurrentTaskTextBox.TabIndex = 1;
+            this.StatusCurrentTaskTextBox.Text = "Idle";
+            // 
+            // StatusIndexVersionTextBox
+            // 
+            this.StatusIndexVersionTextBox.Location = new System.Drawing.Point(90, 35);
+            this.StatusIndexVersionTextBox.Name = "StatusIndexVersionTextBox";
+            this.StatusIndexVersionTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusIndexVersionTextBox.TabIndex = 1;
+            this.StatusIndexVersionTextBox.Text = "12345";
+            // 
+            // StatusRunningTextBox
+            // 
+            this.StatusRunningTextBox.Location = new System.Drawing.Point(90, 16);
+            this.StatusRunningTextBox.Name = "StatusRunningTextBox";
+            this.StatusRunningTextBox.Size = new System.Drawing.Size(133, 20);
+            this.StatusRunningTextBox.TabIndex = 1;
+            this.StatusRunningTextBox.Text = "Yes";
+            // 
+            // statusCodeVersionLabel
+            // 
+            this.statusCodeVersionLabel.AutoSize = true;
+            this.statusCodeVersionLabel.Location = new System.Drawing.Point(7, 133);
+            this.statusCodeVersionLabel.Margin = new System.Windows.Forms.Padding(4, 2, 4, 4);
+            this.statusCodeVersionLabel.Name = "statusCodeVersionLabel";
+            this.statusCodeVersionLabel.Size = new System.Drawing.Size(73, 13);
+            this.statusCodeVersionLabel.TabIndex = 0;
+            this.statusCodeVersionLabel.Text = "Code Version:";
+            this.statusCodeVersionLabel.Click += new System.EventHandler(this.label3_Click);
+            // 
             // statusTestDirLabel
             // 
             this.statusTestDirLabel.AutoSize = true;
@@ -361,6 +431,81 @@ namespace Test_Harness
             this.nodeConfigBox.Text = "Node Configuration";
             this.nodeConfigBox.Enter += new System.EventHandler(this.groupBox1_Enter);
             // 
+            // comboBox2
+            // 
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "1st",
+            "2nd",
+            "3rd",
+            "4th",
+            "5th",
+            "6th",
+            "7th",
+            "8th",
+            "9th",
+            "10th",
+            "11th",
+            "12th",
+            "13th",
+            "14th",
+            "15th",
+            "16th",
+            "17th",
+            "18th",
+            "19th",
+            "20th",
+            "21st",
+            "22nd",
+            "23rd",
+            "24th",
+            "25th",
+            "26th",
+            "27th",
+            "28th",
+            "29th",
+            "30th"});
+            this.comboBox2.Location = new System.Drawing.Point(159, 118);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(51, 21);
+            this.comboBox2.TabIndex = 4;
+            this.comboBox2.Text = "7th";
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "MicroSeconds",
+            "Milliseconds",
+            "Seconds",
+            "Minutes",
+            "Hours",
+            "Days",
+            "Weeks",
+            "Months",
+            "Years",
+            "Decades",
+            "Centuries",
+            "Millenia",
+            "Megannum"});
+            this.comboBox1.Location = new System.Drawing.Point(196, 92);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(131, 21);
+            this.comboBox1.TabIndex = 4;
+            this.comboBox1.Text = "Days";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // dateTimePicker1
+            // 
+            this.dateTimePicker1.CustomFormat = "dddd, MMM dd, yyyy -  hh:mm:sstt";
+            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dateTimePicker1.Location = new System.Drawing.Point(127, 69);
+            this.dateTimePicker1.Name = "dateTimePicker1";
+            this.dateTimePicker1.ShowUpDown = true;
+            this.dateTimePicker1.Size = new System.Drawing.Size(243, 20);
+            this.dateTimePicker1.TabIndex = 3;
+            // 
             // numericUpDown6
             // 
             this.numericUpDown6.Location = new System.Drawing.Point(269, 43);
@@ -392,6 +537,19 @@ namespace Test_Harness
             this.numericUpDown7.Size = new System.Drawing.Size(50, 20);
             this.numericUpDown7.TabIndex = 1;
             // 
+            // numericUpDown5
+            // 
+            this.numericUpDown5.Location = new System.Drawing.Point(140, 93);
+            this.numericUpDown5.Name = "numericUpDown5";
+            this.numericUpDown5.Size = new System.Drawing.Size(50, 20);
+            this.numericUpDown5.TabIndex = 1;
+            this.numericUpDown5.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDown5.ValueChanged += new System.EventHandler(this.numericUpDown5_ValueChanged);
+            // 
             // numericUpDown1
             // 
             this.numericUpDown1.Location = new System.Drawing.Point(110, 20);
@@ -409,6 +567,50 @@ namespace Test_Harness
             this.fileCountConfigLabel.TabIndex = 0;
             this.fileCountConfigLabel.Text = "File Count:";
             this.fileCountConfigLabel.Click += new System.EventHandler(this.label1_Click_1);
+            // 
+            // FullBackupFrequencyConfigLabel2
+            // 
+            this.FullBackupFrequencyConfigLabel2.AutoSize = true;
+            this.FullBackupFrequencyConfigLabel2.Location = new System.Drawing.Point(217, 121);
+            this.FullBackupFrequencyConfigLabel2.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.FullBackupFrequencyConfigLabel2.Name = "FullBackupFrequencyConfigLabel2";
+            this.FullBackupFrequencyConfigLabel2.Size = new System.Drawing.Size(142, 13);
+            this.FullBackupFrequencyConfigLabel2.TabIndex = 0;
+            this.FullBackupFrequencyConfigLabel2.Text = "backup will be a full backup.";
+            this.FullBackupFrequencyConfigLabel2.Click += new System.EventHandler(this.label1_Click_2);
+            // 
+            // FullBackupFrequencyConfigLabel
+            // 
+            this.FullBackupFrequencyConfigLabel.AutoSize = true;
+            this.FullBackupFrequencyConfigLabel.Location = new System.Drawing.Point(7, 121);
+            this.FullBackupFrequencyConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.FullBackupFrequencyConfigLabel.Name = "FullBackupFrequencyConfigLabel";
+            this.FullBackupFrequencyConfigLabel.Size = new System.Drawing.Size(149, 13);
+            this.FullBackupFrequencyConfigLabel.TabIndex = 0;
+            this.FullBackupFrequencyConfigLabel.Text = "Full Backup Frequency: Every";
+            this.FullBackupFrequencyConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
+            // 
+            // backupFrequencyConfigLabel
+            // 
+            this.backupFrequencyConfigLabel.AutoSize = true;
+            this.backupFrequencyConfigLabel.Location = new System.Drawing.Point(7, 95);
+            this.backupFrequencyConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.backupFrequencyConfigLabel.Name = "backupFrequencyConfigLabel";
+            this.backupFrequencyConfigLabel.Size = new System.Drawing.Size(130, 13);
+            this.backupFrequencyConfigLabel.TabIndex = 0;
+            this.backupFrequencyConfigLabel.Text = "Backup Frequency: Every";
+            this.backupFrequencyConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
+            // 
+            // currentDateTimeConfigLabel
+            // 
+            this.currentDateTimeConfigLabel.AutoSize = true;
+            this.currentDateTimeConfigLabel.Location = new System.Drawing.Point(7, 72);
+            this.currentDateTimeConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
+            this.currentDateTimeConfigLabel.Name = "currentDateTimeConfigLabel";
+            this.currentDateTimeConfigLabel.Size = new System.Drawing.Size(117, 13);
+            this.currentDateTimeConfigLabel.TabIndex = 0;
+            this.currentDateTimeConfigLabel.Text = "Current Date and Time:";
+            this.currentDateTimeConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
             // 
             // diskCapacityConfigLabel
             // 
@@ -438,7 +640,7 @@ namespace Test_Harness
             this.testHarnessConfigBox.Controls.Add(this.statusRefreshIntervalConfigLabel);
             this.testHarnessConfigBox.Location = new System.Drawing.Point(427, 184);
             this.testHarnessConfigBox.Name = "testHarnessConfigBox";
-            this.testHarnessConfigBox.Size = new System.Drawing.Size(230, 150);
+            this.testHarnessConfigBox.Size = new System.Drawing.Size(230, 74);
             this.testHarnessConfigBox.TabIndex = 5;
             this.testHarnessConfigBox.TabStop = false;
             this.testHarnessConfigBox.Text = "Test Harness Configuration";
@@ -496,17 +698,6 @@ namespace Test_Harness
             this.pushUpdateButton.Text = "Push Update";
             this.pushUpdateButton.UseVisualStyleBackColor = true;
             // 
-            // statusCodeVersionLabel
-            // 
-            this.statusCodeVersionLabel.AutoSize = true;
-            this.statusCodeVersionLabel.Location = new System.Drawing.Point(7, 133);
-            this.statusCodeVersionLabel.Margin = new System.Windows.Forms.Padding(4, 2, 4, 4);
-            this.statusCodeVersionLabel.Name = "statusCodeVersionLabel";
-            this.statusCodeVersionLabel.Size = new System.Drawing.Size(73, 13);
-            this.statusCodeVersionLabel.TabIndex = 0;
-            this.statusCodeVersionLabel.Text = "Code Version:";
-            this.statusCodeVersionLabel.Click += new System.EventHandler(this.label3_Click);
-            // 
             // nodeControlBox
             // 
             this.nodeControlBox.BackColor = System.Drawing.SystemColors.ControlLightLight;
@@ -528,207 +719,40 @@ namespace Test_Harness
             this.nodeControlBox.Text = "Node Control";
             this.nodeControlBox.Enter += new System.EventHandler(this.groupBox1_Enter_1);
             // 
-            // dateTimePicker1
+            // grpRunAITests
             // 
-            this.dateTimePicker1.CustomFormat = "dddd, MMM dd, yyyy -  hh:mm:sstt";
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dateTimePicker1.Location = new System.Drawing.Point(127, 69);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(243, 20);
-            this.dateTimePicker1.TabIndex = 3;
+            this.grpRunAITests.Controls.Add(this.cmdRunAITests);
+            this.grpRunAITests.Location = new System.Drawing.Point(431, 264);
+            this.grpRunAITests.Name = "grpRunAITests";
+            this.grpRunAITests.Size = new System.Drawing.Size(225, 70);
+            this.grpRunAITests.TabIndex = 8;
+            this.grpRunAITests.TabStop = false;
+            this.grpRunAITests.Text = "AI";
             // 
-            // currentDateTimeConfigLabel
+            // cmdRunAITests
             // 
-            this.currentDateTimeConfigLabel.AutoSize = true;
-            this.currentDateTimeConfigLabel.Location = new System.Drawing.Point(7, 72);
-            this.currentDateTimeConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.currentDateTimeConfigLabel.Name = "currentDateTimeConfigLabel";
-            this.currentDateTimeConfigLabel.Size = new System.Drawing.Size(117, 13);
-            this.currentDateTimeConfigLabel.TabIndex = 0;
-            this.currentDateTimeConfigLabel.Text = "Current Date and Time:";
-            this.currentDateTimeConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
+            this.cmdRunAITests.Location = new System.Drawing.Point(15, 31);
+            this.cmdRunAITests.Name = "cmdRunAITests";
+            this.cmdRunAITests.Size = new System.Drawing.Size(196, 23);
+            this.cmdRunAITests.TabIndex = 0;
+            this.cmdRunAITests.Text = "Run AI Tests";
+            this.cmdRunAITests.UseVisualStyleBackColor = true;
+            this.cmdRunAITests.Click += new System.EventHandler(this.cmdRunAITests_Click);
             // 
-            // backupFrequencyConfigLabel
-            // 
-            this.backupFrequencyConfigLabel.AutoSize = true;
-            this.backupFrequencyConfigLabel.Location = new System.Drawing.Point(7, 95);
-            this.backupFrequencyConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.backupFrequencyConfigLabel.Name = "backupFrequencyConfigLabel";
-            this.backupFrequencyConfigLabel.Size = new System.Drawing.Size(130, 13);
-            this.backupFrequencyConfigLabel.TabIndex = 0;
-            this.backupFrequencyConfigLabel.Text = "Backup Frequency: Every";
-            this.backupFrequencyConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
-            // 
-            // numericUpDown5
-            // 
-            this.numericUpDown5.Location = new System.Drawing.Point(140, 93);
-            this.numericUpDown5.Name = "numericUpDown5";
-            this.numericUpDown5.Size = new System.Drawing.Size(50, 20);
-            this.numericUpDown5.TabIndex = 1;
-            this.numericUpDown5.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.numericUpDown5.ValueChanged += new System.EventHandler(this.numericUpDown5_ValueChanged);
-            // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "MicroSeconds",
-            "Milliseconds",
-            "Seconds",
-            "Minutes",
-            "Hours",
-            "Days",
-            "Weeks",
-            "Months",
-            "Years",
-            "Decades",
-            "Centuries",
-            "Millenia",
-            "Megannum"});
-            this.comboBox1.Location = new System.Drawing.Point(196, 92);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(131, 21);
-            this.comboBox1.TabIndex = 4;
-            this.comboBox1.Text = "Days";
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // FullBackupFrequencyConfigLabel
-            // 
-            this.FullBackupFrequencyConfigLabel.AutoSize = true;
-            this.FullBackupFrequencyConfigLabel.Location = new System.Drawing.Point(7, 121);
-            this.FullBackupFrequencyConfigLabel.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.FullBackupFrequencyConfigLabel.Name = "FullBackupFrequencyConfigLabel";
-            this.FullBackupFrequencyConfigLabel.Size = new System.Drawing.Size(149, 13);
-            this.FullBackupFrequencyConfigLabel.TabIndex = 0;
-            this.FullBackupFrequencyConfigLabel.Text = "Full Backup Frequency: Every";
-            this.FullBackupFrequencyConfigLabel.Click += new System.EventHandler(this.label1_Click_2);
-            // 
-            // FullBackupFrequencyConfigLabel2
-            // 
-            this.FullBackupFrequencyConfigLabel2.AutoSize = true;
-            this.FullBackupFrequencyConfigLabel2.Location = new System.Drawing.Point(217, 121);
-            this.FullBackupFrequencyConfigLabel2.Margin = new System.Windows.Forms.Padding(4, 2, 0, 4);
-            this.FullBackupFrequencyConfigLabel2.Name = "FullBackupFrequencyConfigLabel2";
-            this.FullBackupFrequencyConfigLabel2.Size = new System.Drawing.Size(142, 13);
-            this.FullBackupFrequencyConfigLabel2.TabIndex = 0;
-            this.FullBackupFrequencyConfigLabel2.Text = "backup will be a full backup.";
-            this.FullBackupFrequencyConfigLabel2.Click += new System.EventHandler(this.label1_Click_2);
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
-            "1st",
-            "2nd",
-            "3rd",
-            "4th",
-            "5th",
-            "6th",
-            "7th",
-            "8th",
-            "9th",
-            "10th",
-            "11th",
-            "12th",
-            "13th",
-            "14th",
-            "15th",
-            "16th",
-            "17th",
-            "18th",
-            "19th",
-            "20th",
-            "21st",
-            "22nd",
-            "23rd",
-            "24th",
-            "25th",
-            "26th",
-            "27th",
-            "28th",
-            "29th",
-            "30th"});
-            this.comboBox2.Location = new System.Drawing.Point(159, 118);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(51, 21);
-            this.comboBox2.TabIndex = 4;
-            this.comboBox2.Text = "7th";
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // StatusRunningTextBox
-            // 
-            this.StatusRunningTextBox.Location = new System.Drawing.Point(90, 16);
-            this.StatusRunningTextBox.Name = "StatusRunningTextBox";
-            this.StatusRunningTextBox.Size = new System.Drawing.Size(133, 20);
-            this.StatusRunningTextBox.TabIndex = 1;
-            this.StatusRunningTextBox.Text = "Yes";
-            // 
-            // StatusIndexVersionTextBox
-            // 
-            this.StatusIndexVersionTextBox.Location = new System.Drawing.Point(90, 35);
-            this.StatusIndexVersionTextBox.Name = "StatusIndexVersionTextBox";
-            this.StatusIndexVersionTextBox.Size = new System.Drawing.Size(133, 20);
-            this.StatusIndexVersionTextBox.TabIndex = 1;
-            this.StatusIndexVersionTextBox.Text = "12345";
-            // 
-            // StatusCurrentTaskTextBox
-            // 
-            this.StatusCurrentTaskTextBox.Location = new System.Drawing.Point(90, 54);
-            this.StatusCurrentTaskTextBox.Name = "StatusCurrentTaskTextBox";
-            this.StatusCurrentTaskTextBox.Size = new System.Drawing.Size(133, 20);
-            this.StatusCurrentTaskTextBox.TabIndex = 1;
-            this.StatusCurrentTaskTextBox.Text = "Idle";
-            // 
-            // StatusIPAddressTextBox
-            // 
-            this.StatusIPAddressTextBox.Location = new System.Drawing.Point(90, 73);
-            this.StatusIPAddressTextBox.Name = "StatusIPAddressTextBox";
-            this.StatusIPAddressTextBox.Size = new System.Drawing.Size(133, 20);
-            this.StatusIPAddressTextBox.TabIndex = 1;
-            this.StatusIPAddressTextBox.Text = "10.0.0.1";
-            // 
-            // StatusGUIDTextBox
-            // 
-            this.StatusGUIDTextBox.Location = new System.Drawing.Point(90, 92);
-            this.StatusGUIDTextBox.Name = "StatusGUIDTextBox";
-            this.StatusGUIDTextBox.Size = new System.Drawing.Size(133, 20);
-            this.StatusGUIDTextBox.TabIndex = 1;
-            this.StatusGUIDTextBox.Text = "unique1";
-            // 
-            // StatusTestDirectoryTextBox
-            // 
-            this.StatusTestDirectoryTextBox.Location = new System.Drawing.Point(90, 111);
-            this.StatusTestDirectoryTextBox.Name = "StatusTestDirectoryTextBox";
-            this.StatusTestDirectoryTextBox.Size = new System.Drawing.Size(133, 20);
-            this.StatusTestDirectoryTextBox.TabIndex = 1;
-            this.StatusTestDirectoryTextBox.Text = "C:\\Program  Files\\Echo Backup\\";
-            // 
-            // StatusCodeVersionTextBox
-            // 
-            this.StatusCodeVersionTextBox.Location = new System.Drawing.Point(90, 130);
-            this.StatusCodeVersionTextBox.Name = "StatusCodeVersionTextBox";
-            this.StatusCodeVersionTextBox.Size = new System.Drawing.Size(133, 20);
-            this.StatusCodeVersionTextBox.TabIndex = 1;
-            this.StatusCodeVersionTextBox.Text = "1.2.3";
-            // 
-            // Form1
+            // TestHarness
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.ClientSize = new System.Drawing.Size(668, 373);
+            this.Controls.Add(this.grpRunAITests);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.nodeControlBox);
             this.Controls.Add(this.nodeStatusBox);
             this.Controls.Add(this.nodeConfigBox);
             this.Controls.Add(this.testHarnessConfigBox);
             this.Controls.Add(this.nodesBox);
-            this.Name = "Form1";
+            this.Name = "TestHarness";
             this.Text = "Echo Backup Test Harness";
             this.nodesBox.ResumeLayout(false);
             this.nodeStatusBox.ResumeLayout(false);
@@ -740,13 +764,14 @@ namespace Test_Harness
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown6)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.testHarnessConfigBox.ResumeLayout(false);
             this.testHarnessConfigBox.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown4)).EndInit();
             this.nodeControlBox.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown5)).EndInit();
+            this.grpRunAITests.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -809,6 +834,8 @@ namespace Test_Harness
         private System.Windows.Forms.TextBox StatusCurrentTaskTextBox;
         private System.Windows.Forms.TextBox StatusIndexVersionTextBox;
         private System.Windows.Forms.TextBox StatusRunningTextBox;
+        private System.Windows.Forms.GroupBox grpRunAITests;
+        private System.Windows.Forms.Button cmdRunAITests;
 
     }
 }
