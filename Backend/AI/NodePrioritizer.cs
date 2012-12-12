@@ -125,7 +125,7 @@ namespace Backend.AI
                 //Console.WriteLine();
             }
             var sortedNodes 
-                = (from entry in rankedNodes orderby entry.Value ascending select entry)
+                = (from entry in rankedNodes orderby entry.Value descending select entry)
                 .ToDictionary(pair => pair.Key, pair => pair.Value);
             return sortedNodes;
 

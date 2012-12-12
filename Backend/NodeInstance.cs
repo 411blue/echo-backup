@@ -37,6 +37,7 @@ namespace Backend
             BackupSpaceUsage = backupSpaceUsage;
             GUID = new Guid();
             CPU_Utilization = 0;
+            MaxBandwidth = 3000000;
         }
 
         public long FreeSpace

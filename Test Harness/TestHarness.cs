@@ -80,7 +80,8 @@ namespace Test_Harness
 
         private void cmdRunAITests_Click(object sender, EventArgs e)
         {
-            
+            AIRankForm aiForm = new AIRankForm();
+            aiForm.ShowDialog();
         }
     }
 }

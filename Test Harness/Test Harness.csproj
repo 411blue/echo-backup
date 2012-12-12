@@ -65,6 +65,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AIRankForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AIRankForm.Designer.cs">
+      <DependentUpon>AIRankForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="TestHarness.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +79,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AIRankForm.resx">
+      <DependentUpon>AIRankForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="TestHarness.resx">
       <DependentUpon>TestHarness.cs</DependentUpon>
     </EmbeddedResource>
