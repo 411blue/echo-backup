@@ -99,21 +99,25 @@ namespace Backend
         //Get Internet Protocol Address Version 4 of local node
         public static string GetInternetAddress()
         {
-            string internetAddress = "";
+            IPAddress ipa = GetIPAddress();
+            byte[] octets = ipa.GetAddressBytes();
+            return string.Concat(Convert.ToString(octets[0]) + '.' + Convert.ToString(octets[1]) + '.' +
+                Convert.ToString(octets[2]) + '.' + Convert.ToString(octets[3]));
+        }
+        public static IPAddress GetIPAddress()
+        {
             IPHostEntry ipEntry = Dns.GetHostEntry(GetHostName());
             IPAddress[] addr = ipEntry.AddressList;
             for (int i = 0; i < addr.Length; ++i)
             {
                 //todo: this needs to be rewritten to not use a deprecated property
-                if (addr[i].AddressFamily == AddressFamily.InterNetwork && addr[i].Address != 16777343)
+                if (addr[i].AddressFamily == AddressFamily.InterNetwork && addr[i].Address != 16777343) //lol 1.0.0.127
                 {
-                    byte[] octets = addr[i].GetAddressBytes();
-                    internetAddress = string.Concat(Convert.ToString(octets[0]) + '.' + Convert.ToString(octets[1]) + '.' +
-                        Convert.ToString(octets[2]) + '.' + Convert.ToString(octets[3]));
-                    break;
+                    return addr[i];
                 }
             }
-            return internetAddress;
+            Logger.Error("Node:GetIPAddress Could not determine my IP address");
+            return null;
         }
 
         //Get name of local node

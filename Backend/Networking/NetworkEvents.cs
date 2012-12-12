@@ -75,9 +75,11 @@ namespace Backend
             mySequenceNumber = sequenceNumber;
         }
 
-        public NetworkRequest(/*TcpClient tcpClient*/)
+        public NetworkRequest()
         {
-            //myTcpClient = tcpClient;
+            mySourceIPAddress = Node.GetIPAddress();
+            mySequenceNumber = new Random().Next();
+            mySourceGuid = Node.GetGuid();
         }
     }
 
@@ -186,6 +188,35 @@ namespace Backend
         public QueryRequest(IPAddress ipAddress, /*PhysicalAddress macAddress,*/ Guid guid, int sequenceNumber)
             : base(ipAddress, /*macAddress,*/ guid, sequenceNumber)
         {
+        }
+    }
+
+    /// <summary>
+    /// Represents a request to push an updated SQLite DB to another node.
+    /// </summary>
+    [Serializable()]
+    public class PushIndexRequest : NetworkRequest
+    {
+        // The size of the SQLite DB in bytes
+        private long dbSize;
+        public long DBSize
+        {
+            get { return dbSize; }
+            set { dbSize = value; }
+        }
+
+        // The path to the DB file that will be transmitted to another node
+        private string path;
+        public string Path
+        {
+            get { return path; }
+            set { path = value; }
+        }
+
+        public PushIndexRequest(string path, long size) : base()
+        {
+            this.path = path;
+            this.dbSize = size;
         }
     }
 

@@ -200,6 +200,10 @@ namespace Backend
                 {
                     processMyQueryRequest((QueryRequest)request);
                 }
+                else if (request is PushIndexRequest)
+                {
+                    processMyPushIndexRequest((PushIndexRequest)request);
+                }
                 else
                 { //what kind of request is this?
                     Logger.Warn("ClientThread:handleWork my request is not a known request instance");
@@ -226,9 +230,13 @@ namespace Backend
                     QueryRequest qr = (QueryRequest)request;
                     processRemoteQueryRequest(qr);
                 }
+                else if (request is PushIndexRequest)
+                {
+                    processMyPushIndexRequest((PushIndexRequest)request);
+                }
                 else
                 { //what kind of request is this?
-                    Logger.Warn("ClientThread:handleWork request is not a known request instance");
+                    Logger.Warn("ClientThread:handleWork remote request is not a known request instance");
                 }
             }
         }
@@ -594,6 +602,56 @@ namespace Backend
                     break;
             }
             sendMessage(tcpClient, new NetworkResponse(rt, reason, this.guid, request.SequenceNumber));
+        }
+
+        /// <summary>
+        /// Handles a PushIndexRequest sent through this ClientThread's TcpCLient
+        /// </summary>
+        /// <param name="pir">The PushIndexRequest we need to process</param>
+        private void processMyPushIndexRequest(PushIndexRequest pir)
+        {
+            Logger.Debug("ClientThread:processMyPushIndexRequest");
+            int ret = sendMessage(tcpClient, pir);
+            NetworkResponse response = (NetworkResponse)receiveMessage(tcpClient);
+            if (response.Type == Backend.ResponseType.Yes)
+            {
+                ret = writeFileToNetwork(pir.Path);
+                lock (_lock)
+                {
+                    eventQueue.Enqueue(response);
+                }
+            }
+            else
+            {
+                Logger.Warn("ClientThread:processMyPushIndexRequest Remote node refused to store index file: " + response.Type + ' ' + response.Reason);
+                //other node said 'no' (willnot, cannot, or notimplemented)
+                //add result to event queue
+                lock (_lock)
+                {
+                    eventQueue.Enqueue(response);
+                }
+            }
+        }
+        /// <summary>
+        /// Handles a PushIndexRequest received from this ClientThread's TcpClient
+        /// </summary>
+        /// <param name="pir">The PushIndexRequest we need to process</param>
+        private void processRemotePushIndexRequest(PushIndexRequest pir)
+        {
+            Logger.Debug("ClientThread:processRemotePushIndexRequest");
+            bool b = true;
+            if (b)
+            { //we want to say Yes
+                sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, pir.SequenceNumber));
+                //pir.Path should be modified to be the local path where we want to store the received database
+                readFileToDisk(pir.DBSize, pir.Path);
+            }
+            else
+            { //we want to refuse "WillNot"
+                NetworkResponse response = new NetworkResponse(ResponseType.WillNot, "reason we are refusing to accept the file", guid, pir.SequenceNumber);
+                Logger.Notice("ClientThread:processRemotePushIndexRequest We refuse to store index file: " + response.Type + ' ' + response.Reason);
+                sendMessage(tcpClient, response);
+            }
         }
     }
 }
