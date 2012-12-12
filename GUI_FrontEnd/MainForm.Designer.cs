@@ -35,6 +35,16 @@
             this.tabNodeSets = new System.Windows.Forms.TabPage();
             this.pnlNodeSetsFill = new System.Windows.Forms.Panel();
             this.dataGridViewNodeSets = new System.Windows.Forms.DataGridView();
+            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.reliability = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.trusted = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.numUpDownMaxBackupCapacity = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
@@ -81,19 +91,16 @@
             this.txtBackupDirectory = new System.Windows.Forms.TextBox();
             this.tabDataRecovery = new System.Windows.Forms.TabPage();
             this.pnlDataRecoveryFill = new System.Windows.Forms.Panel();
-            this.dataGridViewDataRecovery = new System.Windows.Forms.DataGridView();
+            this.dataGridViewBackupInfo = new System.Windows.Forms.DataGridView();
+            this.dataGridViewRecoveryDateTimeInfo = new System.Windows.Forms.DataGridView();
             this.colDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colOrigSize = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlDataRecoveryBottom = new System.Windows.Forms.Panel();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.btnRestore = new System.Windows.Forms.Button();
             this.btnRecoveryBrowseDestinations = new System.Windows.Forms.Button();
             this.txtRecoveryDestination = new System.Windows.Forms.TextBox();
             this.lblDestination = new System.Windows.Forms.Label();
             this.pnlDataRecoveryTop = new System.Windows.Forms.Panel();
-            this.btnRecoveryFileBrowser = new System.Windows.Forms.Button();
-            this.txtRecoveryFileBrowser = new System.Windows.Forms.TextBox();
-            this.lblRecoveryFile = new System.Windows.Forms.Label();
+            this.btnRecoveryRefresh = new System.Windows.Forms.Button();
             this.tabScheduler = new System.Windows.Forms.TabPage();
             this.btnLoadSchedule = new System.Windows.Forms.Button();
             this.btnSaveSchedule = new System.Windows.Forms.Button();
@@ -114,16 +121,9 @@
             this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.RecoveryDestinationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openRecoveryFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reliability = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.trusted = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.sourcePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -145,7 +145,8 @@
             this.pnlBackupStatusBottom.SuspendLayout();
             this.tabDataRecovery.SuspendLayout();
             this.pnlDataRecoveryFill.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDataRecovery)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackupInfo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRecoveryDateTimeInfo)).BeginInit();
             this.pnlDataRecoveryBottom.SuspendLayout();
             this.pnlDataRecoveryTop.SuspendLayout();
             this.tabScheduler.SuspendLayout();
@@ -170,8 +171,8 @@
             // 
             // pnlTabGUI
             // 
-            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTabGUI.Controls.Add(this.tabControl);
             this.pnlTabGUI.Location = new System.Drawing.Point(0, 27);
             this.pnlTabGUI.Name = "pnlTabGUI";
@@ -236,6 +237,69 @@
             this.dataGridViewNodeSets.Name = "dataGridViewNodeSets";
             this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 377);
             this.dataGridViewNodeSets.TabIndex = 1;
+            // 
+            // guid
+            // 
+            this.guid.HeaderText = "GUID";
+            this.guid.Name = "guid";
+            // 
+            // name
+            // 
+            this.name.HeaderText = "Name";
+            this.name.Name = "name";
+            this.name.ReadOnly = true;
+            // 
+            // ip
+            // 
+            this.ip.HeaderText = "Logical Address";
+            this.ip.Name = "ip";
+            this.ip.ReadOnly = true;
+            // 
+            // mac
+            // 
+            this.mac.HeaderText = "Physical Address";
+            this.mac.Name = "mac";
+            this.mac.ReadOnly = true;
+            // 
+            // reliability
+            // 
+            this.reliability.HeaderText = "Reliability Metric";
+            this.reliability.Name = "reliability";
+            this.reliability.ReadOnly = true;
+            // 
+            // hopScore
+            // 
+            this.hopScore.HeaderText = "Hop Score";
+            this.hopScore.Name = "hopScore";
+            this.hopScore.ReadOnly = true;
+            // 
+            // smartScore
+            // 
+            this.smartScore.HeaderText = "Smart Score";
+            this.smartScore.Name = "smartScore";
+            this.smartScore.ReadOnly = true;
+            // 
+            // backupsFailed
+            // 
+            this.backupsFailed.HeaderText = "Backups Failed";
+            this.backupsFailed.Name = "backupsFailed";
+            this.backupsFailed.ReadOnly = true;
+            // 
+            // backupsPassed
+            // 
+            this.backupsPassed.HeaderText = "Backups Passed";
+            this.backupsPassed.Name = "backupsPassed";
+            this.backupsPassed.ReadOnly = true;
+            // 
+            // trusted
+            // 
+            this.trusted.HeaderText = "Trusted";
+            this.trusted.Items.AddRange(new object[] {
+            "yes",
+            "no"});
+            this.trusted.Name = "trusted";
+            this.trusted.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.trusted.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // pnlNodeSetsBottom
             // 
@@ -689,28 +753,40 @@
             // 
             // pnlDataRecoveryFill
             // 
-            this.pnlDataRecoveryFill.Controls.Add(this.dataGridViewDataRecovery);
+            this.pnlDataRecoveryFill.Controls.Add(this.dataGridViewBackupInfo);
+            this.pnlDataRecoveryFill.Controls.Add(this.dataGridViewRecoveryDateTimeInfo);
             this.pnlDataRecoveryFill.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlDataRecoveryFill.Location = new System.Drawing.Point(0, 47);
+            this.pnlDataRecoveryFill.Location = new System.Drawing.Point(0, 41);
             this.pnlDataRecoveryFill.Name = "pnlDataRecoveryFill";
-            this.pnlDataRecoveryFill.Size = new System.Drawing.Size(776, 357);
+            this.pnlDataRecoveryFill.Size = new System.Drawing.Size(776, 363);
             this.pnlDataRecoveryFill.TabIndex = 2;
             // 
-            // dataGridViewDataRecovery
+            // dataGridViewBackupInfo
             // 
-            this.dataGridViewDataRecovery.AllowUserToOrderColumns = true;
-            this.dataGridViewDataRecovery.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridViewDataRecovery.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewDataRecovery.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.colDateTime,
-            this.colOrigSize});
-            this.dataGridViewDataRecovery.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewDataRecovery.Location = new System.Drawing.Point(0, 0);
-            this.dataGridViewDataRecovery.Name = "dataGridViewDataRecovery";
-            this.dataGridViewDataRecovery.ReadOnly = true;
-            this.dataGridViewDataRecovery.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridViewDataRecovery.Size = new System.Drawing.Size(776, 357);
-            this.dataGridViewDataRecovery.TabIndex = 4;
+            this.dataGridViewBackupInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewBackupInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.sourcePath,
+            this.size,
+            this.backupTime});
+            this.dataGridViewBackupInfo.Location = new System.Drawing.Point(0, 311);
+            this.dataGridViewBackupInfo.Name = "dataGridViewBackupInfo";
+            this.dataGridViewBackupInfo.Size = new System.Drawing.Size(744, 46);
+            this.dataGridViewBackupInfo.TabIndex = 5;
+            // 
+            // dataGridViewRecoveryDateTimeInfo
+            // 
+            this.dataGridViewRecoveryDateTimeInfo.AllowUserToOrderColumns = true;
+            this.dataGridViewRecoveryDateTimeInfo.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewRecoveryDateTimeInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewRecoveryDateTimeInfo.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colDateTime});
+            this.dataGridViewRecoveryDateTimeInfo.Location = new System.Drawing.Point(0, 0);
+            this.dataGridViewRecoveryDateTimeInfo.Name = "dataGridViewRecoveryDateTimeInfo";
+            this.dataGridViewRecoveryDateTimeInfo.ReadOnly = true;
+            this.dataGridViewRecoveryDateTimeInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewRecoveryDateTimeInfo.Size = new System.Drawing.Size(776, 305);
+            this.dataGridViewRecoveryDateTimeInfo.TabIndex = 4;
+            this.dataGridViewRecoveryDateTimeInfo.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewRecoveryDateTimeInfo_CellContentClick);
             // 
             // colDateTime
             // 
@@ -718,16 +794,9 @@
             this.colDateTime.Name = "colDateTime";
             this.colDateTime.ReadOnly = true;
             // 
-            // colOrigSize
-            // 
-            this.colOrigSize.HeaderText = "Original Size";
-            this.colOrigSize.Name = "colOrigSize";
-            this.colOrigSize.ReadOnly = true;
-            // 
             // pnlDataRecoveryBottom
             // 
             this.pnlDataRecoveryBottom.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlDataRecoveryBottom.Controls.Add(this.progressBar1);
             this.pnlDataRecoveryBottom.Controls.Add(this.btnRestore);
             this.pnlDataRecoveryBottom.Controls.Add(this.btnRecoveryBrowseDestinations);
             this.pnlDataRecoveryBottom.Controls.Add(this.txtRecoveryDestination);
@@ -737,13 +806,6 @@
             this.pnlDataRecoveryBottom.Name = "pnlDataRecoveryBottom";
             this.pnlDataRecoveryBottom.Size = new System.Drawing.Size(776, 83);
             this.pnlDataRecoveryBottom.TabIndex = 1;
-            // 
-            // progressBar1
-            // 
-            this.progressBar1.Location = new System.Drawing.Point(125, 45);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(643, 23);
-            this.progressBar1.TabIndex = 13;
             // 
             // btnRestore
             // 
@@ -784,40 +846,22 @@
             // pnlDataRecoveryTop
             // 
             this.pnlDataRecoveryTop.BackColor = System.Drawing.SystemColors.Control;
-            this.pnlDataRecoveryTop.Controls.Add(this.btnRecoveryFileBrowser);
-            this.pnlDataRecoveryTop.Controls.Add(this.txtRecoveryFileBrowser);
-            this.pnlDataRecoveryTop.Controls.Add(this.lblRecoveryFile);
+            this.pnlDataRecoveryTop.Controls.Add(this.btnRecoveryRefresh);
             this.pnlDataRecoveryTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.pnlDataRecoveryTop.Location = new System.Drawing.Point(0, 0);
             this.pnlDataRecoveryTop.Name = "pnlDataRecoveryTop";
-            this.pnlDataRecoveryTop.Size = new System.Drawing.Size(776, 47);
+            this.pnlDataRecoveryTop.Size = new System.Drawing.Size(776, 41);
             this.pnlDataRecoveryTop.TabIndex = 0;
             // 
-            // btnRecoveryFileBrowser
+            // btnRecoveryRefresh
             // 
-            this.btnRecoveryFileBrowser.Location = new System.Drawing.Point(664, 12);
-            this.btnRecoveryFileBrowser.Name = "btnRecoveryFileBrowser";
-            this.btnRecoveryFileBrowser.Size = new System.Drawing.Size(104, 23);
-            this.btnRecoveryFileBrowser.TabIndex = 5;
-            this.btnRecoveryFileBrowser.Text = "Browse Files";
-            this.btnRecoveryFileBrowser.UseVisualStyleBackColor = true;
-            this.btnRecoveryFileBrowser.Click += new System.EventHandler(this.btnRecoveryFileBrowser_Click);
-            // 
-            // txtRecoveryFileBrowser
-            // 
-            this.txtRecoveryFileBrowser.Location = new System.Drawing.Point(82, 14);
-            this.txtRecoveryFileBrowser.Name = "txtRecoveryFileBrowser";
-            this.txtRecoveryFileBrowser.Size = new System.Drawing.Size(576, 20);
-            this.txtRecoveryFileBrowser.TabIndex = 4;
-            // 
-            // lblRecoveryFile
-            // 
-            this.lblRecoveryFile.AutoSize = true;
-            this.lblRecoveryFile.Location = new System.Drawing.Point(8, 17);
-            this.lblRecoveryFile.Name = "lblRecoveryFile";
-            this.lblRecoveryFile.Size = new System.Drawing.Size(68, 13);
-            this.lblRecoveryFile.TabIndex = 3;
-            this.lblRecoveryFile.Text = "Select a File:";
+            this.btnRecoveryRefresh.Location = new System.Drawing.Point(8, 12);
+            this.btnRecoveryRefresh.Name = "btnRecoveryRefresh";
+            this.btnRecoveryRefresh.Size = new System.Drawing.Size(129, 23);
+            this.btnRecoveryRefresh.TabIndex = 5;
+            this.btnRecoveryRefresh.Text = "Refresh Backup List";
+            this.btnRecoveryRefresh.UseVisualStyleBackColor = true;
+            this.btnRecoveryRefresh.Click += new System.EventHandler(this.btnRecoveryRefresh_Click);
             // 
             // tabScheduler
             // 
@@ -963,68 +1007,22 @@
             // 
             this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
             // 
-            // guid
+            // sourcePath
             // 
-            this.guid.HeaderText = "GUID";
-            this.guid.Name = "guid";
+            this.sourcePath.HeaderText = "Source Path";
+            this.sourcePath.Name = "sourcePath";
+            this.sourcePath.Width = 600;
             // 
-            // name
+            // size
             // 
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
+            this.size.HeaderText = "Size";
+            this.size.Name = "size";
             // 
-            // ip
+            // backupTime
             // 
-            this.ip.HeaderText = "Logical Address";
-            this.ip.Name = "ip";
-            this.ip.ReadOnly = true;
-            // 
-            // mac
-            // 
-            this.mac.HeaderText = "Physical Address";
-            this.mac.Name = "mac";
-            this.mac.ReadOnly = true;
-            // 
-            // reliability
-            // 
-            this.reliability.HeaderText = "Reliability Metric";
-            this.reliability.Name = "reliability";
-            this.reliability.ReadOnly = true;
-            // 
-            // hopScore
-            // 
-            this.hopScore.HeaderText = "Hop Score";
-            this.hopScore.Name = "hopScore";
-            this.hopScore.ReadOnly = true;
-            // 
-            // smartScore
-            // 
-            this.smartScore.HeaderText = "Smart Score";
-            this.smartScore.Name = "smartScore";
-            this.smartScore.ReadOnly = true;
-            // 
-            // backupsFailed
-            // 
-            this.backupsFailed.HeaderText = "Backups Failed";
-            this.backupsFailed.Name = "backupsFailed";
-            this.backupsFailed.ReadOnly = true;
-            // 
-            // backupsPassed
-            // 
-            this.backupsPassed.HeaderText = "Backups Passed";
-            this.backupsPassed.Name = "backupsPassed";
-            this.backupsPassed.ReadOnly = true;
-            // 
-            // trusted
-            // 
-            this.trusted.HeaderText = "Trusted";
-            this.trusted.Items.AddRange(new object[] {
-            "yes",
-            "no"});
-            this.trusted.Name = "trusted";
-            this.trusted.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.trusted.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
+            this.backupTime.HeaderText = "Backup Time";
+            this.backupTime.Name = "backupTime";
+            this.backupTime.Visible = false;
             // 
             // MainForm
             // 
@@ -1066,11 +1064,11 @@
             this.pnlBackupStatusBottom.PerformLayout();
             this.tabDataRecovery.ResumeLayout(false);
             this.pnlDataRecoveryFill.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewDataRecovery)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewBackupInfo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRecoveryDateTimeInfo)).EndInit();
             this.pnlDataRecoveryBottom.ResumeLayout(false);
             this.pnlDataRecoveryBottom.PerformLayout();
             this.pnlDataRecoveryTop.ResumeLayout(false);
-            this.pnlDataRecoveryTop.PerformLayout();
             this.tabScheduler.ResumeLayout(false);
             this.tabScheduler.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -1125,20 +1123,14 @@
         private System.Windows.Forms.Panel pnlDataRecoveryTop;
         private System.Windows.Forms.Panel pnlDataRecoveryFill;
         private System.Windows.Forms.Panel pnlDataRecoveryBottom;
-        private System.Windows.Forms.Button btnRecoveryFileBrowser;
-        private System.Windows.Forms.TextBox txtRecoveryFileBrowser;
-        private System.Windows.Forms.Label lblRecoveryFile;
-        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.Button btnRecoveryRefresh;
         private System.Windows.Forms.Button btnRestore;
         private System.Windows.Forms.Button btnRecoveryBrowseDestinations;
         private System.Windows.Forms.TextBox txtRecoveryDestination;
         private System.Windows.Forms.Label lblDestination;
-        private System.Windows.Forms.DataGridView dataGridViewDataRecovery;
         private System.Windows.Forms.TabPage tabScheduler;
         private System.Windows.Forms.Button btnLoadSchedule;
         private System.Windows.Forms.Button btnSaveSchedule;
-        private System.Windows.Forms.Label lblNodeSets;
-        private System.Windows.Forms.ComboBox comboNodeSets;
         private System.Windows.Forms.Label lblFrequency;
         private System.Windows.Forms.ComboBox comboFrequency;
         private System.Windows.Forms.DateTimePicker startTimePicker;
@@ -1164,8 +1156,6 @@
         private System.Windows.Forms.FolderBrowserDialog RecoveryDestinationBrowserDialog;
         private System.Windows.Forms.OpenFileDialog openRecoveryFileDialog;
         private System.Windows.Forms.Button btnSetBackupDirectory;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colDateTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colOrigSize;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFilepath;
         private System.Windows.Forms.GroupBox StatisticsGroup;
         private System.Windows.Forms.DataGridViewTextBoxColumn guid;
@@ -1178,5 +1168,13 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsFailed;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupsPassed;
         private System.Windows.Forms.DataGridViewComboBoxColumn trusted;
+        private System.Windows.Forms.Label lblNodeSets;
+        private System.Windows.Forms.ComboBox comboNodeSets;
+        private System.Windows.Forms.DataGridView dataGridViewBackupInfo;
+        private System.Windows.Forms.DataGridView dataGridViewRecoveryDateTimeInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colDateTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn sourcePath;
+        private System.Windows.Forms.DataGridViewTextBoxColumn size;
+        private System.Windows.Forms.DataGridViewTextBoxColumn backupTime;
     }
 }

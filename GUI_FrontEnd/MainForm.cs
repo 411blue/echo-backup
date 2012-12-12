@@ -20,6 +20,7 @@ namespace GUI_FrontEnd
             InitializeComponent();
             numUpDownMaxBackupCapacity.Value = Settings.Default.maxBackupCapacity;
             db = new NodeDatabase();
+            indexDB = new IndexDatabase();
             
             /*
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC1", "192.168.1.1", "00-21-70-FE-23-EF", "1", "51", "89", "0", "100","yes");
@@ -118,9 +119,6 @@ namespace GUI_FrontEnd
                         text = sr.ReadLine();
                         comboFrequency.SelectedItem = text;
                         Console.WriteLine(text);
-                        text = sr.ReadLine();
-                        comboNodeSets.SelectedItem = text;
-                        Console.WriteLine(text);
                     }
                 }
                 catch (System.IO.IOException)
@@ -138,8 +136,8 @@ namespace GUI_FrontEnd
                 file.WriteLine(startDatePicker.Value.ToString("d"));
                 file.WriteLine(startTimePicker.Value.ToString("T"));
                 file.WriteLine(comboFrequency.SelectedItem);
-                file.WriteLine(comboNodeSets.SelectedItem);
             }
+
         }
 
         private void btnBackupFiles_Click(object sender, EventArgs e)
@@ -192,68 +190,6 @@ namespace GUI_FrontEnd
             dataGridViewNodeSets.Rows.Clear();
         }
 
-        private void btnRecoveryFileBrowser_Click(object sender, EventArgs e)
-        {
-            DialogResult result = openRecoveryFileDialog.ShowDialog();
-            if (result == DialogResult.OK)
-            {
-                string recoveryFilePath = openRecoveryFileDialog.FileName;
-                try
-                {
-                    txtRecoveryFileBrowser.Text = recoveryFilePath;
-
-                    string sqliteDBFile = @"C:\Users\Tom\Desktop\index.db";
-                    //cnn = db.ConnectToDatabase(sqliteDBFile);
-                    
-                    string query = "SELECT date_of_backup, size FROM Backup_Indexes WHERE source_path = @pSourcePath";
-                    SQLiteCommand cmd = new SQLiteCommand(query, cnn);
-
-                    //create a parameter for sourceGUID
-                    SQLiteParameter pSourceGUID = new SQLiteParameter("@pSourcePath", recoveryFilePath);
-
-                    cmd.Parameters.Add(pSourceGUID);
-                    try
-                    {
-                        cnn.Open();
-
-                        SQLiteCommand myCommand = new SQLiteCommand(query, cnn);
-                        SQLiteDataReader reader = myCommand.ExecuteReader();
-
-                        DataTable dt = new DataTable();
-                        dt.Load(reader);
-
-                        string text = "";
-                        foreach (DataRow row in dt.Rows)
-                        {
-                            for (int i = 0; i < 15; i++)
-                            {
-                                text += row[i] + ", ";
-                            }
-                            text += "\n";
-
-                            string[] rowArray = new string[] {row[0].ToString(), row[1].ToString()};
-                            dataGridViewDataRecovery.Rows.Add(rowArray[0]);
-                        }
-                        Console.WriteLine(text);
-                    }
-                    catch (Exception error)
-                    {
-                        Console.WriteLine("Caught exception: " + error.Message);
-                    }
-                    finally
-                    {
-                        if (cnn != null)
-                        {
-                            cnn.Close();
-                        }
-                    }
-                }
-                catch (System.IO.IOException)
-                {
-                }
-            }
-        }
-
         private void btnRecoveryBrowseDestinations_Click(object sender, EventArgs e)
         {
             DialogResult result = RecoveryDestinationBrowserDialog.ShowDialog();
@@ -284,13 +220,30 @@ namespace GUI_FrontEnd
         //Placeholder for Jame's code to restore files
         private void btnRestore_Click(object sender, EventArgs e)
         {
-            //Retrieves data about selected recovery file, stores in object {date/time, original size}
-            string[] recoveryFile = new string[]{dataGridViewDataRecovery.SelectedRows[0].Cells[0].Value.ToString(), dataGridViewDataRecovery.SelectedRows[0].Cells[1].Value.ToString()};
+            //Retrieves data about selected recovery file, stores in object {source path, original size, backup time/date}
+            string[] recoveryFile = new string[] { dataGridViewBackupInfo.SelectedRows[0].Cells[0].Value.ToString(), dataGridViewBackupInfo.SelectedRows[0].Cells[1].Value.ToString(), dataGridViewBackupInfo.SelectedRows[0].Cells[2].Value.ToString() };
 
             string recoveryDestination = txtRecoveryDestination.Text;
         }
 
+        private void btnRecoveryRefresh_Click(object sender, EventArgs e)
+        {
+            string guid = Backend.Properties.Settings.Default.guid.ToString();
+            dataGridViewRecoveryDateTimeInfo.DataSource = indexDB.GetIndexList(guid);
+        }
+        
+        private void dataGridViewRecoveryDateTimeInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            string guid = Backend.Properties.Settings.Default.guid.ToString();
+            BackupIndex index = indexDB.GetBackupIndex(guid, dataGridViewRecoveryDateTimeInfo.SelectedRows[0].Cells[0].Value.ToString());
+            
+            //Updates data grid based on values of backup index
+            dataGridViewBackupInfo.Rows[0].Cells[0].Value = index.sourcePath;
+            dataGridViewBackupInfo.Rows[0].Cells[1].Value = index.size;
+            dataGridViewBackupInfo.Rows[0].Cells[2].Value = index.dateAndTime; //column is not visible
+        }
+
         private NodeDatabase db;
-        private SQLiteConnection cnn;
+        private IndexDatabase indexDB;
     }
 }
