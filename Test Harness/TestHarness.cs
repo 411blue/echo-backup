@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Backend.AI;
 
 namespace Test_Harness
 {
@@ -75,6 +76,11 @@ namespace Test_Harness
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void cmdRunAITests_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }
