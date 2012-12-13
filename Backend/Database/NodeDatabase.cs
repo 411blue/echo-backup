@@ -81,11 +81,13 @@ namespace Backend.Database
         //Update a node. Table unchanged if UniqueId is not present, table unchanged. 
         public void UpdateNodeRecord(Node.PC n1)
         {
-            string sql = "UPDATE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity, BackupData, NonBackupData, FreeSpace, TotalCapacity)"
-                + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace, @pTotalCapacity)";
+            string sql = "UPDATE nodes SET Name = @pName, Ip = @pIp, MAC = @pMac, MaxBackupCapacity = @pMaxBackupCapacity," +
+                " BackupData = @pBackupData, NonBackupData = @NonBackupData, FreeSpace = @FreeSpace, TotalCapacity = @TotalCapacity" +
+                " WHERE UniqueID = @pUniqueID";
+
+
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pName", n1.name));
             cmd.Parameters.Add(new SQLiteParameter("@pIp", n1.ip));
             cmd.Parameters.Add(new SQLiteParameter("@pMac", n1.mac));
@@ -94,6 +96,7 @@ namespace Backend.Database
             cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", n1.nonBackupData));
             cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", n1.freeSpace));
             cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", n1.totalCapacity));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId.ToString()));
 
             conn.Open();
             cmd.ExecuteNonQuery();
