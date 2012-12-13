@@ -187,7 +187,7 @@ namespace GUI_FrontEnd
         private void btnRefreshList_Click(object sender, EventArgs e)
         {
             DataTable dt = db.GetNodes();
-            dataGridViewNodeSets.Rows.Clear();
+            dataGridViewNodeSets.DataSource = dt;
         }
 
         private void btnRecoveryBrowseDestinations_Click(object sender, EventArgs e)

@@ -750,6 +750,7 @@ namespace Backend.Database
             SQLiteDataReader reader = cmd.ExecuteReader();
             DataTable dt = new DataTable();
             dt.Load(reader);
+            conn.Close();
             return dt;
         }
 

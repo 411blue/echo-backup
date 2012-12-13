@@ -35,16 +35,6 @@
             this.tabNodeSets = new System.Windows.Forms.TabPage();
             this.pnlNodeSetsFill = new System.Windows.Forms.Panel();
             this.dataGridViewNodeSets = new System.Windows.Forms.DataGridView();
-            this.guid = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ip = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mac = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.reliability = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.hopScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.smartScore = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsFailed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupsPassed = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.trusted = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.pnlNodeSetsBottom = new System.Windows.Forms.Panel();
             this.numUpDownMaxBackupCapacity = new System.Windows.Forms.NumericUpDown();
             this.label9 = new System.Windows.Forms.Label();
@@ -171,8 +161,8 @@
             // 
             // pnlTabGUI
             // 
-            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pnlTabGUI.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.pnlTabGUI.Controls.Add(this.tabControl);
             this.pnlTabGUI.Location = new System.Drawing.Point(0, 27);
             this.pnlTabGUI.Name = "pnlTabGUI";
@@ -221,85 +211,11 @@
             this.dataGridViewNodeSets.AllowUserToOrderColumns = true;
             this.dataGridViewNodeSets.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewNodeSets.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewNodeSets.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.guid,
-            this.name,
-            this.ip,
-            this.mac,
-            this.reliability,
-            this.hopScore,
-            this.smartScore,
-            this.backupsFailed,
-            this.backupsPassed,
-            this.trusted});
             this.dataGridViewNodeSets.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewNodeSets.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewNodeSets.Name = "dataGridViewNodeSets";
             this.dataGridViewNodeSets.Size = new System.Drawing.Size(770, 377);
             this.dataGridViewNodeSets.TabIndex = 1;
-            // 
-            // guid
-            // 
-            this.guid.HeaderText = "GUID";
-            this.guid.Name = "guid";
-            // 
-            // name
-            // 
-            this.name.HeaderText = "Name";
-            this.name.Name = "name";
-            this.name.ReadOnly = true;
-            // 
-            // ip
-            // 
-            this.ip.HeaderText = "Logical Address";
-            this.ip.Name = "ip";
-            this.ip.ReadOnly = true;
-            // 
-            // mac
-            // 
-            this.mac.HeaderText = "Physical Address";
-            this.mac.Name = "mac";
-            this.mac.ReadOnly = true;
-            // 
-            // reliability
-            // 
-            this.reliability.HeaderText = "Reliability Metric";
-            this.reliability.Name = "reliability";
-            this.reliability.ReadOnly = true;
-            // 
-            // hopScore
-            // 
-            this.hopScore.HeaderText = "Hop Score";
-            this.hopScore.Name = "hopScore";
-            this.hopScore.ReadOnly = true;
-            // 
-            // smartScore
-            // 
-            this.smartScore.HeaderText = "Smart Score";
-            this.smartScore.Name = "smartScore";
-            this.smartScore.ReadOnly = true;
-            // 
-            // backupsFailed
-            // 
-            this.backupsFailed.HeaderText = "Backups Failed";
-            this.backupsFailed.Name = "backupsFailed";
-            this.backupsFailed.ReadOnly = true;
-            // 
-            // backupsPassed
-            // 
-            this.backupsPassed.HeaderText = "Backups Passed";
-            this.backupsPassed.Name = "backupsPassed";
-            this.backupsPassed.ReadOnly = true;
-            // 
-            // trusted
-            // 
-            this.trusted.HeaderText = "Trusted";
-            this.trusted.Items.AddRange(new object[] {
-            "yes",
-            "no"});
-            this.trusted.Name = "trusted";
-            this.trusted.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.trusted.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.Automatic;
             // 
             // pnlNodeSetsBottom
             // 
@@ -1159,16 +1075,6 @@
         private System.Windows.Forms.Button btnSetBackupDirectory;
         private System.Windows.Forms.DataGridViewTextBoxColumn colFilepath;
         private System.Windows.Forms.GroupBox StatisticsGroup;
-        private System.Windows.Forms.DataGridViewTextBoxColumn guid;
-        private System.Windows.Forms.DataGridViewTextBoxColumn name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ip;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mac;
-        private System.Windows.Forms.DataGridViewTextBoxColumn reliability;
-        private System.Windows.Forms.DataGridViewTextBoxColumn hopScore;
-        private System.Windows.Forms.DataGridViewTextBoxColumn smartScore;
-        private System.Windows.Forms.DataGridViewTextBoxColumn backupsFailed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn backupsPassed;
-        private System.Windows.Forms.DataGridViewComboBoxColumn trusted;
         private System.Windows.Forms.Label lblNodeSets;
         private System.Windows.Forms.ComboBox comboNodeSets;
         private System.Windows.Forms.DataGridView dataGridViewBackupInfo;
