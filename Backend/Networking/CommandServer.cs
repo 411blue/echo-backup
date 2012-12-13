@@ -17,7 +17,7 @@ namespace Backend
     public class CommandServer
     {
         //arbitrary unprivileged port
-        private const int SERVER_PORT = 7890;
+        public static readonly int SERVER_PORT = 7890;
         private Guid guid;
         //flag to continue listening
         private volatile bool keepGoing = true;

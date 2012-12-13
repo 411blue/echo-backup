@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AI\NodePrioritizer.cs" />
+    <Compile Include="MiscFunctions.cs" />
     <Compile Include="Networking\ClientThread.cs" />
     <Compile Include="Database\DistributionDatabase.cs" />
     <Compile Include="Database\NodeDatabase.cs" />

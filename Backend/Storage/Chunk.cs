@@ -19,8 +19,6 @@ namespace Backend.Storage
         }
     }
 
-    
-
     public class Chunk
     {
         private int chunkID;
@@ -34,7 +32,7 @@ namespace Backend.Storage
         public static string PathToChunk(Guid sourceGuid, long backupID, long chunkID)
         {
             // "<backup file storage dir>\<source host>\<backup id>\<sourceGuid>_<backupID>_<chunkID>.tgz"
-            return Settings.Default.localBackupPath + '\\' + sourceGuid + '\\' + backupID + '\\' + sourceGuid + '_' + backupID + '_' + chunkID + ".tgz";
+            return Settings.Default.localBackupPath + '\\' + sourceGuid + /*'\\' + backupID + */'\\' + sourceGuid /*+ '_' + backupID*/ + '_' + chunkID + ".tgz";
         }
         public static string PathToChunk(PushRequest request)
         {

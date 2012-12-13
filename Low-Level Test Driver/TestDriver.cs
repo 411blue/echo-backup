@@ -23,6 +23,11 @@ namespace Low_Level_Test_Driver
         {
             Console.WriteLine(s);
         }
+        static void Wait()
+        {
+            Console.WriteLine("press a key to continue");
+            Console.ReadKey();
+        }
 
         /// <summary>
         /// tests the basic Tar and GZip functionality.
@@ -298,6 +303,7 @@ namespace Low_Level_Test_Driver
             }*/
             //testUnTarGZip();
             testService();
+            Wait();
         }
     }
 }

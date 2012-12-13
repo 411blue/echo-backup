@@ -10,8 +10,11 @@ using System.Text;
 using System.Threading;
 using Backend.Storage;
 using Backend.Database;
+using Backend.Networking;
 using System.ServiceModel;
 using System.ServiceModel.Description;
+using System.Net;
+using System.Net.Sockets;
 
 namespace Backend 
 {
@@ -201,8 +204,47 @@ namespace Backend
                 Chunk chunk = storageThread.DequeueChunk();
                 Logger.Debug("EchoBackupService:checkStorageThread Finished archiving FileShare for BackupIndex.");
                 //identify host(s) to send to.
+                List<GuidAndIP> gai = NetworkFunctions.GetOnlineNodesIPAddresses();
+                if (gai.Count < 2)
+                {
+                    Logger.Warn("EchoBackupService:checkStorageThread not enough online hosts");
+                }
                 //send chunk to hosts.
+                List<Block> blocks = new List<Block>();
+                long filesize = new FileInfo(chunk.Path()).Length;
+                for (int i = 0; i < 2 && i < gai.Count; i++)
+                {
+                    TcpClient tc = new TcpClient(new IPEndPoint(gai[i].ipAddress, CommandServer.SERVER_PORT));
+                    ClientThread ct = new ClientThread(tc, false, this.guid);
+                    PushRequest pr = new PushRequest(Node.GetIPAddress(), this.guid, MiscFunctions.Next());
+                    pr.Path = chunk.Path();
+                    pr.FileSize = filesize;
+                    pr.BackupNumber = chunk.BackupID();
+                    pr.ChunkNumber = chunk.ChunkID();
+                    ct.EnqueueWork(pr);
+                    lock (clientThreads)
+                    {
+                        clientThreads.Add(ct);
+                    }
+                    blocks.Add(new Block(this.guid.ToString(), gai[i].guid.ToString(), "bad storage path", filesize, MiscFunctions.DBDateAndTime()));
+                }
                 //do something with the index so we know about this backup
+                //store files in BackupIndex
+                IndexDatabase idb = new IndexDatabase();
+                foreach (FileInChunk fic in chunk.Files())
+                {
+                    BackupIndex bi = new BackupIndex();
+                    string fullpath = Path.Combine(chunk.BasePath(), bi.sourcePath);
+                    bi.backupLevel = 0;
+                    bi.dateAndTime = MiscFunctions.DBDateAndTime();
+                    bi.firstBlockOffset = 0;
+                    bi.size = new FileInfo(fullpath).Length;
+                    bi.sourceGUID = this.guid.ToString();
+                    bi.sourcePath = fullpath;
+                    idb.InsertIndex(bi, blocks);
+                }
+                //store indexes in DB
+
             }
             if (storageThread.NumRecoverStructs() > 0)
             {
