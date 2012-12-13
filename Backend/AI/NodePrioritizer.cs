@@ -102,8 +102,6 @@ namespace Backend.AI
 
             for (int i = 0; i < nodes.Count; i++)
             {
-
-
                 //
                 // Fuzzify input values
                 //
