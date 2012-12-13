@@ -38,7 +38,17 @@ namespace Backend
         //Calculate reliabity metric
         public int CalculateReliablity(int hops, int smart, int passed, int failed)
         {
-            reliabilityMetric = 255 - smart- hops - (114 * (failed / (failed + passed)));
+            int ratio = 0;
+            if (failed + passed == 0)
+            {
+                ratio = 1;
+            }
+            else
+            {
+                ratio = Convert.ToInt32((double) failed / (double) (failed + passed));
+            }
+
+            reliabilityMetric = 255 - smart- hops - (114 * ratio);
             return reliabilityMetric;
         }
 
@@ -101,11 +111,11 @@ namespace Backend
                     }
                     else
                     {
-                        int s = Node.GetSmart(0,89);
-                        int h = Node.GetHops(0, 51);
+                        int s = Node.GetSmart();
+                        int h = Node.GetHops();
                         Node.PC newPC = new Node.PC(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
-                            long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
+                            long.Parse(attributes[6]), long.Parse(attributes[7]),long.Parse(attributes[8]), 
                             CalculateReliablity(h, s, 0,0), h, s, 0, 0, "yes");
                         nd.InsertNodeRecord(newPC);
                     }

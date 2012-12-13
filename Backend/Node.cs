@@ -57,18 +57,18 @@ namespace Backend
         }
 
         //Get SMART Data
-        public static int GetSmart(int min, int max)
+        public static int GetSmart()
         {
             Random rnd = new Random();
-            int smart = rnd.Next(min, max);
+            int smart = rnd.Next(0, 89);
             return smart;
         }
 
         //Get Hop Data
-        public static int GetHops(int min, int max)
+        public static int GetHops()
         {
             Random rnd = new Random();
-            int hop = rnd.Next(min, max);
+            int hop = rnd.Next(0, 51);
             return hop;
 
         }

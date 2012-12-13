@@ -92,6 +92,9 @@
             this.tabDataRecovery = new System.Windows.Forms.TabPage();
             this.pnlDataRecoveryFill = new System.Windows.Forms.Panel();
             this.dataGridViewBackupInfo = new System.Windows.Forms.DataGridView();
+            this.sourcePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewRecoveryDateTimeInfo = new System.Windows.Forms.DataGridView();
             this.colDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlDataRecoveryBottom = new System.Windows.Forms.Panel();
@@ -121,9 +124,6 @@
             this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.RecoveryDestinationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openRecoveryFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.sourcePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -770,8 +770,26 @@
             this.backupTime});
             this.dataGridViewBackupInfo.Location = new System.Drawing.Point(0, 311);
             this.dataGridViewBackupInfo.Name = "dataGridViewBackupInfo";
-            this.dataGridViewBackupInfo.Size = new System.Drawing.Size(744, 46);
+            this.dataGridViewBackupInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewBackupInfo.Size = new System.Drawing.Size(773, 46);
             this.dataGridViewBackupInfo.TabIndex = 5;
+            // 
+            // sourcePath
+            // 
+            this.sourcePath.HeaderText = "Source Path";
+            this.sourcePath.Name = "sourcePath";
+            this.sourcePath.Width = 600;
+            // 
+            // size
+            // 
+            this.size.HeaderText = "Size";
+            this.size.Name = "size";
+            // 
+            // backupTime
+            // 
+            this.backupTime.HeaderText = "Backup Time";
+            this.backupTime.Name = "backupTime";
+            this.backupTime.Visible = false;
             // 
             // dataGridViewRecoveryDateTimeInfo
             // 
@@ -1006,23 +1024,6 @@
             // saveScheduleDialog
             // 
             this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
-            // 
-            // sourcePath
-            // 
-            this.sourcePath.HeaderText = "Source Path";
-            this.sourcePath.Name = "sourcePath";
-            this.sourcePath.Width = 600;
-            // 
-            // size
-            // 
-            this.size.HeaderText = "Size";
-            this.size.Name = "size";
-            // 
-            // backupTime
-            // 
-            this.backupTime.HeaderText = "Backup Time";
-            this.backupTime.Name = "backupTime";
-            this.backupTime.Visible = false;
             // 
             // MainForm
             // 
