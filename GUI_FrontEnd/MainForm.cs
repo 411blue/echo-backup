@@ -221,7 +221,10 @@ namespace GUI_FrontEnd
         private void btnRestore_Click(object sender, EventArgs e)
         {
             //Retrieves data about selected recovery file, stores in object {source path, original size, backup time/date}
-            string[] recoveryFile = new string[] { dataGridViewBackupInfo.SelectedRows[0].Cells[0].Value.ToString(), dataGridViewBackupInfo.SelectedRows[0].Cells[1].Value.ToString(), dataGridViewBackupInfo.SelectedRows[0].Cells[2].Value.ToString() };
+            string sourcePath = (string) dataGridViewBackupInfo.Rows[0].Cells["sourcePath"].Value;
+            string size = (string) dataGridViewBackupInfo.Rows[0].Cells["size"].Value;
+            string backupTime = (string) dataGridViewBackupInfo.Rows[0].Cells["backupTime"].Value;
+            string[] recoveryFile = new string[] { sourcePath, size, backupTime };
 
             string recoveryDestination = txtRecoveryDestination.Text;
         }
@@ -235,12 +238,13 @@ namespace GUI_FrontEnd
         private void dataGridViewRecoveryDateTimeInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             string guid = Backend.Properties.Settings.Default.guid.ToString();
-            BackupIndex index = indexDB.GetBackupIndex(guid, dataGridViewRecoveryDateTimeInfo.SelectedRows[0].Cells[0].Value.ToString());
+            string dateAndTime = (string) dataGridViewRecoveryDateTimeInfo.SelectedRows[0].Cells["colDateTime"].Value;
+            BackupIndex index = indexDB.GetBackupIndex(guid, dateAndTime);
             
             //Updates data grid based on values of backup index
-            dataGridViewBackupInfo.Rows[0].Cells[0].Value = index.sourcePath;
-            dataGridViewBackupInfo.Rows[0].Cells[1].Value = index.size;
-            dataGridViewBackupInfo.Rows[0].Cells[2].Value = index.dateAndTime; //column is not visible
+            dataGridViewBackupInfo.Rows[0].Cells["sourcePath"].Value = index.sourcePath;
+            dataGridViewBackupInfo.Rows[0].Cells["size"].Value = index.size;
+            dataGridViewBackupInfo.Rows[0].Cells["backupTime"].Value = index.dateAndTime; //column is not visible
         }
 
         private NodeDatabase db;
