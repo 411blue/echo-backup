@@ -81,7 +81,7 @@ namespace Backend.Database
         //Update a node. Table unchanged if UniqueId is not present, table unchanged. 
         public void UpdateNodeRecord(Node.PC n1)
         {
-            string sql = "REPLACE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity, BackupData, NonBackupData, FreeSpace, TotalCapacity)"
+            string sql = "UPDATE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity, BackupData, NonBackupData, FreeSpace, TotalCapacity)"
                 + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace, @pTotalCapacity)";
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
