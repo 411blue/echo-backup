@@ -53,7 +53,7 @@ namespace Backend.Database
                 string sql = "INSERT INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
                     + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
                     + " ReliabilityMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
-                    + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
+                    + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace,"
                     + " @pTotalCapacity, @pReliabilityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
 
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
