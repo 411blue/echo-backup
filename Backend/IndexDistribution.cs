@@ -198,6 +198,6 @@ namespace Backend
              
         }
 
-        private bool distribute;
+        private volatile bool distribute;
     }
 }
