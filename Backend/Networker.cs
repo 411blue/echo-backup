@@ -71,6 +71,7 @@ namespace Backend
         {
             while (receiverAlive)
             {
+
                 receiver.Receive(rxBuffer);
                 string str = System.Text.Encoding.ASCII.GetString(rxBuffer, 0, rxBuffer.Length);
                 heartbeats.Enqueue(str);
@@ -105,9 +106,9 @@ namespace Backend
                     {
                         Node.PC existingPC = new Node.PC(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
-                            long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
-                            -1, -1, Convert.ToInt32(attributes[9]), -1, -1, "");
-                        nd.ReplaceNodeRecord(existingPC);
+                            long.Parse(attributes[6]), long.Parse(attributes[7]),long.Parse(attributes[8]),
+                            -1,-1,-1,-1,-1,"");
+                        nd.UpdateNodeRecord(existingPC);
                     }
                     else
                     {
