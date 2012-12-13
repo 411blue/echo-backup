@@ -48,6 +48,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.txtUnitTests = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtDiskUsage = new System.Windows.Forms.TextBox();
+            this.txtWorstDiskUsage = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -59,7 +63,7 @@
             this.lstNodes.FormattingEnabled = true;
             this.lstNodes.Location = new System.Drawing.Point(16, 19);
             this.lstNodes.Name = "lstNodes";
-            this.lstNodes.Size = new System.Drawing.Size(141, 277);
+            this.lstNodes.Size = new System.Drawing.Size(185, 238);
             this.lstNodes.TabIndex = 0;
             // 
             // timer1
@@ -72,32 +76,34 @@
             this.groupBox1.Controls.Add(this.lstNodes);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(174, 312);
+            this.groupBox1.Size = new System.Drawing.Size(219, 278);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Priority";
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.txtDiskUsage);
+            this.groupBox2.Controls.Add(this.label6);
             this.groupBox2.Controls.Add(this.txtNetwork);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.txtCPU);
             this.groupBox2.Controls.Add(this.label1);
             this.groupBox2.Controls.Add(this.txtName);
             this.groupBox2.Controls.Add(this.lblName);
-            this.groupBox2.Location = new System.Drawing.Point(204, 12);
+            this.groupBox2.Location = new System.Drawing.Point(12, 296);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(219, 105);
+            this.groupBox2.Size = new System.Drawing.Size(219, 132);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Optimal Node";
             // 
             // txtNetwork
             // 
-            this.txtNetwork.Location = new System.Drawing.Point(79, 68);
+            this.txtNetwork.Location = new System.Drawing.Point(87, 68);
             this.txtNetwork.Name = "txtNetwork";
             this.txtNetwork.ReadOnly = true;
-            this.txtNetwork.Size = new System.Drawing.Size(122, 20);
+            this.txtNetwork.Size = new System.Drawing.Size(114, 20);
             this.txtNetwork.TabIndex = 5;
             // 
             // label2
@@ -111,10 +117,10 @@
             // 
             // txtCPU
             // 
-            this.txtCPU.Location = new System.Drawing.Point(79, 42);
+            this.txtCPU.Location = new System.Drawing.Point(87, 42);
             this.txtCPU.Name = "txtCPU";
             this.txtCPU.ReadOnly = true;
-            this.txtCPU.Size = new System.Drawing.Size(122, 20);
+            this.txtCPU.Size = new System.Drawing.Size(114, 20);
             this.txtCPU.TabIndex = 3;
             // 
             // label1
@@ -128,10 +134,10 @@
             // 
             // txtName
             // 
-            this.txtName.Location = new System.Drawing.Point(79, 16);
+            this.txtName.Location = new System.Drawing.Point(87, 16);
             this.txtName.Name = "txtName";
             this.txtName.ReadOnly = true;
-            this.txtName.Size = new System.Drawing.Size(122, 20);
+            this.txtName.Size = new System.Drawing.Size(114, 20);
             this.txtName.TabIndex = 1;
             // 
             // lblName
@@ -145,25 +151,27 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.txtWorstDiskUsage);
+            this.groupBox3.Controls.Add(this.label7);
             this.groupBox3.Controls.Add(this.txtWorstNetwork);
             this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.txtWorstCPU);
             this.groupBox3.Controls.Add(this.label4);
             this.groupBox3.Controls.Add(this.txtWorstName);
             this.groupBox3.Controls.Add(this.label5);
-            this.groupBox3.Location = new System.Drawing.Point(204, 203);
+            this.groupBox3.Location = new System.Drawing.Point(12, 434);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(219, 105);
+            this.groupBox3.Size = new System.Drawing.Size(219, 132);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Worst Node";
             // 
             // txtWorstNetwork
             // 
-            this.txtWorstNetwork.Location = new System.Drawing.Point(79, 68);
+            this.txtWorstNetwork.Location = new System.Drawing.Point(87, 68);
             this.txtWorstNetwork.Name = "txtWorstNetwork";
             this.txtWorstNetwork.ReadOnly = true;
-            this.txtWorstNetwork.Size = new System.Drawing.Size(122, 20);
+            this.txtWorstNetwork.Size = new System.Drawing.Size(114, 20);
             this.txtWorstNetwork.TabIndex = 5;
             // 
             // label3
@@ -177,10 +185,10 @@
             // 
             // txtWorstCPU
             // 
-            this.txtWorstCPU.Location = new System.Drawing.Point(79, 42);
+            this.txtWorstCPU.Location = new System.Drawing.Point(87, 42);
             this.txtWorstCPU.Name = "txtWorstCPU";
             this.txtWorstCPU.ReadOnly = true;
-            this.txtWorstCPU.Size = new System.Drawing.Size(122, 20);
+            this.txtWorstCPU.Size = new System.Drawing.Size(114, 20);
             this.txtWorstCPU.TabIndex = 3;
             // 
             // label4
@@ -194,10 +202,10 @@
             // 
             // txtWorstName
             // 
-            this.txtWorstName.Location = new System.Drawing.Point(79, 16);
+            this.txtWorstName.Location = new System.Drawing.Point(87, 16);
             this.txtWorstName.Name = "txtWorstName";
             this.txtWorstName.ReadOnly = true;
-            this.txtWorstName.Size = new System.Drawing.Size(122, 20);
+            this.txtWorstName.Size = new System.Drawing.Size(114, 20);
             this.txtWorstName.TabIndex = 1;
             // 
             // label5
@@ -212,9 +220,9 @@
             // groupBox4
             // 
             this.groupBox4.Controls.Add(this.txtUnitTests);
-            this.groupBox4.Location = new System.Drawing.Point(439, 17);
+            this.groupBox4.Location = new System.Drawing.Point(260, 17);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(270, 307);
+            this.groupBox4.Size = new System.Drawing.Size(449, 549);
             this.groupBox4.TabIndex = 7;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Unit Tests";
@@ -224,14 +232,48 @@
             this.txtUnitTests.Location = new System.Drawing.Point(16, 19);
             this.txtUnitTests.Multiline = true;
             this.txtUnitTests.Name = "txtUnitTests";
-            this.txtUnitTests.Size = new System.Drawing.Size(238, 272);
+            this.txtUnitTests.Size = new System.Drawing.Size(413, 512);
             this.txtUnitTests.TabIndex = 0;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(19, 100);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(62, 13);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Disk Usage";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(19, 101);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(62, 13);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "Disk Usage";
+            // 
+            // txtDiskUsage
+            // 
+            this.txtDiskUsage.Location = new System.Drawing.Point(87, 97);
+            this.txtDiskUsage.Name = "txtDiskUsage";
+            this.txtDiskUsage.ReadOnly = true;
+            this.txtDiskUsage.Size = new System.Drawing.Size(114, 20);
+            this.txtDiskUsage.TabIndex = 7;
+            // 
+            // txtWorstDiskUsage
+            // 
+            this.txtWorstDiskUsage.Location = new System.Drawing.Point(87, 98);
+            this.txtWorstDiskUsage.Name = "txtWorstDiskUsage";
+            this.txtWorstDiskUsage.ReadOnly = true;
+            this.txtWorstDiskUsage.Size = new System.Drawing.Size(114, 20);
+            this.txtWorstDiskUsage.TabIndex = 8;
             // 
             // AIRankForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(721, 336);
+            this.ClientSize = new System.Drawing.Size(721, 584);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -271,5 +313,9 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.TextBox txtUnitTests;
+        private System.Windows.Forms.TextBox txtDiskUsage;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtWorstDiskUsage;
+        private System.Windows.Forms.Label label7;
     }
 }
