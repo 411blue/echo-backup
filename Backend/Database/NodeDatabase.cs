@@ -82,12 +82,13 @@ namespace Backend.Database
         public void UpdateNodeRecord(Node.PC n1)
         {
             string sql = "UPDATE nodes SET Name = @pName, Ip = @pIp, MAC = @pMac, MaxBackupCapacity = @pMaxBackupCapacity," +
-                " BackupData = @pBackupData, NonBackupData = @NonBackupData, FreeSpace = @FreeSpace, TotalCapacity = @TotalCapacity" +
+                " BackupData = @pBackupData, NonBackupData = @pNonBackupData, FreeSpace = @pFreeSpace, TotalCapacity = @pTotalCapacity" +
                 " WHERE UniqueID = @pUniqueID";
 
 
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pName", n1.name));
             cmd.Parameters.Add(new SQLiteParameter("@pIp", n1.ip));
             cmd.Parameters.Add(new SQLiteParameter("@pMac", n1.mac));
@@ -96,7 +97,6 @@ namespace Backend.Database
             cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", n1.nonBackupData));
             cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", n1.freeSpace));
             cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", n1.totalCapacity));
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId.ToString()));
 
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -750,6 +750,7 @@ namespace Backend.Database
             SQLiteDataReader reader = cmd.ExecuteReader();
             DataTable dt = new DataTable();
             dt.Load(reader);
+            conn.Close();
             return dt;
         }
 
