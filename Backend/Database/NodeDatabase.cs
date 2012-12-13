@@ -50,13 +50,11 @@ namespace Backend.Database
         //Insert a new record. Primary key must not be in table already.
         public void InsertNodeRecord(Node.PC n1)
         {
-            try
-            {
                 string sql = "INSERT INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
                     + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
                     + " ReliabilityMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
                     + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
-                    + " @pTotalCapaciy, @pReliabilityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
+                    + " @pTotalCapacity, @pReliabilityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
 
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
                 cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
@@ -71,19 +69,13 @@ namespace Backend.Database
                 cmd.Parameters.Add(new SQLiteParameter("@pReliabilityMetric", n1.reliablityMetric));
                 cmd.Parameters.Add(new SQLiteParameter("@pHops", n1.hops));
                 cmd.Parameters.Add(new SQLiteParameter("@pSmart", n1.smart));
-                cmd.Parameters.Add(new SQLiteParameter("@pBackkupsFailed", n1.backupsFailed));
+                cmd.Parameters.Add(new SQLiteParameter("@pBackupsFailed", n1.backupsFailed));
                 cmd.Parameters.Add(new SQLiteParameter("@pBackupsPassed", n1.backupsPassed));
                 cmd.Parameters.Add(new SQLiteParameter("@pTrusted", n1.trusted));
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
                 conn.Close();
-            }
-            catch (SQLiteException)
-            {
-                MessageBox.Show("Possbile errors, record already existed or connection error.", "Database Insert Error",
-                    MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
         }
 
         //Replace a record. Table unchanged if UniqueId is not present, table unchanged. 
@@ -93,7 +85,7 @@ namespace Backend.Database
                 + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
                 + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
                 + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
-                + " @pTotalCapaciy, @pSmart)";
+                + " @pTotalCapacity, @pSmart)";
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
             cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
