@@ -9,16 +9,38 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using Backend.Storage;
+using Backend.Database;
+using System.ServiceModel;
+using System.ServiceModel.Description;
 
 namespace Backend 
 {
-    public partial class EchoBackupService : ServiceBase 
+    [ServiceContract(Namespace = "http://Backend")]
+    public interface EBInterface
+    {
+        [OperationContract]
+        void StartBackup(List<string> directories);
+        [OperationContract]
+        void StartRecovery(long fileID, Guid sourceNode, string outputPath);
+        [OperationContract]
+        string CheckRecovery(long fileID, Guid sourceNode);
+    }
+
+    public partial class EchoBackupService : ServiceBase, EBInterface
     {
         private CommandServer commandServer;
         //this value should not change as long as the service running.
         //in fact, it should never change after it has been initialized with Guid.NewGuid()
         private Guid guid;
         private StorageThread storageThread;
+        private ServiceHost servicehost;
+        private Version version = new Version("0.1.0.0");
+        private Thread messageThread;
+        private Thread rxThread;
+        private Thread txThread;
+        private Thread distributionThread;
+        private Backend.Networker net;
+        private Backend.IndexDistribution indexdi;
 
         public EchoBackupService() 
         {
@@ -50,6 +72,25 @@ namespace Backend
         {
             string[] args = { };
             OnStart(args);
+        }
+
+        protected void setupWCF()
+        {
+            Uri baseAddress = new Uri("http://localhost:8765/Backend/Service");
+            servicehost = new ServiceHost(typeof(EchoBackupService), baseAddress);
+            try
+            {
+                servicehost.AddServiceEndpoint(typeof(EBInterface), new WSHttpBinding(), "EchobackupService");
+                ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
+                smb.HttpGetEnabled = true;
+                servicehost.Description.Behaviors.Add(smb);
+                servicehost.Open();
+                Logger.Info("EchobackupService:setupWCF Successfully initialized WCF.");
+            }
+            catch
+            {
+                Logger.Error("EchobackupService:setupWCF An exception occured when initializing the WCF service stuff.");
+            }
         }
 
         protected override void OnStart(string[] args) 
@@ -119,6 +160,8 @@ namespace Backend
             while (true) 
             {
                 Thread.Sleep(1000);
+                //todo: as chunks finish compressing, add to networkthread
+                //todo: as backup files retrieved from nodes, recover file from chunk/block
             }
         }
 
@@ -127,12 +170,35 @@ namespace Backend
             ServiceBase.Run(new EchoBackupService());
         }
 
-        private Version version = new Version("0.1.0.0");
-        private Thread messageThread;
-        private Thread rxThread;
-        private Thread txThread;
-        private Thread distributionThread;
-        private Backend.Networker net;
-        private Backend.IndexDistribution indexdi;
+        public void StartBackup(List<string> directories)
+        {
+            foreach (string dir in directories)
+            {
+                if (Directory.Exists(dir))
+                {
+                    BackupTask bt = new BackupTask(dir, Node.GetTemporaryDirectory(), 123, 0);
+                    storageThread.EnqueueStorageTask(bt);
+                }
+                else
+                {
+                    Logger.Warn("EchoBackupService:StartBackup Directory '" + dir + "' does not exist.");
+                }
+            }
+        }
+        public void StartRecovery(long fileID, Guid sourceNode, string outputPath)
+        {
+            //get host with chunk/block from index
+            //add network task to pull chunk/block from host
+
+            //in mainLooP:
+            //recover file form chunk/block
+
+        }
+        public string CheckRecovery(long fileID, Guid sourceNode)
+        {
+            //todo: everything
+
+            return "";
+        }
     }
 }
