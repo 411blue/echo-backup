@@ -288,8 +288,8 @@ namespace Low_Level_Test_Driver
             string[] args = {};
             ebs.testStartThreaded();
             Wait();
-            List<string> list = new List<string>();
-            list.Add(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch");
+            string[] list = new string[1];
+            list[0] = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch";
             ebs.StartBackup(list);
             Wait();
             ebs.testStop();

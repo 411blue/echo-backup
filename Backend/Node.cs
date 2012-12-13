@@ -29,7 +29,8 @@ namespace Backend
         public static string ExecutableDir()
         {
             //return System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
-            return Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp";
+            //return Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp";
+            return @"C:\Users\411blue\Desktop\temp";
         }
 
         // get/set the directory used to store temporary and intermediate files

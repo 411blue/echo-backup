@@ -10,18 +10,21 @@ using System.Threading;
 using System.Data.SQLite;
 using Backend.Database;
 using Backend.Properties;
+using Backend;
 
 namespace GUI_FrontEnd
 {
     public partial class MainForm : Form
     {
+        private EBInterfaceClient ebic;
         public MainForm()
         {
             InitializeComponent();
             numUpDownMaxBackupCapacity.Value = Settings.Default.maxBackupCapacity;
             db = new NodeDatabase();
             indexDB = new IndexDatabase();
-            
+
+            ebic = new EBInterfaceClient();
             /*
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC1", "192.168.1.1", "00-21-70-FE-23-EF", "1", "51", "89", "0", "100","yes");
             dataGridViewNodeSets.Rows.Add("936DA01F-9ABD-4d9d-80C7-02AF85C822A8", "PC2", "192.168.1.2", "00-21-69-FE-23-AB", "32", "50", "88", "25", "75", "yes");
@@ -209,12 +212,17 @@ namespace GUI_FrontEnd
         //Placeholder for Jame's code to backup files
         private void btnBackupNow_Click(object sender, EventArgs e)
         {
+            Logger.init(@"C:\Users\411blue\Desktop\temp\gui.log");
             //Collects all filepaths into an array
-            string[] rowArray = new string[dataGridViewBackupFiles.Rows.Count];
+            string[] rowArray = new string[dataGridViewBackupFiles.Rows.Count-1];
             for (int i = 0; i < (dataGridViewBackupFiles.Rows.Count - 1); i++)
             {
-                rowArray[i] = (string) dataGridViewBackupFiles.Rows[i].Cells[0].Value;
+                string s = (string)dataGridViewBackupFiles.Rows[i].Cells[0].Value;
+                if (s != null && s != "") rowArray[i] = s;
             }
+            Logger.Log("size of array: " + rowArray.Length);
+
+            ebic.StartBackup(rowArray);
         }
 
         //Placeholder for Jame's code to restore files

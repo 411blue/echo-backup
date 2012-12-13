@@ -22,13 +22,15 @@ namespace Backend
     public interface EBInterface
     {
         [OperationContract]
-        void StartBackup(List<string> directories);
+        void StartBackup(string[] directories);
         [OperationContract]
         void StartRecovery(long fileID, Guid sourceNode, string outputPath);
         [OperationContract]
         string CheckRecovery(/*long fileID, Guid sourceNode*/);
     }
 
+    //The Windows Service class and the WCF service class need to be two different classes.
+    // http://msdn.microsoft.com/en-us/library/ms733069.aspx
     public partial class EchoBackupService : ServiceBase, EBInterface
     {
         private CommandServer commandServer;
@@ -46,6 +48,7 @@ namespace Backend
         private Backend.IndexDistribution indexdi;
         private Queue<RecoverResult> recoverResults;
         private List<ClientThread> clientThreads;
+        private Thread mainThread;
 
         public EchoBackupService() 
         {
@@ -96,18 +99,32 @@ namespace Backend
         {
             Uri baseAddress = new Uri("http://localhost:8765/Backend/Service");
             serviceHost = new ServiceHost(typeof(EchoBackupService), baseAddress);
+            ServiceDebugBehavior debug = serviceHost.Description.Behaviors.Find<ServiceDebugBehavior>();
+            // if not found - add behavior with setting turned on 
+            if (debug == null)
+            {
+                serviceHost.Description.Behaviors.Add(new ServiceDebugBehavior() { IncludeExceptionDetailInFaults = true });
+            }
+            else
+            {
+                // make sure setting is turned ON
+                if (!debug.IncludeExceptionDetailInFaults)
+                {
+                    debug.IncludeExceptionDetailInFaults = true;
+                }
+            }
             try
             {
-                serviceHost.AddServiceEndpoint(typeof(EBInterface), new WSHttpBinding(), "EchobackupService");
+                serviceHost.AddServiceEndpoint(typeof(EBInterface), new WSHttpBinding(), "EchoBackupService");
                 ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
                 smb.HttpGetEnabled = true;
                 serviceHost.Description.Behaviors.Add(smb);
                 serviceHost.Open();
-                Logger.Info("EchobackupService:setupWCF Successfully initialized WCF.");
+                Logger.Info("EchoBackupService:setupWCF Successfully initialized WCF.");
             }
             catch (Exception ex)
             {
-                Logger.Error("EchobackupService:setupWCF An exception occured when initializing the WCF service stuff: " + ex.Message);
+                Logger.Error("EchoBackupService:setupWCF An exception occured when initializing the WCF service stuff: " + ex.Message);
             }
         }
 
@@ -155,7 +172,8 @@ namespace Backend
 
             setupWCF();
 
-            MainLoop();
+            mainThread = new Thread(new ThreadStart(MainLoop));
+            //MainLoop();
         }
 
         protected override void OnStop() 
@@ -356,13 +374,14 @@ namespace Backend
             ServiceBase.Run(new EchoBackupService());
         }
 
-        public void StartBackup(List<string> directories)
+        public void StartBackup(string[] directories)
         {
             foreach (string dir in directories)
             {
                 if (Directory.Exists(dir))
                 {
                     BackupTask bt = new BackupTask(dir, Node.GetTemporaryDirectory(), 123, 0);
+                    //if (storageThread == null) Logger.Log("shit");
                     storageThread.EnqueueStorageTask(bt);
                 }
                 else
@@ -398,7 +417,7 @@ namespace Backend
                     }
                     else
                     {
-                        Logger.Error("EchobackupService:CheckRecovery Recovery failed");
+                        Logger.Error("EchoBackupService:CheckRecovery Recovery failed");
                     }
                 }
             }
