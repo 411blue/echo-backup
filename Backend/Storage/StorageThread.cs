@@ -165,7 +165,7 @@ namespace Backend.Storage
             int chunkID = 0;
             while (true)
             { //while need more chunks
-                Logger.Debug("StorageThread:processTask outer loop");
+                Logger.Debug2("StorageThread:processTask outer loop");
                 if (allFiles.Count() == 0) break;
                 string oFilename = task.TempPath + '\\' + guid + '_' + task.BackupID + '_' + chunkID + ".tgz";
                 TarOutputStream tarOutputStream = newTarOutputStream(oFilename);
@@ -174,7 +174,7 @@ namespace Backend.Storage
                 string relPath, fullPath;
                 while (true)
                 { //while need more files in chunk
-                    Logger.Debug("StorageThread:processTask inner loop");
+                    //Logger.Debug2("StorageThread:processTask inner loop");
                     if (allFiles.Count() == 0)
                     {
                         tarOutputStream.Close();
@@ -185,7 +185,7 @@ namespace Backend.Storage
                     fullPath = task.Path + '\\' + relPath;
                     if (Directory.Exists(fullPath))
                     {
-                        Logger.Debug("StorageThread:processTask inner loop if 1");
+                        //Logger.Debug2("StorageThread:processTask inner loop if 1");
                         TarEntry entry2 = TarEntry.CreateTarEntry(relPath);
                         //entry2.Name = relPath;
                         entry2.TarHeader.TypeFlag = TarHeader.LF_DIR;
@@ -203,7 +203,7 @@ namespace Backend.Storage
                     TarEntry entry = TarEntry.CreateTarEntry(relPath);
                     if (size + s < CHUNK_SIZE)
                     {
-                        Logger.Debug("StorageThread:processTask inner loop if 2");
+                        //Logger.Debug2("StorageThread:processTask inner loop if 2");
                         entry.Size = s;
                         tarOutputStream.PutNextEntry(entry);
                         byte[] buffer = new byte[32 * 1024];
@@ -230,7 +230,7 @@ namespace Backend.Storage
                     }
                     else
                     { //file is too big to fit in chunk in entirety
-                        Logger.Debug("StorageThread:processTask inner loop else 2");
+                        //Logger.Debug2("StorageThread:processTask inner loop else 2");
                         long totalFileRead = 0;
                         int partLength = CHUNK_SIZE - (int)size;
                         createSplitFileInChunks(ref allFiles, partLength, s);
@@ -240,7 +240,7 @@ namespace Backend.Storage
                         byte[] buffer = new byte[32 * 1024];
                         while (true)
                         { //while we have more chunks from this file to write
-                            Logger.Debug("StorageThread:processTask inner-inner loop");
+                            //Logger.Debug2("StorageThread:processTask inner-inner loop");
                             while (true)
                             {
                                 int numRead = inputStream.Read(buffer, 0, Math.Min(buffer.Length, partLength));
@@ -260,7 +260,7 @@ namespace Backend.Storage
                             if (allFiles.Count == 0) break;
                             if (allFiles.First.Value.fileStart != 0)
                             {
-                                Logger.Debug("StorageThread:processTask inner-inner loop if");
+                                //Logger.Debug2("StorageThread:processTask inner-inner loop if");
                                 tarOutputStream.Close();
                                 lock (_lock)
                                 {
@@ -276,14 +276,14 @@ namespace Backend.Storage
                             }
                             else
                             {
-                                Logger.Debug("StorageThread:processTask inner-inner loop else");
+                                //Logger.Debug2("StorageThread:processTask inner-inner loop else");
                                 break;
                             }
                         }
                     }
                     if (size >= CHUNK_SIZE)
                     {
-                        Logger.Debug("StorageThread:processTask inner loop if 3");
+                        //Logger.Debug2("StorageThread:processTask inner loop if 3");
                         tarOutputStream.Close();
                         break;
                     }
@@ -375,7 +375,7 @@ namespace Backend.Storage
             foreach (string filename in names)
             {
                 string dir = Path.GetFileName(filename);
-                queue.AddLast(new FileInChunk(dir, 0));
+                queue.AddLast(new FileInChunk(recursivePath + dir, 0));
                 recursivelyFillFileQueue(ref queue, filename, recursivePath + dir + '\\');
             }
         }

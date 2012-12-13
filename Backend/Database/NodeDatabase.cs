@@ -14,7 +14,8 @@ namespace Backend.Database
     {
         public NodeDatabase()
         {
-            pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\nodes.db";
+            //pathAndFileName = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location) + @"\nodes.db";
+            pathAndFileName = Node.ExecutableDir() + @"\nodes.db";
             conn = new SQLiteConnection("Data Source=" + pathAndFileName);
             CreateNodeTable();
         }
@@ -162,10 +163,12 @@ namespace Backend.Database
                 string ip = cmd.ExecuteScalar().ToString();
                 conn.Close();
 
+                //Logger.Debug2("NodeDatabase:SelectNodeIp returning '" + ip + "' for " + UniqueId.ToString());
                 return IPAddress.Parse(ip);
             }
             catch (NullReferenceException)
             {
+                Logger.Error("NodeDatabase:SelectNodeIp Null Reference Exception");
                 return IPAddress.Parse("0.0.0.0");
             }
 
@@ -668,11 +671,12 @@ namespace Backend.Database
                 conn.Open();
                 string Trusted = cmd.ExecuteScalar().ToString();
                 conn.Close();
-
+                //Logger.Debug2("NodeDatabase:SelectNodeTrusted returning '" + Trusted + "' for " + UniqueId.ToString());
                 return Trusted;
             }
             catch (NullReferenceException)
             {
+                Logger.Error("NodeDatabase:SelectNodeTrusted Null Reference Exception");
                 return null;
             }
         }
@@ -792,7 +796,7 @@ namespace Backend.Database
             {
 
             }
-
+            //Logger.Debug2("NodeDatabase:SelectGUID Returning List<string> with " + guidList.Count + " elements");
             return guidList;
         }
 

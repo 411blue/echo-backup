@@ -92,6 +92,7 @@ namespace Backend
         {
             while (receiverAlive)
             {
+                Thread.Sleep(1000);
                 if (heartbeats.Count > 0)
                 {
                     string[] attributes = new string[10];
@@ -128,10 +129,17 @@ namespace Backend
         public void startTransmitter()
         {
             transmitterAlive = true;
-            transmitter.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ip));
-            transmitter.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 25);
-            IPEndPoint txipep = new IPEndPoint(ip, 4567);
-            transmitter.Connect(txipep);
+            try
+            {
+                transmitter.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(ip));
+                transmitter.SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 25);
+                IPEndPoint txipep = new IPEndPoint(ip, 4567);
+                transmitter.Connect(txipep);
+            }
+            catch (SocketException ex)
+            {
+                Logger.Error("Networker:startTransmitter ErrorCode: " + ex.ErrorCode + ' ' + ex.Message);
+            }
         }
 
         //Run transmittter

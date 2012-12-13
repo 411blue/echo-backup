@@ -36,7 +36,7 @@ namespace Backend
         //in fact, it should never change after it has been initialized with Guid.NewGuid()
         private Guid guid;
         private StorageThread storageThread;
-        private ServiceHost servicehost;
+        private ServiceHost serviceHost;
         private Version version = new Version("0.1.0.0");
         private Thread messageThread;
         private Thread rxThread;
@@ -75,28 +75,39 @@ namespace Backend
             Logger.Debug2("initialized component");
         }
 
-        public void testStart()
+        private Thread testThread;
+        public void testStartThreaded()
+        {
+            testThread = new Thread(new ThreadStart(testStart));
+            testThread.Start();
+        }
+        private void testStart()
         {
             string[] args = { };
             OnStart(args);
+        }
+        public void testStop()
+        {
+            OnStop();
+            testThread.Abort();
         }
 
         protected void setupWCF()
         {
             Uri baseAddress = new Uri("http://localhost:8765/Backend/Service");
-            servicehost = new ServiceHost(typeof(EchoBackupService), baseAddress);
+            serviceHost = new ServiceHost(typeof(EchoBackupService), baseAddress);
             try
             {
-                servicehost.AddServiceEndpoint(typeof(EBInterface), new WSHttpBinding(), "EchobackupService");
+                serviceHost.AddServiceEndpoint(typeof(EBInterface), new WSHttpBinding(), "EchobackupService");
                 ServiceMetadataBehavior smb = new ServiceMetadataBehavior();
                 smb.HttpGetEnabled = true;
-                servicehost.Description.Behaviors.Add(smb);
-                servicehost.Open();
+                serviceHost.Description.Behaviors.Add(smb);
+                serviceHost.Open();
                 Logger.Info("EchobackupService:setupWCF Successfully initialized WCF.");
             }
-            catch
+            catch (Exception ex)
             {
-                Logger.Error("EchobackupService:setupWCF An exception occured when initializing the WCF service stuff.");
+                Logger.Error("EchobackupService:setupWCF An exception occured when initializing the WCF service stuff: " + ex.Message);
             }
         }
 
@@ -142,11 +153,15 @@ namespace Backend
             Logger.Debug2("started StorageThread");
             #endregion
 
+            setupWCF();
+
             MainLoop();
         }
 
         protected override void OnStop() 
         {
+            serviceHost.Close();
+
             net.setReceiverAlive(false);
             net.setTransmitterAlive(false);
             indexdi.SetDistribute(false);
@@ -159,6 +174,8 @@ namespace Backend
 
             stopNetworking();
             storageThread.RequestStop();
+
+            Thread.Sleep(250);
 
             Logger.Log("Stopped Service");
             Logger.Close();
@@ -202,19 +219,19 @@ namespace Backend
             if (storageThread.NumChunks() > 0)
             {
                 Chunk chunk = storageThread.DequeueChunk();
-                Logger.Debug("EchoBackupService:checkStorageThread Finished archiving FileShare for BackupIndex.");
+                Logger.Debug("EchoBackupService:checkStorageThread Finished archiving chunk.");
                 //identify host(s) to send to.
                 List<GuidAndIP> gai = NetworkFunctions.GetOnlineNodesIPAddresses();
                 if (gai.Count < 2)
                 {
-                    Logger.Warn("EchoBackupService:checkStorageThread not enough online hosts");
+                    Logger.Warn("EchoBackupService:checkStorageThread not enough online hosts. hosts online: " + gai.Count);
                 }
                 //send chunk to hosts.
                 List<Block> blocks = new List<Block>();
                 long filesize = new FileInfo(chunk.Path()).Length;
                 for (int i = 0; i < 2 && i < gai.Count; i++)
                 {
-                    TcpClient tc = new TcpClient(new IPEndPoint(gai[i].ipAddress, CommandServer.SERVER_PORT));
+                    TcpClient tc = new TcpClient(gai[i].ipAddress.ToString(), CommandServer.SERVER_PORT);
                     ClientThread ct = new ClientThread(tc, false, this.guid);
                     PushRequest pr = new PushRequest(Node.GetIPAddress(), this.guid, MiscFunctions.Next());
                     pr.Path = chunk.Path();
@@ -234,14 +251,16 @@ namespace Backend
                 foreach (FileInChunk fic in chunk.Files())
                 {
                     BackupIndex bi = new BackupIndex();
-                    string fullpath = Path.Combine(chunk.BasePath(), bi.sourcePath);
+                    string fullpath = Path.Combine(chunk.BasePath(), fic.path);
+                    if (Directory.Exists(fullpath)) continue;
                     bi.backupLevel = 0;
                     bi.dateAndTime = MiscFunctions.DBDateAndTime();
                     bi.firstBlockOffset = 0;
                     bi.size = new FileInfo(fullpath).Length;
                     bi.sourceGUID = this.guid.ToString();
                     bi.sourcePath = fullpath;
-                    idb.InsertIndex(bi, blocks);
+                    //todo: we cannot insert multiple blocks for every file. that is what the index-to-block table is for
+                    //idb.InsertIndex(bi, blocks);
                 }
                 //store indexes in DB
 
@@ -318,7 +337,6 @@ namespace Backend
             Logger.Debug("EchoBackupService:processPushRequest");
             //there probably ought to be some processing here but oh well
             ct.EnqueueWork((NetworkRequest)request);
-
         }
         protected void processPullRequest(ClientThread ct, PullRequest request)
         {

@@ -17,17 +17,6 @@ namespace Backend {
         private static String defaultFileName = Path.Combine(Node.ExecutableDir(),"log.log");
         //true when init has been calld. used to prevent multiple inits
         private static bool inited = false;
-        
-        /*public Logger(string path) {
-            writer = new StreamWriter(path + "\\" + filename, true);
-            this.Log("Opened log file.");
-        }*/
-
-        /*public Logger()
-        {
-            writer = new StreamWriter(filename, true);
-            this.Log("Opened log file.");
-        }*/
 
         /// <summary>
         /// Initializes the logger with a custom path to the log file.
@@ -51,7 +40,7 @@ namespace Backend {
 
         private static void privateInit()
         {
-            writer = new StreamWriter(filename, true);
+            writer = new StreamWriter(filename, false);
             inited = true;
             Logger.Log("Opened log file: " + filename);
         }

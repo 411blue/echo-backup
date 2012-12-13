@@ -154,11 +154,11 @@ namespace Backend
         {
             lock (_lock)
             {
-                if (!isClient)
-                {
+                /*if (!isClient)
+                {*/
                     working = true;
                     workQueue.Enqueue(request);
-                }
+                /*}*/
             }
         }
 
@@ -217,7 +217,9 @@ namespace Backend
                     PushRequest pr = (PushRequest)request;
                     sendMessage(tcpClient, new NetworkResponse(ResponseType.Yes, "", guid, request.SequenceNumber));
                     //readFileToDisk(pr.FileSize, Chunk.PathToChunk(pr));
-                    readFileToDisk(pr.FileSize, this.path);
+                    string remoteGuid = request.SourceGuid.ToString();
+                    //string path = Path.Combine(Node.GetBackupDirectory(), remoteGuid, remoteGuid+'_'+pr.ChunkNumber+.tar
+                    readFileToDisk(pr.FileSize, Chunk.PathToChunk(request.SourceGuid, 0, pr.ChunkNumber));
                 }
                 else if (request is PullRequest)
                 {
@@ -378,6 +380,7 @@ namespace Backend
             FileStream fileStream;
             try
             {
+                Directory.CreateDirectory(Path.GetDirectoryName(path));
                 fileStream = File.Open(path, FileMode.CreateNew);
             }
             catch
@@ -518,6 +521,7 @@ namespace Backend
 
         private void processMyPushRequest(PushRequest request)
         {
+            Logger.Debug("ClientThread:processMyPushRequest");
             int ret = sendMessage(tcpClient, request);
             NetworkResponse response = (NetworkResponse)receiveMessage(tcpClient);
             if (response.Type == Backend.ResponseType.Yes)

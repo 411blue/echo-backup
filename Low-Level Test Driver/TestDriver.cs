@@ -19,6 +19,8 @@ namespace Low_Level_Test_Driver
     /// </summary>
     class TestDriver
     {
+        private static EchoBackupService ebs;
+
         static void Print(string s)
         {
             Console.WriteLine(s);
@@ -282,9 +284,16 @@ namespace Low_Level_Test_Driver
 
         public static void testService()
         {
-            EchoBackupService ebs = new EchoBackupService();
+            ebs = new EchoBackupService();
             string[] args = {};
-            ebs.testStart();
+            ebs.testStartThreaded();
+            Wait();
+            List<string> list = new List<string>();
+            list.Add(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch");
+            ebs.StartBackup(list);
+            Wait();
+            ebs.testStop();
+
         }
 
         static void Main(string[] args)
@@ -303,7 +312,6 @@ namespace Low_Level_Test_Driver
             }*/
             //testUnTarGZip();
             testService();
-            Wait();
         }
     }
 }
