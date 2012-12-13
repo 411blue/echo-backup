@@ -27,7 +27,7 @@ namespace Low_Level_Test_Driver
         }
         static void Wait()
         {
-            Console.WriteLine("press a key to continue");
+            Console.WriteLine("Press any key to continue.");
             Console.ReadKey();
         }
 
@@ -284,16 +284,18 @@ namespace Low_Level_Test_Driver
 
         public static void testService()
         {
+            Print("Echo backup service started.");
             ebs = new EchoBackupService();
             string[] args = {};
             ebs.testStartThreaded();
             Wait();
             string[] list = new string[1];
             list[0] = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\temp\\scratch";
+            Print("Backing up " + list[0] + ".");
             ebs.StartBackup(list);
             Wait();
+            Print("Stopping Echo Backup.");
             ebs.testStop();
-
         }
 
         static void Main(string[] args)
