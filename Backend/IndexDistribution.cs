@@ -40,37 +40,43 @@ namespace Backend
 
             while (distribute)
             {
-                guidList = ndb.SelectTrustedGUID();
+                guidList = ndb.SelectGUID();
 
                 foreach (string currentGUID in guidList)
                 {
                     Thread.Sleep(1000);
                     ddb.InsertNode(currentGUID, offline);
-
-                    Ping pingSender = new Ping();
-                    int timeout = 100;
-                    try
+                    if (ndb.SelectNodeTrusted(Guid.Parse(currentGUID)) == "yes")
                     {
-                        IPAddress ip = ndb.SelectNodeIp(Guid.Parse(currentGUID));
-                        PingReply reply = pingSender.Send(ip, timeout);
-
-                        if (reply.Status == IPStatus.Success)
+                        Ping pingSender = new Ping();
+                        int timeout = 100;
+                        try
                         {
-                            if (ddb.GetStatus(currentGUID) == offline)
+                            IPAddress ip = ndb.SelectNodeIp(Guid.Parse(currentGUID));
+                            PingReply reply = pingSender.Send(ip, timeout);
+
+                            if (reply.Status == IPStatus.Success)
                             {
-                                sendIndexes(currentGUID);
-                                ddb.UpdateStatus(currentGUID, online);
+                                if (ddb.GetStatus(currentGUID) == offline)
+                                {
+                                    sendIndexes(currentGUID);
+                                    ddb.UpdateStatus(currentGUID, online);
+                                }
+                            }
+                            else
+                            {
+                                ddb.UpdateStatus(currentGUID, offline);
                             }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            ddb.UpdateStatus(currentGUID, offline);
+                            Debug.Print(ex.Message);
                         }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Debug.Print(ex.Message);
-                    }  
+                        ddb.UpdateStatus(currentGUID, offline);
+                    }
                 }
             }
         }
@@ -101,13 +107,13 @@ namespace Backend
                     }
                 }
 
-                guidList = ndb.SelectTrustedGUID();
+                guidList = ndb.SelectGUID();
 
                 foreach (string currentGUID in guidList)
                 {
-                    if (ddb.GetStatus(currentGUID) == online)
+                    if (ddb.GetStatus(currentGUID) == online && ndb.SelectNodeTrusted(Guid.Parse(currentGUID)) == "yes")
                     {
-                        Guid myGuid = Guid.NewGuid();
+                        Guid myGuid = Node.GetGuid();
                         TcpClient tcpClient = new TcpClient((ndb.SelectNodeIp(Guid.Parse(currentGUID))).ToString(), 7890);
                         ClientThread ct = new ClientThread(tcpClient, false, myGuid);
                         PushIndexRequest pir = new PushIndexRequest(indexDBCopy, new FileInfo(indexDBCopy).Length);
@@ -149,7 +155,7 @@ namespace Backend
                     }
                 }
 
-                Guid myGuid = Guid.NewGuid();
+                Guid myGuid = Node.GetGuid();
                 TcpClient tcpClient = new TcpClient((ndb.SelectNodeIp(Guid.Parse(guid))).ToString(), 7890);
                 ClientThread ct = new ClientThread(tcpClient, false, myGuid);
                 PushIndexRequest pir = new PushIndexRequest(indexDBCopy, new FileInfo(indexDBCopy).Length);
