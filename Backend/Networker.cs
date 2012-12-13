@@ -115,7 +115,7 @@ namespace Backend
                         int h = Node.GetHops();
                         Node.PC newPC = new Node.PC(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
-                            long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
+                            long.Parse(attributes[6]), long.Parse(attributes[7]),long.Parse(attributes[8]), 
                             CalculateReliablity(h, s, 0,0), h, s, 0, 0, "yes");
                         nd.InsertNodeRecord(newPC);
                     }
