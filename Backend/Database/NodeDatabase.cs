@@ -78,14 +78,11 @@ namespace Backend.Database
                 conn.Close();
         }
 
-        //Replace a record. Table unchanged if UniqueId is not present, table unchanged. 
-        public void ReplaceNodeRecord(Node.PC n1)
+        //Update a node. Table unchanged if UniqueId is not present, table unchanged. 
+        public void UpdateNodeRecord(Node.PC n1)
         {
-            string sql = "REPLACE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
-                + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
-                + " RelialibyMetric, Hops, Smart, BackupsFailed, BackupsPassed, Trusted)"
-                + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace"
-                + " @pTotalCapacity, @pSmart)";
+            string sql = "UPDATE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity, BackupData, NonBackupData, FreeSpace, TotalCapacity)"
+                + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace, @pTotalCapacity)";
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
             cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
@@ -97,7 +94,6 @@ namespace Backend.Database
             cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", n1.nonBackupData));
             cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", n1.freeSpace));
             cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", n1.totalCapacity));
-            cmd.Parameters.Add(new SQLiteParameter("@pSmart", n1.smart));
 
             conn.Open();
             cmd.ExecuteNonQuery();
