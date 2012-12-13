@@ -28,7 +28,8 @@ namespace Backend
         {
         }
 
-        public NodeInstance(string name, int smartScore, string backupDir, long maxBackupSpace, long backupSpaceUsage)
+        public NodeInstance(string name, int smartScore, 
+            string backupDir, long maxBackupSpace, long backupSpaceUsage)
         {
             Name = name;
             SMART_Score = smartScore;
@@ -37,7 +38,7 @@ namespace Backend
             BackupSpaceUsage = backupSpaceUsage;
             GUID = new Guid();
             CPU_Utilization = 0;
-            MaxBandwidth = 3000000;
+            MaxBandwidth = 3000000; //simulating
         }
 
         public long FreeSpace
