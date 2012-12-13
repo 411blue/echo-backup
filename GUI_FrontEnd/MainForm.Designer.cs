@@ -660,6 +660,7 @@
             this.btnLogs.TabIndex = 7;
             this.btnLogs.Text = "View Logs";
             this.btnLogs.UseVisualStyleBackColor = true;
+            this.btnLogs.Click += new System.EventHandler(this.btnLogs_Click);
             // 
             // dataGridViewBackupFiles
             // 

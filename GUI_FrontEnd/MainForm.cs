@@ -248,5 +248,11 @@ namespace GUI_FrontEnd
 
         private NodeDatabase db;
         private IndexDatabase indexDB;
+
+        private void btnLogs_Click(object sender, EventArgs e)
+        {
+            string fileName = Backend.Logger.getLogFilename();
+            System.Diagnostics.Process.Start("notepad.exe", fileName);
+        }
     }
 }
