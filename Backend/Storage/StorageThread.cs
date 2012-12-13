@@ -25,6 +25,7 @@ namespace Backend.Storage
         private string tempDir;
         private Queue<StorageTask> storageTasks;
         private Queue<Chunk> backupResults;
+        private Queue<RecoverResult> recoverResults;
 
         /// <summary>
         /// Creates a StorageThread with the specified temporary directory and Guid.
@@ -38,6 +39,7 @@ namespace Backend.Storage
             this.tempDir = tempDir;
             storageTasks = new Queue<StorageTask>();
             backupResults = new Queue<Chunk>();
+            recoverResults = new Queue<RecoverResult>();
             thread = new Thread(new ThreadStart(RunStorageThread));
             thread.Start();
         }
@@ -114,12 +116,27 @@ namespace Backend.Storage
                 return backupResults.Count;
             }
         }
+        public int NumRecoverStructs()
+        {
+            lock (_lock)
+            {
+                return recoverResults.Count;
+            }
+        }
 
         public Chunk DequeueChunk()
         {
             lock (_lock)
             {
                 if (backupResults.Count != 0) return backupResults.Dequeue();
+                return null;
+            }
+        }
+        public RecoverResult DequeueRecoverResult()
+        {
+            lock (_lock)
+            {
+                if (backupResults.Count != 0) return recoverResults.Dequeue();
                 return null;
             }
         }
@@ -139,7 +156,6 @@ namespace Backend.Storage
                 Logger.Error("StorageThread:processTask:StorageTask What kind of StorageTask is this?");
             }
         }
-
         private void processTask(BackupTask task)
         {
             Logger.Debug("StorageThread:processTask:BackupTask");
@@ -279,6 +295,36 @@ namespace Backend.Storage
                 chunkID++;
             }
         }
+        private void processTask(RestoreTask task)
+        {
+            Logger.Debug("StorageThread:processTask:RestoreTask");
+            Stream inStream = File.OpenRead(task.ArchivePath);
+            Stream gzipStream = new GZipInputStream(inStream);
+            TarInputStream tarStream = new TarInputStream(gzipStream);
+            TarEntry entry;
+            List<string> list = task.RelativeFilenames();
+            RecoverResult recover = new RecoverResult(task.OutputDir, true);
+            while ((entry = tarStream.GetNextEntry()) != null)
+            {
+                if (entry.IsDirectory) continue;
+                if (list.IndexOf(entry.Name) != -1)
+                {
+                    string name = entry.Name.Replace('/', Path.DirectorySeparatorChar);
+                    name = Path.Combine(task.OutputDir, name);
+                    Directory.CreateDirectory(Path.GetDirectoryName(name));
+                    FileStream outStream = new FileStream(name, FileMode.CreateNew);
+                    tarStream.CopyEntryContents(outStream);
+                    outStream.Close();
+                    DateTime myDt = DateTime.SpecifyKind(entry.ModTime, DateTimeKind.Utc);
+                    File.SetLastWriteTime(name, myDt);
+                }
+            }
+            tarStream.Close();
+            lock (_lock)
+            {
+                recoverResults.Enqueue(recover);
+            }
+        }
 
         private TarOutputStream newTarOutputStream(string filename)
         {
@@ -334,30 +380,6 @@ namespace Backend.Storage
             }
         }
 
-        private void processTask(RestoreTask task)
-        {
-            Logger.Debug("StorageThread:processTask:RestoreTask");
-            Stream inStream = File.OpenRead(task.ArchivePath);
-            Stream gzipStream = new GZipInputStream(inStream);
-            TarInputStream tarStream = new TarInputStream(gzipStream);
-            TarEntry entry;
-            List<string> list = task.RelativeFilenames();
-            while ((entry = tarStream.GetNextEntry()) != null)
-            {
-                if (entry.IsDirectory) continue;
-                if (list.IndexOf(entry.Name) != -1)
-                {
-                    string name = entry.Name.Replace('/', Path.DirectorySeparatorChar);
-                    name = Path.Combine(task.OutputDir, name);
-                    Directory.CreateDirectory(Path.GetDirectoryName(name));
-                    FileStream outStream = new FileStream(name, FileMode.CreateNew);
-                    tarStream.CopyEntryContents(outStream);
-                    outStream.Close();
-                    DateTime myDt = DateTime.SpecifyKind(entry.ModTime, DateTimeKind.Utc);
-                    File.SetLastWriteTime(name, myDt);
-                }
-            }
-            tarStream.Close();
-        }
+        
     }
 }

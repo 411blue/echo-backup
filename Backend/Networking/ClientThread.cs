@@ -232,7 +232,7 @@ namespace Backend
                 }
                 else if (request is PushIndexRequest)
                 {
-                    processMyPushIndexRequest((PushIndexRequest)request);
+                    processRemotePushIndexRequest((PushIndexRequest)request);
                 }
                 else
                 { //what kind of request is this?

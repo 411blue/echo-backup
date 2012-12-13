@@ -112,6 +112,7 @@
       <DependentUpon>EchoBackupService.cs</DependentUpon>
     </Compile>
     <Compile Include="Networker.cs" />
+    <Compile Include="Networking\NetworkFunctions.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="NodeInstance.cs" />
     <Compile Include="ProjectInstaller.cs">
@@ -128,6 +129,7 @@
     </Compile>
     <Compile Include="Settings.cs" />
     <Compile Include="Storage\Chunk.cs" />
+    <Compile Include="Storage\RecoverResult.cs" />
     <Compile Include="Storage\StorageTask.cs" />
     <Compile Include="Storage\StorageThread.cs" />
   </ItemGroup>
