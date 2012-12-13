@@ -726,36 +726,50 @@ namespace Backend.Database
 
         //Get the Names from the node database
         public string[] GetNodeNames()
-        {       
-            string sql = "SELECT Name  FROM nodes";
-            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-
-            conn.Open();
-            SQLiteDataReader reader = cmd.ExecuteReader();
-            DataTable dt = new DataTable();
-            dt.Load(reader);
-            conn.Close();
-
-            string[] Names = new string[dt.Rows.Count];
-            for (int i = 0; i < dt.Rows.Count; i++)
+        {
+            string[] Names;
+            try
             {
-                DataRow row = dt.Rows[i];                
-                Names[i] = Convert.ToString(row["Name"]);                           
+                string sql = "SELECT Name  FROM nodes";
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+
+                conn.Open();
+                SQLiteDataReader reader = cmd.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                conn.Close();
+                Names = new string[dt.Rows.Count];
+                for (int i = 0; i < dt.Rows.Count; i++)
+                {
+                    DataRow row = dt.Rows[i];
+                    Names[i] = Convert.ToString(row["Name"]);
+                }
+                return Names;
             }
-            return Names;
+            catch (SQLiteException)
+            {
+                return null;
+            }
         }
 
         //Get database
         public DataTable GetNodes()
         {
-            string sql = "Select * from nodes";
-            SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            conn.Open();
-            SQLiteDataReader reader = cmd.ExecuteReader();
-            DataTable dt = new DataTable();
-            dt.Load(reader);
-            conn.Close();
-            return dt;
+            try
+            {
+                string sql = "Select * from nodes";
+                SQLiteCommand cmd = new SQLiteCommand(sql, conn);
+                conn.Open();
+                SQLiteDataReader reader = cmd.ExecuteReader();
+                DataTable dt = new DataTable();
+                dt.Load(reader);
+                conn.Close();
+                return dt;
+            }
+            catch (SQLiteException)
+            {
+                return null;
+            }
         }
 
         public List<string> SelectGUID()
