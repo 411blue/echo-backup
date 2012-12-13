@@ -57,7 +57,7 @@ namespace Backend.Database
                     + " @pTotalCapacity, @pReliabilityMetric, @pHops, @pSmart, @pBackupsFailed, @pBackupsPassed, @pTrusted)";
 
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId.ToString()));
                 cmd.Parameters.Add(new SQLiteParameter("@pName", n1.name));
                 cmd.Parameters.Add(new SQLiteParameter("@pIp", n1.ip));
                 cmd.Parameters.Add(new SQLiteParameter("@pMac", n1.mac));
