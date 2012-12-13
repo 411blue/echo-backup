@@ -21,13 +21,6 @@ namespace Backend
                 uniqueId = GenerateUniqueId();
             }*/
 
-            smart = Node.GetSmart();
-            hops = Node.GetHops();
-            if (smart == 0)
-            {
-                Node.CalculateAndSetSmart(0, 89);
-            }
-
             reliabilityMetric = 0;
             receiverAlive = false;
             transmitterAlive = false;
@@ -43,9 +36,9 @@ namespace Backend
         
 
         //Calculate reliabity metric
-        public int CalculateReliablity(int passed, int failed)
+        public int CalculateReliablity(int hops, int smart, int passed, int failed)
         {
-            reliabilityMetric = 255 - Node.GetSmart() - Node.GetHops() - (114 * (failed / (failed + passed)));
+            reliabilityMetric = 255 - smart- hops - (114 * (failed / (failed + passed)));
             return reliabilityMetric;
         }
 
@@ -77,9 +70,9 @@ namespace Backend
         //Get update message
         public string GetHeartbeat()
         {
-            heartbeat = string.Concat(Node.GetUniqueID() + "/" + Node.GetHostName() + "/" + Node.GetInternetAddress() + "/" + Node.GetMAC() 
+            heartbeat = string.Concat(Node.GetUniqueID() + "/" + Node.GetHostName() + "/" + Node.GetInternetAddress() + "/" + Node.GetMAC()
             + "/" + Node.GetMaxBackupSpace() + "/" + Node.GetBackupSpace() + "/" + Node.GetNonBackupSpace() + "/" + Node.GetFreeSpace()
-            + "/" + Node.GetTotalSize() + "/" + Node.GetSmart());
+            + "/" + Node.GetTotalSize());
             return heartbeat;
         }
 
@@ -92,7 +85,6 @@ namespace Backend
                 {
                     string[] attributes = new string[10];
                     string hb = heartbeats.Dequeue();
-
                     attributes = hb.Split('/');
 
                     Backend.Database.NodeDatabase nd = new Backend.Database.NodeDatabase();
@@ -101,19 +93,21 @@ namespace Backend
                     //If node is existing, then just add heartbeat attributes
                     if(nd.NodePrimaryKeyCheck(Guid.Parse(attributes[0])))
                     {
-                        Backend.Database.Node existingNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
+                        Node.PC existingPC = new Node.PC(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
                             long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
                             -1, -1, Convert.ToInt32(attributes[9]), -1, -1, "");
-                        nd.ReplaceNodeRecord(existingNode);
+                        nd.ReplaceNodeRecord(existingPC);
                     }
                     else
                     {
-                        Backend.Database.Node newNode = new Backend.Database.Node(Guid.Parse(attributes[0]), attributes[1], 
+                        int s = Node.GetSmart(0,89);
+                        int h = Node.GetHops(0, 51);
+                        Node.PC newPC = new Node.PC(Guid.Parse(attributes[0]), attributes[1], 
                             IPAddress.Parse(attributes[2]), attributes[3], Convert.ToInt32(attributes[4]), long.Parse(attributes[5]),
                             long.Parse(attributes[6]), long.Parse(attributes[7]),Convert.ToInt32(attributes[8]), 
-                            CalculateReliablity(0,0), Node.GetHops(), Convert.ToInt32(attributes[9]), 0, 0, "yes");
-                        nd.InsertNodeRecord(newNode);
+                            CalculateReliablity(h, s, 0,0), h, s, 0, 0, "yes");
+                        nd.InsertNodeRecord(newPC);
                     }
                 }
             }
@@ -174,8 +168,6 @@ namespace Backend
         private Queue<string> heartbeats;
         private bool receiverAlive;
         private bool transmitterAlive;
-        private int smart;
-        private int hops;
         private int reliabilityMetric;
     }
 }

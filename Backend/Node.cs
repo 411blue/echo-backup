@@ -36,6 +36,7 @@ namespace Backend
         {
             return Properties.Settings.Default.temporaryDirectory;
         }
+
         public static void SetTemporaryDirectory(string path)
         {
             CreateDirectoryIfNotExists(path);
@@ -55,32 +56,21 @@ namespace Backend
             Properties.Settings.Default.Save();
         }
 
-        //Get SMART score
-        public static int GetSmart()
-        {
-            return Properties.Settings.Default.smart;
-        }
-        //Set SMART Data
-        public static int CalculateAndSetSmart(int min, int max)
+        //Get SMART Data
+        public static int GetSmart(int min, int max)
         {
             Random rnd = new Random();
-            int x = rnd.Next(min, max);
-            Properties.Settings.Default.smart = x;
-            Properties.Settings.Default.Save();
-            return x;
+            int smart = rnd.Next(min, max);
+            return smart;
         }
 
-        //Get Hop score
-        public static int GetHops()
-        {
-            return Properties.Settings.Default.hops;
-        }
-        //Set Hop Data
-        public static void SetHop(int min, int max)
+        //Get Hop Data
+        public static int GetHops(int min, int max)
         {
             Random rnd = new Random();
-            Properties.Settings.Default.hops = rnd.Next(min, max);
-            Properties.Settings.Default.Save();
+            int hop = rnd.Next(min, max);
+            return hop;
+
         }
 
         //Get the backup directory
@@ -222,6 +212,40 @@ namespace Backend
                 }
             }
             return freeSpace;
+        }
+
+        //Defines a node and provides constructor
+        public struct PC
+        {
+            public Guid uniqueId;
+            public string name;
+            public IPAddress ip;
+            public string mac;
+            public int maxBackupCapacity;
+            public long backupData, nonBackupData, freeSpace, totalCapacity;
+            public int reliablityMetric, hops, smart, backupsFailed, backupsPassed;
+            public string trusted;
+
+            public PC(Guid uniqueId, string name, IPAddress ip, string mac, int maxBackupCapacity, long backupData,
+                long nonBackupData, long freeSpace, long totalCapacity, int reliabilityMetric, int hops, int smart,
+                int backupsFailed, int backupsPassed, string trusted)
+            {
+                this.uniqueId = uniqueId;
+                this.name = name;
+                this.ip = ip;
+                this.mac = mac;
+                this.maxBackupCapacity = maxBackupCapacity;
+                this.backupData = backupData;
+                this.nonBackupData = nonBackupData;
+                this.freeSpace = freeSpace;
+                this.totalCapacity = totalCapacity;
+                this.reliablityMetric = reliabilityMetric;
+                this.hops = hops;
+                this.smart = smart;
+                this.backupsFailed = backupsFailed;
+                this.backupsPassed = backupsPassed;
+                this.trusted = trusted;
+            }
         }
     }
 }

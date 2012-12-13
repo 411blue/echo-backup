@@ -48,7 +48,7 @@ namespace Backend.Database
         }
 
         //Insert a new record. Primary key must not be in table already.
-        public void InsertNodeRecord(Node n1)
+        public void InsertNodeRecord(Node.PC n1)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Backend.Database
         }
 
         //Replace a record. Table unchanged if UniqueId is not present, table unchanged. 
-        public void ReplaceNodeRecord(Node n1)
+        public void ReplaceNodeRecord(Node.PC n1)
         {
             string sql = "REPLACE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity,"
                 + " BackupData, NonBackupData, FreeSpace, TotalCapacity,"
@@ -762,14 +762,12 @@ namespace Backend.Database
             return dt;
         }
 
-        public List<string> SelectTrustedGUID()
+        public List<string> SelectGUID()
         {
             List<string> guidList = new List<string>();
-            string Trusted = "yes";
 
-            string query = "SELECT UniqueID FROM nodes WHERE Trusted = @pTrusted";
+            string query = "SELECT UniqueID FROM nodes";
             SQLiteCommand cmd = new SQLiteCommand(query, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pTrusted", Trusted));
 
             try
             {
@@ -809,38 +807,4 @@ namespace Backend.Database
         private string pathAndFileName;
         private SQLiteConnection conn;
     }
-
-        //Defines a node and provides constructor
-        public struct Node
-        {
-            public Guid uniqueId; 
-            public string name;
-            public IPAddress ip;
-            public string mac;
-            public int maxBackupCapacity;
-            public long backupData, nonBackupData, freeSpace, totalCapacity;
-            public int reliablityMetric, hops, smart, backupsFailed, backupsPassed;
-            public string trusted;
-
-            public Node(Guid uniqueId, string name, IPAddress ip, string mac, int maxBackupCapacity, long backupData, 
-                long nonBackupData, long freeSpace, long totalCapacity, int reliabilityMetric, int hops, int smart, 
-                int backupsFailed, int backupsPassed, string trusted)
-            {
-                this.uniqueId = uniqueId;
-                this.name = name;
-                this.ip = ip;
-                this.mac = mac;
-                this.maxBackupCapacity = maxBackupCapacity;
-                this.backupData = backupData;
-                this.nonBackupData = nonBackupData;
-                this.freeSpace = freeSpace;
-                this.totalCapacity = totalCapacity;
-                this.reliablityMetric = reliabilityMetric;
-                this.hops = hops;
-                this.smart = smart;
-                this.backupsFailed = backupsFailed;
-                this.backupsPassed = backupsPassed;
-                this.trusted = trusted;
-            }
-        }
 }
