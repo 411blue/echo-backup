@@ -156,6 +156,7 @@ namespace Backend
         //Get the size of directory and all subdirectories
         public static long GetDirectorySize(string path)
         {
+            CreateDirectoryIfNotExists(path);
             DirectoryInfo di = new DirectoryInfo(path);
             FileInfo[] fi = di.GetFiles();
             long directorySize = 0;

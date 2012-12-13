@@ -81,11 +81,13 @@ namespace Backend.Database
         //Update a node. Table unchanged if UniqueId is not present, table unchanged. 
         public void UpdateNodeRecord(Node.PC n1)
         {
-            string sql = "UPDATE INTO nodes (UniqueId, Name, Ip, Mac, MaxBackupCapacity, BackupData, NonBackupData, FreeSpace, TotalCapacity)"
-                + " VALUES (@pUniqueId, @pName, @pIp, @pMac, @pMaxBackupCapacity, @pBackupData, @pNonBackupData, @pFreeSpace, @pTotalCapacity)";
+            string sql = "UPDATE nodes SET Name = @pName, Ip = @pIp, MAC = @pMac, MaxBackupCapacity = @pMaxBackupCapacity," +
+                " BackupData = @pBackupData, NonBackupData = @NonBackupData, FreeSpace = @FreeSpace, TotalCapacity = @TotalCapacity" +
+                " WHERE UniqueID = @pUniqueID";
+
+
 
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId));
             cmd.Parameters.Add(new SQLiteParameter("@pName", n1.name));
             cmd.Parameters.Add(new SQLiteParameter("@pIp", n1.ip));
             cmd.Parameters.Add(new SQLiteParameter("@pMac", n1.mac));
@@ -94,6 +96,7 @@ namespace Backend.Database
             cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", n1.nonBackupData));
             cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", n1.freeSpace));
             cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", n1.totalCapacity));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", n1.uniqueId.ToString()));
 
             conn.Open();
             cmd.ExecuteNonQuery();
@@ -105,7 +108,7 @@ namespace Backend.Database
         {
             string sql = "DELETE FROM nodes where UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             conn.Open();
             cmd.ExecuteNonQuery();
             conn.Close();
@@ -118,7 +121,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT Name FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 string name = cmd.ExecuteScalar().ToString();
@@ -138,7 +141,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set Name = @pName WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pName", name));
 
             conn.Open();
@@ -153,7 +156,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT Ip FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 string ip = cmd.ExecuteScalar().ToString();
@@ -174,7 +177,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set Ip = @pIp WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pIp", ip));
 
             conn.Open();
@@ -189,7 +192,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT Mac FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 string mac = cmd.ExecuteScalar().ToString();
@@ -209,7 +212,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set Mac = @pMac WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pMac", mac));
 
             conn.Open();
@@ -224,7 +227,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT MaxBackupCapacity FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 int maxBackupCapacity = (Int32) cmd.ExecuteScalar();
@@ -244,7 +247,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set MaxBackupCapacity = @pMaxBackupCapacity WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pMaxBackupCapacity", MaxBackupCapacity));
 
             conn.Open();
@@ -259,7 +262,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT BackupData FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 long BackupData = (long)cmd.ExecuteScalar();
@@ -301,7 +304,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set BackupData = @pBacupData WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pBackupData", BackupData));
 
             conn.Open();
@@ -316,7 +319,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT NonBackupData FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 long NonBackupData = (long)cmd.ExecuteScalar();
@@ -357,7 +360,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set NonBackupData = @pNonBacupData WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pNonBackupData", NonBackupData));
 
             conn.Open();
@@ -372,7 +375,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT FreeSpace FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 long NonBackupData = (long)cmd.ExecuteScalar();
@@ -413,7 +416,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set FreeSpace = @pFreeSpace WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pFreeSpace", FreeSpace));
 
             conn.Open();
@@ -428,7 +431,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT TotalCapacity FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 long NonBackupData = (long)cmd.ExecuteScalar();
@@ -470,7 +473,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set TotalCapacity = @pTotalCapacity WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pTotalCapacity", TotalCapacity));
 
             conn.Open();
@@ -485,7 +488,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT ReliablityMetric FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 int ReliablityMetric = (Int32)cmd.ExecuteScalar();
@@ -505,7 +508,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set ReliablityMetric = @pRelialibyMetric WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pReliablityMetric", ReliablityMetric));
 
             conn.Open();
@@ -520,7 +523,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT Hops FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 int Hops = (Int32)cmd.ExecuteScalar();
@@ -540,7 +543,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set Hops = @pHops WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pHops", Hops));
 
             conn.Open();
@@ -555,7 +558,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT Smart FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 int Smart = (Int32)cmd.ExecuteScalar();
@@ -575,7 +578,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set Smart = @pSmart WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pSmart", Smart));
 
             conn.Open();
@@ -590,7 +593,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT BackupsFailed FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 int BackupsFailed = (Int32)cmd.ExecuteScalar();
@@ -610,7 +613,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set BackupsFailed = @pBackupsFailed WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pBackupsFailed", BackupsFailed));
 
             conn.Open();
@@ -625,7 +628,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT BackupsPassed FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 int BackupsPassed = (Int32)cmd.ExecuteScalar();
@@ -645,7 +648,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set BackupsPassed = @pBackupsPassed WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pBackupsPassed", BackupsPassed));
 
             conn.Open();
@@ -660,7 +663,7 @@ namespace Backend.Database
             {
                 string sql = "SELECT Trusted FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 string Trusted = cmd.ExecuteScalar().ToString();
@@ -680,7 +683,7 @@ namespace Backend.Database
             string sql = "UPDATE nodes Set Trusted = @pTrusted WHERE UniqueId = @pUniqueId";
             SQLiteCommand cmd = new SQLiteCommand(sql, conn);
 
-            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+            cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
             cmd.Parameters.Add(new SQLiteParameter("@pTrusted", Status));
 
             conn.Open();
@@ -696,7 +699,7 @@ namespace Backend.Database
                 object value = new object();
                 string sql = "SELECT UniqueId FROM nodes WHERE UniqueId = @pUniqueId";
                 SQLiteCommand cmd = new SQLiteCommand(sql, conn);
-                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId));
+                cmd.Parameters.Add(new SQLiteParameter("@pUniqueId", UniqueId.ToString()));
 
                 conn.Open();
                 value = cmd.ExecuteScalar();
