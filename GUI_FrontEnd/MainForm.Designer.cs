@@ -92,6 +92,9 @@
             this.tabDataRecovery = new System.Windows.Forms.TabPage();
             this.pnlDataRecoveryFill = new System.Windows.Forms.Panel();
             this.dataGridViewBackupInfo = new System.Windows.Forms.DataGridView();
+            this.sourcePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.backupTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewRecoveryDateTimeInfo = new System.Windows.Forms.DataGridView();
             this.colDateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pnlDataRecoveryBottom = new System.Windows.Forms.Panel();
@@ -118,12 +121,9 @@
             this.openScheduleDialog = new System.Windows.Forms.OpenFileDialog();
             this.saveScheduleDialog = new System.Windows.Forms.SaveFileDialog();
             this.LocalBackupDirectoryBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.openBackupFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.RecoveryDestinationBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.openRecoveryFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.sourcePath = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.size = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.backupTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.openBackupFolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.statusStrip1.SuspendLayout();
             this.pnlTabGUI.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -622,17 +622,17 @@
             this.btnAddBackupFile.Name = "btnAddBackupFile";
             this.btnAddBackupFile.Size = new System.Drawing.Size(127, 23);
             this.btnAddBackupFile.TabIndex = 11;
-            this.btnAddBackupFile.Text = "Add File to Backup List";
+            this.btnAddBackupFile.Text = "Add Folders to Backup List";
             this.btnAddBackupFile.UseVisualStyleBackColor = true;
             this.btnAddBackupFile.Click += new System.EventHandler(this.btnAddBackupFile_Click);
             // 
             // btnBackupFiles
             // 
-            this.btnBackupFiles.Location = new System.Drawing.Point(560, 4);
+            this.btnBackupFiles.Location = new System.Drawing.Point(550, 4);
             this.btnBackupFiles.Name = "btnBackupFiles";
-            this.btnBackupFiles.Size = new System.Drawing.Size(80, 23);
+            this.btnBackupFiles.Size = new System.Drawing.Size(90, 23);
             this.btnBackupFiles.TabIndex = 10;
-            this.btnBackupFiles.Text = "Browse Files";
+            this.btnBackupFiles.Text = "Browse Folders";
             this.btnBackupFiles.UseVisualStyleBackColor = true;
             this.btnBackupFiles.Click += new System.EventHandler(this.btnBackupFiles_Click);
             // 
@@ -640,7 +640,7 @@
             // 
             this.txtBackupFiles.Location = new System.Drawing.Point(82, 6);
             this.txtBackupFiles.Name = "txtBackupFiles";
-            this.txtBackupFiles.Size = new System.Drawing.Size(472, 20);
+            this.txtBackupFiles.Size = new System.Drawing.Size(462, 20);
             this.txtBackupFiles.TabIndex = 9;
             // 
             // lblBackupFiles
@@ -660,6 +660,7 @@
             this.btnLogs.TabIndex = 7;
             this.btnLogs.Text = "View Logs";
             this.btnLogs.UseVisualStyleBackColor = true;
+            this.btnLogs.Click += new System.EventHandler(this.btnLogs_Click);
             // 
             // dataGridViewBackupFiles
             // 
@@ -770,8 +771,26 @@
             this.backupTime});
             this.dataGridViewBackupInfo.Location = new System.Drawing.Point(0, 311);
             this.dataGridViewBackupInfo.Name = "dataGridViewBackupInfo";
-            this.dataGridViewBackupInfo.Size = new System.Drawing.Size(744, 46);
+            this.dataGridViewBackupInfo.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dataGridViewBackupInfo.Size = new System.Drawing.Size(773, 46);
             this.dataGridViewBackupInfo.TabIndex = 5;
+            // 
+            // sourcePath
+            // 
+            this.sourcePath.HeaderText = "Source Path";
+            this.sourcePath.Name = "sourcePath";
+            this.sourcePath.Width = 600;
+            // 
+            // size
+            // 
+            this.size.HeaderText = "Size";
+            this.size.Name = "size";
+            // 
+            // backupTime
+            // 
+            this.backupTime.HeaderText = "Backup Time";
+            this.backupTime.Name = "backupTime";
+            this.backupTime.Visible = false;
             // 
             // dataGridViewRecoveryDateTimeInfo
             // 
@@ -1007,23 +1026,6 @@
             // 
             this.saveScheduleDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.saveScheduleDialog_FileOk);
             // 
-            // sourcePath
-            // 
-            this.sourcePath.HeaderText = "Source Path";
-            this.sourcePath.Name = "sourcePath";
-            this.sourcePath.Width = 600;
-            // 
-            // size
-            // 
-            this.size.HeaderText = "Size";
-            this.size.Name = "size";
-            // 
-            // backupTime
-            // 
-            this.backupTime.HeaderText = "Backup Time";
-            this.backupTime.Name = "backupTime";
-            this.backupTime.Visible = false;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1152,7 +1154,6 @@
         private System.Windows.Forms.Button btnBackupDirectory;
         private System.Windows.Forms.TextBox txtBackupDirectory;
         private System.Windows.Forms.FolderBrowserDialog LocalBackupDirectoryBrowserDialog;
-        private System.Windows.Forms.OpenFileDialog openBackupFileDialog;
         private System.Windows.Forms.FolderBrowserDialog RecoveryDestinationBrowserDialog;
         private System.Windows.Forms.OpenFileDialog openRecoveryFileDialog;
         private System.Windows.Forms.Button btnSetBackupDirectory;
@@ -1176,5 +1177,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn sourcePath;
         private System.Windows.Forms.DataGridViewTextBoxColumn size;
         private System.Windows.Forms.DataGridViewTextBoxColumn backupTime;
+        private System.Windows.Forms.FolderBrowserDialog openBackupFolderDialog;
     }
 }

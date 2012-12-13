@@ -14,7 +14,7 @@ namespace Test_Harness
     public partial class AIRankForm : Form
     {
         private List<NodeInstance> nodes;
-
+        bool firstStart = true;
 
         private Random rand;
 
@@ -65,8 +65,9 @@ namespace Test_Harness
                 if (node.Name == bestNodeName)
                 {
                     txtName.Text = node.Name;
-                    txtCPU.Text = Math.Round(node.CPU_Utilization, 0).ToString() + "%";
-                    txtNetwork.Text = Math.Round(node.UsedBandwidth / node.MaxBandwidth, 2).ToString() + "%";
+                    txtCPU.Text = (node.CPU_Utilization * 100).ToString() + "%";
+                    txtNetwork.Text = (Math.Round(node.UsedBandwidth / node.MaxBandwidth, 2) * 100).ToString() + "%";
+                    txtDiskUsage.Text = (Math.Round((double)node.BackupSpaceUsage / (double)node.MaxBackupSpace, 1) * 100).ToString() + "%";
                 }
             }
             string worstNodeName = lstNodes.Items[lstNodes.Items.Count - 1].ToString().Split(new char[1] { '-' })[0].Trim();
@@ -75,8 +76,9 @@ namespace Test_Harness
                 if (node.Name == worstNodeName)
                 {
                     txtWorstName.Text = node.Name;
-                    txtWorstCPU.Text = Math.Round(node.CPU_Utilization, 0).ToString() + "%";
-                    txtWorstNetwork.Text = Math.Round(node.UsedBandwidth / node.MaxBandwidth, 2).ToString() + "%";
+                    txtWorstCPU.Text = (node.CPU_Utilization * 100).ToString() + "%";
+                    txtWorstNetwork.Text = (Math.Round(node.UsedBandwidth / node.MaxBandwidth, 2) * 100).ToString() + "%";
+                    txtWorstDiskUsage.Text = (Math.Round((double)node.BackupSpaceUsage / (double)node.MaxBackupSpace, 1) * 100).ToString() + "%";
                 }
             }
         }
@@ -86,7 +88,13 @@ namespace Test_Harness
             UpdateCPU();
             UpdateUsedBandwith();
             UpdateNodeListBox();
-            UpdateLabels();
+            //UpdateLabels();
+            //if (firstStart)
+            //{
+                PerformTests();
+            //}
+                UpdateLabels();
+            firstStart = false;
         }
 
         private void UpdateCPU()
@@ -150,54 +158,56 @@ namespace Test_Harness
                 }
             }
         }
+
         private void PerformTests()
         {
+            txtUnitTests.Clear();
             if (PassedNodeAvailabilityTest(nodes))
             {
-                Console.WriteLine("Test 8.1.1 passed.");
-                Console.WriteLine();
+                txtUnitTests.Text += Environment.NewLine + "Test 8.1.1 passed." + Environment.NewLine;
+                
             }
             else
             {
-                Console.WriteLine("Test 8.1.1 failed!");
-                Console.WriteLine();
+                txtUnitTests.Text += Environment.NewLine + "Test 8.1.1 failed!" + Environment.NewLine;
+                
             }
 
             if (PassedNodeDiskSpaceTest(nodes))
             {
-                Console.WriteLine("Test 8.1.2 passed.");
-                Console.WriteLine();
+                txtUnitTests.Text += Environment.NewLine + "Test 8.1.2 passed." + Environment.NewLine;
+                
             }
             else
             {
-                Console.WriteLine("Test 8.1.2 failed!");
-                Console.WriteLine();
+                txtUnitTests.Text += Environment.NewLine + "Test 8.1.2 failed!" + Environment.NewLine;
+                
             }
 
             if (PassedCPUUtilizationTest(nodes))
             {
-                Console.WriteLine("Test 8.1.3 passed.");
-                Console.WriteLine();
+                txtUnitTests.Text += Environment.NewLine + "Test 8.1.3 passed." + Environment.NewLine;
+                
             }
             else
             {
-                Console.WriteLine("Test 8.1.3 failed!");
-                Console.WriteLine();
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.1.3 failed!" + Environment.NewLine;
+                
             }
 
-            if (PassedUserDefinedScheduleCheck())
-            {
-                Console.WriteLine("Test 8.2.1 passed.");
-                Console.WriteLine();
-            }
-            else
-            {
-                Console.WriteLine("Test 8.2.1 failed!");
-                Console.WriteLine();
-            }
+            //if (PassedUserDefinedScheduleCheck())
+            //{
+            //    txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.2.1 passed." + Environment.NewLine;
+                
+            //}
+            //else
+            //{
+            //    txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.2.1 failed!" + Environment.NewLine;
+                
+            //}
         }
 
-        private static bool PassedUserDefinedScheduleCheck()
+        private bool PassedUserDefinedScheduleCheck()
         {
             bool passed = true;
             //try
@@ -268,16 +278,16 @@ namespace Test_Harness
             return passed;
         }
 
-        private static bool PassedCPUUtilizationTest(List<NodeInstance> nodes)
+        private bool PassedCPUUtilizationTest(List<NodeInstance> nodes)
         {
-            Console.WriteLine("Test 8.1.3 - Verifying CPU utilization of available nodes:");
+            txtUnitTests.Text += Environment.NewLine + "Test 8.1.3 - Verifying CPU utilization of available nodes:";
             bool passed = true;
             foreach (NodeInstance node in nodes)
             {
                 if (node.CPU_Utilization >= 0)
                 {
-                    Console.WriteLine(node.Name
-                        + ": CPU - " + (node.CPU_Utilization * 100).ToString() + "%");
+                    txtUnitTests.Text += Environment.NewLine + node.Name
+                        + ": CPU - " + (node.CPU_Utilization * 100).ToString() + "%";
                 }
                 else
                 {
@@ -287,35 +297,36 @@ namespace Test_Harness
             return passed;
         }
 
-        private static bool PassedNodeDiskSpaceTest(List<NodeInstance> nodes)
+        private bool PassedNodeDiskSpaceTest(List<NodeInstance> nodes)
         {
-            Console.WriteLine("Test 8.1.2 - Verifying node disk space:");
+            txtUnitTests.Text += Environment.NewLine + "Test 8.1.2 - Verifying node disk space:";
             bool passed = true;
             foreach (NodeInstance node in nodes)
             {
                 if (node.MaxBackupSpace - node.FreeSpace >= 0 && node.MaxBackupSpace > 0 && node.FreeSpace >= 0)
                 {
-                    Console.WriteLine("Correctly determined disk space for " + node.Name
-                        + ". Free Space: " + Math.Round(((double)node.FreeSpace / 1048576), 2).ToString() + " MB");
+                    
+                    txtUnitTests.Text += Environment.NewLine + "Correctly determined disk space for " + node.Name
+                        + ". Free Space: " + Math.Round(((double)node.FreeSpace / 1048576), 2).ToString() + " MB";
                 }
                 else
                 {
-                    Console.WriteLine("Could not determine disk space for " + node.Name + "!");
+                    txtUnitTests.Text += Environment.NewLine + "Could not determine disk space for " + node.Name + "!";
                     passed = false;
                 }
             }
             return passed;
         }
 
-        private static bool PassedNodeAvailabilityTest(List<NodeInstance> nodes)
+        private bool PassedNodeAvailabilityTest(List<NodeInstance> nodes)
         {
-            Console.WriteLine("Test 8.1.1 - Verifying node availability:");
+            txtUnitTests.Text += "Test 8.1.1 - Verifying node availability:";
             bool passed = true;
             foreach (NodeInstance node in nodes)
             {
                 if (node.IPAddress.Length > 0)
                 {
-                    Console.WriteLine(node.Name + " is available, IP Address: " + node.IPAddress.Length);
+                    txtUnitTests.Text += Environment.NewLine + node.Name + " is available, IP Address: " + node.IPAddress;
                 }
                 else
                 {

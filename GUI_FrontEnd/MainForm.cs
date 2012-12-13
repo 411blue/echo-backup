@@ -142,10 +142,10 @@ namespace GUI_FrontEnd
 
         private void btnBackupFiles_Click(object sender, EventArgs e)
         {
-            DialogResult result = openBackupFileDialog.ShowDialog();
+            DialogResult result = openBackupFolderDialog.ShowDialog();
             if (result == DialogResult.OK)
             {
-                string backupFilePath = openBackupFileDialog.FileName;
+                string backupFilePath = openBackupFolderDialog.SelectedPath;
                 try
                 {
                     txtBackupFiles.Text = backupFilePath;
@@ -213,7 +213,7 @@ namespace GUI_FrontEnd
             string[] rowArray = new string[dataGridViewBackupFiles.Rows.Count];
             for (int i = 0; i < (dataGridViewBackupFiles.Rows.Count - 1); i++)
             {
-                rowArray[i] = dataGridViewBackupFiles.Rows[i].Cells[0].Value.ToString();
+                rowArray[i] = (string) dataGridViewBackupFiles.Rows[i].Cells[0].Value;
             }
         }
 
@@ -221,9 +221,11 @@ namespace GUI_FrontEnd
         private void btnRestore_Click(object sender, EventArgs e)
         {
             //Retrieves data about selected recovery file, stores in object {source path, original size, backup time/date}
-            string[] recoveryFile = new string[] { dataGridViewBackupInfo.SelectedRows[0].Cells[0].Value.ToString(), dataGridViewBackupInfo.SelectedRows[0].Cells[1].Value.ToString(), dataGridViewBackupInfo.SelectedRows[0].Cells[2].Value.ToString() };
+            string guid = Backend.Properties.Settings.Default.guid.ToString();
+            string dateAndTime = (string) dataGridViewBackupInfo.Rows[0].Cells["backupTime"].Value;
 
-            string recoveryDestination = txtRecoveryDestination.Text;
+            BackupIndex index = indexDB.GetBackupIndex(guid, dateAndTime);
+            string recoveryDestinationDirectory = txtRecoveryDestination.Text;
         }
 
         private void btnRecoveryRefresh_Click(object sender, EventArgs e)
@@ -235,15 +237,22 @@ namespace GUI_FrontEnd
         private void dataGridViewRecoveryDateTimeInfo_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             string guid = Backend.Properties.Settings.Default.guid.ToString();
-            BackupIndex index = indexDB.GetBackupIndex(guid, dataGridViewRecoveryDateTimeInfo.SelectedRows[0].Cells[0].Value.ToString());
+            string dateAndTime = (string) dataGridViewRecoveryDateTimeInfo.SelectedRows[0].Cells["colDateTime"].Value;
+            BackupIndex index = indexDB.GetBackupIndex(guid, dateAndTime);
             
             //Updates data grid based on values of backup index
-            dataGridViewBackupInfo.Rows[0].Cells[0].Value = index.sourcePath;
-            dataGridViewBackupInfo.Rows[0].Cells[1].Value = index.size;
-            dataGridViewBackupInfo.Rows[0].Cells[2].Value = index.dateAndTime; //column is not visible
+            dataGridViewBackupInfo.Rows[0].Cells["sourcePath"].Value = index.sourcePath;
+            dataGridViewBackupInfo.Rows[0].Cells["size"].Value = index.size;
+            dataGridViewBackupInfo.Rows[0].Cells["backupTime"].Value = index.dateAndTime; //column is not visible
         }
 
         private NodeDatabase db;
         private IndexDatabase indexDB;
+
+        private void btnLogs_Click(object sender, EventArgs e)
+        {
+            string fileName = Backend.Logger.getLogFilename();
+            System.Diagnostics.Process.Start("notepad.exe", fileName);
+        }
     }
 }

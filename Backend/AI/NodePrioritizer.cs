@@ -50,10 +50,10 @@ namespace Backend.AI
             MamdaniFuzzyRule rule6 = fsNodeSys.ParseRule("if (cpu is low) and (bandwidth is med) and (freespace is low) then rank is med_low");
             MamdaniFuzzyRule rule7 = fsNodeSys.ParseRule("if (cpu is low) and (bandwidth is low) and (freespace is ample) then rank is high");
             MamdaniFuzzyRule rule8 = fsNodeSys.ParseRule("if (cpu is low) and (bandwidth is low) and (freespace is moderate) then rank is med_high");
-            MamdaniFuzzyRule rule9 = fsNodeSys.ParseRule("if (cpu is low) and (bandwidth is low) and (freespace is low) then rank is low");
+            MamdaniFuzzyRule rule9 = fsNodeSys.ParseRule("if (cpu is low) and (bandwidth is low) and (freespace is low) then rank is med_low");
             MamdaniFuzzyRule rule10 = fsNodeSys.ParseRule("if (cpu is med) and (bandwidth is high) and (freespace is ample) then rank is med");
             MamdaniFuzzyRule rule11 = fsNodeSys.ParseRule("if (cpu is med) and (bandwidth is high) and (freespace is moderate) then rank is med_low");
-            MamdaniFuzzyRule rule12 = fsNodeSys.ParseRule("if (cpu is med) and (bandwidth is high) and (freespace is low) then rank is low");
+            MamdaniFuzzyRule rule12 = fsNodeSys.ParseRule("if (cpu is med) and (bandwidth is high) and (freespace is low) then rank is med_low");
             MamdaniFuzzyRule rule13 = fsNodeSys.ParseRule("if (cpu is med) and (bandwidth is med) and (freespace is ample) then rank is med");
             MamdaniFuzzyRule rule14 = fsNodeSys.ParseRule("if (cpu is med) and (bandwidth is med) and (freespace is moderate) then rank is med");
             MamdaniFuzzyRule rule15 = fsNodeSys.ParseRule("if (cpu is med) and (bandwidth is med) and (freespace is low) then rank is low");
