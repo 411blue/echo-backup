@@ -14,7 +14,7 @@ namespace Test_Harness
     public partial class AIRankForm : Form
     {
         private List<NodeInstance> nodes;
-
+        bool firstStart = true;
 
         private Random rand;
 
@@ -87,6 +87,11 @@ namespace Test_Harness
             UpdateUsedBandwith();
             UpdateNodeListBox();
             UpdateLabels();
+            if (firstStart)
+            {
+                PerformTests();
+            }
+            firstStart = false;
         }
 
         private void UpdateCPU()
@@ -154,45 +159,45 @@ namespace Test_Harness
         {
             if (PassedNodeAvailabilityTest(nodes))
             {
-                Console.WriteLine("Test 8.1.1 passed.");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.1.1 passed.";
                 Console.WriteLine();
             }
             else
             {
-                Console.WriteLine("Test 8.1.1 failed!");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.1.1 failed!";
                 Console.WriteLine();
             }
 
             if (PassedNodeDiskSpaceTest(nodes))
             {
-                Console.WriteLine("Test 8.1.2 passed.");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.1.2 passed.";
                 Console.WriteLine();
             }
             else
             {
-                Console.WriteLine("Test 8.1.2 failed!");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.1.2 failed!";
                 Console.WriteLine();
             }
 
             if (PassedCPUUtilizationTest(nodes))
             {
-                Console.WriteLine("Test 8.1.3 passed.");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.1.3 passed.";
                 Console.WriteLine();
             }
             else
             {
-                Console.WriteLine("Test 8.1.3 failed!");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.1.3 failed!";
                 Console.WriteLine();
             }
 
             if (PassedUserDefinedScheduleCheck())
             {
-                Console.WriteLine("Test 8.2.1 passed.");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.2.1 passed.";
                 Console.WriteLine();
             }
             else
             {
-                Console.WriteLine("Test 8.2.1 failed!");
+                txtUnitTests.Text += Environment.NewLine + Environment.NewLine + "Test 8.2.1 failed!";
                 Console.WriteLine();
             }
         }
