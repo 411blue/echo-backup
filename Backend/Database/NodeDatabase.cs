@@ -762,14 +762,12 @@ namespace Backend.Database
             return dt;
         }
 
-        public List<string> SelectTrustedGUID()
+        public List<string> SelectGUID()
         {
             List<string> guidList = new List<string>();
-            string Trusted = "yes";
 
-            string query = "SELECT UniqueID FROM nodes WHERE Trusted = @pTrusted";
+            string query = "SELECT UniqueID FROM nodes";
             SQLiteCommand cmd = new SQLiteCommand(query, conn);
-            cmd.Parameters.Add(new SQLiteParameter("@pTrusted", Trusted));
 
             try
             {
