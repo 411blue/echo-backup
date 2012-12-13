@@ -23,6 +23,8 @@ namespace GUI_FrontEnd
             numUpDownMaxBackupCapacity.Value = Settings.Default.maxBackupCapacity;
             db = new NodeDatabase();
             indexDB = new IndexDatabase();
+            DataTable dt = db.GetNodes();
+            dataGridViewNodeSets.DataSource = dt;
 
             ebic = new EBInterfaceClient();
             /*
